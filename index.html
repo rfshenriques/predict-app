@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Propline</title>
+<meta name="description" content="Player projections for the next games, sport by sport">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme:dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Propline">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-startup-image" href="splash/440x956@3-light.png" media="(device-width:440px) and (device-height:956px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/440x956@3-dark.png" media="(device-width:440px) and (device-height:956px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/420x912@3-light.png" media="(device-width:420px) and (device-height:912px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/420x912@3-dark.png" media="(device-width:420px) and (device-height:912px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/402x874@3-light.png" media="(device-width:402px) and (device-height:874px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/402x874@3-dark.png" media="(device-width:402px) and (device-height:874px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/430x932@3-light.png" media="(device-width:430px) and (device-height:932px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/430x932@3-dark.png" media="(device-width:430px) and (device-height:932px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/393x852@3-light.png" media="(device-width:393px) and (device-height:852px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/393x852@3-dark.png" media="(device-width:393px) and (device-height:852px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/390x844@3-light.png" media="(device-width:390px) and (device-height:844px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/390x844@3-dark.png" media="(device-width:390px) and (device-height:844px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/428x926@3-light.png" media="(device-width:428px) and (device-height:926px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/428x926@3-dark.png" media="(device-width:428px) and (device-height:926px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/414x896@3-light.png" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/414x896@3-dark.png" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/414x896@2-light.png" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/414x896@2-dark.png" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/375x812@3-light.png" media="(device-width:375px) and (device-height:812px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/375x812@3-dark.png" media="(device-width:375px) and (device-height:812px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/375x667@2-light.png" media="(device-width:375px) and (device-height:667px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/375x667@2-dark.png" media="(device-width:375px) and (device-height:667px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<link rel="apple-touch-startup-image" href="splash/414x736@3-light.png" media="(device-width:414px) and (device-height:736px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:light)">
+<link rel="apple-touch-startup-image" href="splash/414x736@3-dark.png" media="(device-width:414px) and (device-height:736px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait) and (prefers-color-scheme:dark)">
+<style>
+/* Propline. Native iOS neutrals. Roles: burgundy = interactive + the key number, butter yellow = attention. Layout: iOS large title, floating glass tab bar, floating sheets. */
+:root{
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",system-ui,"Segoe UI",Roboto,sans-serif;
+  --round:var(--font);
+  --bg:#F2F2F7; --bg-rgb:242,242,247; --card:#FFFFFF; --sheet:#F2F2F7; --inset:#FFFFFF;
+  --label:#1C1C1E; --label2:rgba(60,60,67,.66); --sep:rgba(60,60,67,.18); --fill:rgba(120,120,128,.12); --sw-off:rgba(120,120,128,.3);
+  --tint:#731328; --tint-bg:rgba(115,19,40,.09);
+  --attn:#7A5200; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.28);
+  --red:#C5221F; --red-bg:rgba(255,59,48,.12); --green:#34C759;
+  --scrim:rgba(0,0,0,.46); --seg-on:#FFFFFF;
+  --lg-tint:rgba(255,255,255,.62); --lg-edge2:rgba(60,60,67,.16); --lg-rim:#fff; --lg-rim2:rgba(60,60,67,.2);
+  --lg-act:rgba(120,120,128,.16); --lg-ink:rgba(28,28,30,.82); --lg-sh:rgba(0,0,0,.18); --lg-spec:rgba(255,255,255,.5); --lg-flash:rgba(255,255,255,.85);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#000000; --bg-rgb:0,0,0; --card:#1C1C1E; --sheet:#1C1C1E; --inset:#2C2C2E;
+  --label:#FFFFFF; --label2:rgba(235,235,245,.64); --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --sw-off:rgba(120,120,128,.42);
+  --tint:#FF8FA6; --tint-bg:rgba(255,143,166,.16);
+  --attn:#FEC40B; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.2);
+  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158;
+  --scrim:rgba(0,0,0,.58); --seg-on:#636366;
+  --lg-tint:rgba(44,44,46,.68); --lg-edge2:rgba(255,255,255,.1); --lg-rim:rgba(255,255,255,.16); --lg-rim2:rgba(255,255,255,.05);
+  --lg-act:rgba(255,255,255,.14); --lg-ink:rgba(255,255,255,.9); --lg-sh:rgba(0,0,0,.5); --lg-spec:rgba(255,255,255,.06); --lg-flash:rgba(255,255,255,.22);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#000000; --bg-rgb:0,0,0; --card:#1C1C1E; --sheet:#1C1C1E; --inset:#2C2C2E;
+  --label:#FFFFFF; --label2:rgba(235,235,245,.64); --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --sw-off:rgba(120,120,128,.42);
+  --tint:#FF8FA6; --tint-bg:rgba(255,143,166,.16);
+  --attn:#FEC40B; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.2);
+  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158;
+  --scrim:rgba(0,0,0,.58); --seg-on:#636366;
+  --lg-tint:rgba(44,44,46,.68); --lg-edge2:rgba(255,255,255,.1); --lg-rim:rgba(255,255,255,.16); --lg-rim2:rgba(255,255,255,.05);
+  --lg-act:rgba(255,255,255,.14); --lg-ink:rgba(255,255,255,.9); --lg-sh:rgba(0,0,0,.5); --lg-spec:rgba(255,255,255,.06); --lg-flash:rgba(255,255,255,.22);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;touch-action:manipulation;background:var(--bg)}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--label);font:1.0625rem/1.3 var(--font);-webkit-font-smoothing:antialiased;
+  padding-bottom:calc(7rem + env(safe-area-inset-bottom));overscroll-behavior-y:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+button:focus-visible{outline:2px solid var(--tint);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+svg.ic{width:1.5rem;height:1.5rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* page */
+.view{max-width:36rem;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--bg);
+  padding:calc(env(safe-area-inset-top) + 3.75rem) calc(1rem + env(safe-area-inset-right)) 1rem calc(1rem + env(safe-area-inset-left));
+  display:flex;flex-direction:column;gap:1.25rem}
+#view,#nav{transition:transform .5s cubic-bezier(.32,.72,0,1);transform-origin:50% var(--sy,0px)}
+body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
+.lt-wrap{display:flex;flex-direction:column;gap:.2rem;padding:0 .25rem}
+.eyebrow{font-size:.8125rem;font-weight:700;color:var(--tint);text-transform:uppercase;letter-spacing:.06em}
+.lt{font:700 2.125rem/1.08 var(--round);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{font-size:.9375rem;color:var(--label2)}
+.sec{font-size:.8125rem;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.04em;padding:0 1rem;margin-bottom:-.75rem}
+.note{font-size:.8125rem;line-height:1.4;color:var(--label2);padding:0 1rem;margin:0}
+.card{background:var(--card);border-radius:1.375rem;overflow:hidden;box-shadow:0 0 0 .5px var(--sep)}
+
+/* top area */
+#nav{position:fixed;top:0;left:0;right:0;z-index:5;pointer-events:none}
+.nav-bg{position:absolute;inset:0 0 -1rem 0;background:linear-gradient(rgba(var(--bg-rgb),.72),rgba(var(--bg-rgb),0))}
+.nav-bg::before{content:"";position:absolute;inset:0;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);-webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent)}
+.nav-row{position:relative;max-width:36rem;margin:0 auto;display:flex;align-items:center;gap:.5rem;height:3.25rem;
+  padding:0 calc(1rem + env(safe-area-inset-right)) 0 calc(1rem + env(safe-area-inset-left));margin-top:env(safe-area-inset-top)}
+.nb-sp{width:2.75rem;flex:none}
+.nav-title{flex:1;text-align:center;font-weight:600;opacity:0;transform:translateY(.35rem);transition:opacity .2s,transform .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nav.show-title .nav-title{opacity:1;transform:none}
+.glassbtn{pointer-events:auto;flex:none;width:2.75rem;height:2.75rem;border-radius:50%;display:grid;place-items:center;color:var(--lg-ink);
+  background:var(--lg-tint);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:inset .5px .5px 0 0 var(--lg-rim),inset -.5px -.5px 0 0 var(--lg-rim2),inset 0 0 0 .5px var(--lg-edge2),0 4px 14px var(--lg-sh);transition:transform .2s}
+.glassbtn:active{transform:scale(.92)}
+
+/* tab bar */
+#tabbar{position:fixed;z-index:6;left:50%;bottom:1rem;transform:translateX(-50%);width:min(calc(100% - 2rem),36rem);height:4rem;padding:.25rem;border-radius:999px;display:flex;
+  background:var(--lg-tint);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:inset .5px .5px 0 0 var(--lg-rim),inset -.5px -.5px 0 0 var(--lg-rim2),inset 0 0 0 .5px var(--lg-edge2),0 6px 20px var(--lg-sh);
+  transition:width .45s cubic-bezier(.32,.72,0,1),height .45s cubic-bezier(.32,.72,0,1)}
+#tabbar::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(120% 90% at 20% 0,var(--lg-spec),transparent 60%);opacity:.5;pointer-events:none}
+#tabbar::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--lg-flash);opacity:0;pointer-events:none}
+#tabbar button{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.1rem;color:var(--lg-ink);border-radius:999px;min-width:0}
+#tabbar button span{font-size:.6875rem;font-weight:600;max-height:1rem;overflow:hidden;transition:max-height .3s,opacity .3s}
+#tabbar button[aria-current="page"]{color:var(--tint)}
+#tabbar svg.ic{transition:width .3s,height .3s}
+.tb-ind{position:absolute;top:.25rem;bottom:.25rem;left:.25rem;width:calc((100% - .5rem)/var(--n));border-radius:999px;background:var(--lg-act);
+  transform:translateX(calc(100%*var(--i,0)));transition:transform .55s cubic-bezier(.3,1.25,.4,1)}
+#tabbar.min{width:min(calc(100% - 6rem),calc(4.5rem*var(--n) + .5rem));height:3rem}
+#tabbar.min button span{max-height:0;opacity:0}
+#tabbar.min svg.ic{width:1.4rem;height:1.4rem}
+#tabbar.tap{animation:tbzoom .65s ease}
+#tabbar.tap::after{animation:tbflash .65s ease}
+@keyframes tbzoom{0%,100%{transform:translateX(-50%) scale(1)}35%{transform:translateX(-50%) scale(1.018)}}
+@keyframes tbflash{0%,100%{opacity:0}30%{opacity:.28}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:.2rem 1rem;width:100%;padding:1rem 1.125rem;border-radius:1.375rem;background:var(--card);box-shadow:0 0 0 .5px var(--sep);transition:background .15s}
+.hero:active{background:var(--fill)}
+.hero-k{grid-column:1/-1;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--tint)}
+.hero-n{font-size:1.375rem;font-weight:700;line-height:1.15;overflow-wrap:anywhere}
+.hero-s{grid-column:1;font-size:.875rem;color:var(--label2)}
+.hero-v{grid-column:2;grid-row:2/4;font-size:2.75rem;font-weight:700;line-height:.95;color:var(--tint)}
+.hero-v small{font-size:.875rem;font-weight:600;margin-left:.2rem;color:var(--label2)}
+
+/* game cards */
+.game{display:flex;flex-direction:column;gap:.75rem;width:100%;padding:1rem;transition:background .15s}
+.game:active,.row:active{background:var(--fill)}
+.ghead{display:flex;justify-content:space-between;align-items:center;font-size:.8125rem;font-weight:600;color:var(--label2)}
+.chev{width:.55rem;height:.55rem;border-right:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);opacity:.6;flex:none;margin-right:.15rem}
+.side{display:flex;align-items:center;gap:.75rem}
+.abbr{flex:none;width:3.125rem;height:2.125rem;border-radius:.625rem;background:var(--fill);color:var(--label);display:grid;place-items:center;font:700 .8125rem var(--round);letter-spacing:.04em}
+.side .nm{flex:1;min-width:0;font-weight:600}
+.side .topp{display:block;font-size:.8125rem;font-weight:400;color:var(--label2);overflow-wrap:anywhere}
+.side .big{font:700 1.375rem var(--round)}
+
+/* segmented */
+.seg{display:flex;background:var(--fill);border-radius:.75rem;padding:2px;gap:2px}
+.seg button{flex:1;min-height:2.375rem;border-radius:.625rem;text-align:center;font-size:.875rem;font-weight:600;color:var(--label2);min-width:0}
+.seg button[aria-pressed="true"]{background:var(--seg-on);color:var(--label);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+
+/* rows */
+.row{display:flex;align-items:center;gap:.75rem;width:100%;min-height:3.5rem;padding:.6rem 1rem;position:relative;transition:background .15s}
+.row + .row::before{content:"";position:absolute;left:3rem;right:0;top:0;height:.5px;background:var(--sep)}
+.row .rk{flex:none;width:1.25rem;font:700 .8125rem var(--round);color:var(--label2);text-align:center}
+.row .who{flex:1;min-width:0}
+.row .who b{display:block;font-weight:600;overflow-wrap:anywhere}
+.row .who > span{font-size:.8125rem;color:var(--label2)}
+.row .proj{flex:none;font:700 1.375rem var(--round);text-align:right;min-width:3rem}
+.row.off b,.row.off .proj{color:var(--label2);font-weight:500}
+.row.plain{min-height:2.75rem;font-size:.9375rem}.row.plain + .row.plain::before{left:1rem}
+.row.plain .k{flex:1}.row.plain .v{color:var(--label2);text-align:right}
+.pill{display:inline-block;font-size:.6875rem;font-weight:700;padding:.1rem .45rem;border-radius:999px;margin-left:.35rem;vertical-align:.1em;letter-spacing:.02em}
+.pill.q{background:var(--attn-bg);color:var(--attn)}.pill.o{background:var(--red-bg);color:var(--red)}.pill.e{background:var(--tint-bg);color:var(--tint)}
+
+/* steps */
+.steps{padding:.25rem 1rem}
+.step{display:flex;align-items:center;gap:.75rem;min-height:3rem;padding:.55rem 0}
+.step + .step{border-top:.5px solid var(--sep)}
+.step .n{flex:none;width:1.625rem;height:1.625rem;border-radius:50%;background:var(--tint-bg);color:var(--tint);font:700 .8125rem var(--round);display:grid;place-items:center}
+.step .t{flex:1;min-width:0;font-size:.9375rem}
+.step .t small{display:block;font-size:.75rem;color:var(--label2);margin-top:.1rem}
+.step .v{flex:none;font:700 1.0625rem var(--round)}
+.btn2{min-height:2.75rem;width:100%;text-align:center;color:var(--tint);font-weight:600;border-radius:999px;background:var(--tint-bg);transition:opacity .15s}
+.btn2:active{opacity:.55}
+
+/* sheet */
+.scrim{position:fixed;inset:0;z-index:10;background:var(--scrim);animation:fade .3s ease both}
+.sheet{position:fixed;z-index:11;left:1rem;right:1rem;bottom:1rem;max-width:36rem;margin:0 auto;height:auto;
+  max-height:calc(100% - max(env(safe-area-inset-top),1.25rem) - 1.625rem);display:flex;flex-direction:column;overflow:hidden;
+  background:var(--sheet);border-radius:2rem;box-shadow:0 0 0 .5px var(--lg-edge2),0 .75rem 2.5rem rgba(0,0,0,.32);
+  animation:rise .42s cubic-bezier(.32,.72,0,1) both;touch-action:pan-y}
+.sheet .card{background:var(--inset);border-radius:1rem}
+.closing .sheet{animation:drop .3s cubic-bezier(.32,.72,0,1) both}
+.closing .scrim{animation:fade .3s ease reverse both}
+.grab{flex:none;width:36px;height:5px;border-radius:3px;background:var(--sw-off);margin:.5rem auto 0}
+.sh-head{flex:none;display:flex;align-items:center;min-height:3rem;padding:0 1.25rem}
+.sh-head h2{flex:1;margin:0;font-size:1.0625rem;font-weight:600;text-align:center;overflow-wrap:anywhere}
+.sh-head .sp{width:3.5rem;flex:none}
+.sh-head button{width:3.5rem;flex:none;min-height:2.75rem;color:var(--tint);font-weight:600;text-align:right}
+.sh-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:.5rem 1rem 1rem;display:flex;flex-direction:column;gap:.75rem}
+.result{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:1rem}
+.result span{font-size:.9375rem;color:var(--label2)}
+.result b{font:700 2.75rem/1 var(--round);color:var(--tint)}
+.stepper{display:flex;align-items:center;gap:.4rem;flex:none}
+.stepper button{width:2.75rem;height:2.75rem;border-radius:.75rem;background:var(--fill);text-align:center;font-size:1.375rem;font-weight:500;color:var(--tint)}
+.stepper button:active{opacity:.55}
+.stepper b{min-width:2.75rem;text-align:center;font:700 1.0625rem var(--round)}
+.sw{flex:none;position:relative;width:3.1875rem;height:1.9375rem;border-radius:999px;background:var(--sw-off);transition:background .2s}
+.sw::before{content:"";position:absolute;inset:-.4rem}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:1.6875rem;height:1.6875rem;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
+.sw[aria-checked="true"]{background:var(--green)}.sw[aria-checked="true"]::after{transform:translateX(1.25rem)}
+
+/* toast */
+#toast{position:fixed;z-index:20;left:50%;bottom:calc(5.75rem);transform:translate(-50%,1rem);opacity:0;pointer-events:none;display:flex;align-items:center;gap:.75rem;
+  padding:.65rem 1.1rem;border-radius:999px;font-size:.9375rem;font-weight:600;color:var(--lg-ink);background:var(--lg-tint);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px var(--lg-edge2),0 6px 20px var(--lg-sh);transition:opacity .25s,transform .25s;max-width:calc(100% - 2rem)}
+#toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#toast button{color:var(--tint);font-weight:700;min-height:2rem}
+
+/* page slide */
+.pg{position:fixed;top:0;left:0;right:0;z-index:1;pointer-events:none}
+html.pg-run{overflow-x:hidden}html.pg-run body{overflow-x:clip}
+#view.pg-in{position:relative;z-index:2;animation:pgin .42s cubic-bezier(.32,.72,0,1) both;box-shadow:-10px 0 28px rgba(0,0,0,.22)}
+.pg.pg-under{animation:pgunder .42s cubic-bezier(.32,.72,0,1) both}
+.pg.pg-out{z-index:3;animation:pgout .42s cubic-bezier(.32,.72,0,1) both;box-shadow:-10px 0 28px rgba(0,0,0,.22)}
+#view.pg-back-in{animation:pgbackin .42s cubic-bezier(.32,.72,0,1) both}
+@keyframes pgin{from{transform:translateX(100%)}to{transform:none}}
+@keyframes pgunder{to{transform:translateX(-28%);opacity:.78}}
+@keyframes pgout{to{transform:translateX(100%)}}
+@keyframes pgbackin{from{transform:translateX(-28%);opacity:.78}to{transform:none;opacity:1}}
+@keyframes rise{from{transform:translateY(calc(100% + 1.5rem))}to{transform:none}}
+@keyframes drop{to{transform:translateY(calc(100% + 1.5rem))}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+@media (prefers-reduced-motion:reduce){
+  .pg{display:none}#view.pg-in,#view.pg-back-in{animation:fade .15s both;box-shadow:none}
+  .sheet,.scrim,.closing .sheet,.closing .scrim{animation-duration:.01s}
+  #view,#nav,#tabbar,.tb-ind,.sw,.sw::after{transition:none}#tabbar.tap,#tabbar.tap::after{animation:none}
+  body.sheet-open #view,body.sheet-open #nav{transform:none}
+}
+@media (prefers-reduced-transparency:reduce){#tabbar,.glassbtn,#toast{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav-bg::before{display:none}.nav-bg{background:var(--bg)}}
+@media (prefers-contrast:more){:root{--sep:currentColor;--label2:var(--label)}.card,.sheet,#tabbar,.glassbtn{box-shadow:0 0 0 1.5px var(--label)}}
+@media (forced-colors:active){.card,.sheet,#tabbar,.glassbtn,.seg button[aria-pressed="true"]{border:1px solid CanvasText}.tb-ind{background:Highlight;opacity:.3}}
+
+</style>
+</head>
+<body>
+<div id="nav"></div>
+<main id="view" class="view"></main>
+<nav id="tabbar" aria-label="Sections"></nav>
+<div id="sheet-root"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+/* storage shim: same interface a synced DB would have */
+const DB={
+  get(k,d){try{const v=JSON.parse(localStorage.getItem('propline:'+k));return v==null?d:v}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('propline:'+k,JSON.stringify(v))}catch(e){}}
+};
+const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
+
+/* NBA DATA. Today this is a saved snapshot. When the API is linked, load() in part-sports.js returns the same shape. */
+const NBA_SLATE = {
+  checked: "12 Nov 2026",
+  games: [
+    {id:"tor-phi", utc:"2026-11-13T00:00:00Z", away:"TOR", home:"PHI"},
+    {id:"det-was", utc:"2026-11-13T00:00:00Z", away:"DET", home:"WAS"},
+    {id:"dal-min", utc:"2026-11-13T01:00:00Z", away:"DAL", home:"MIN"},
+    {id:"cha-phx", utc:"2026-11-13T02:00:00Z", away:"CHA", home:"PHX"}
+  ],
+  // points per game each defense allows to PG, SG, SF, PF, C (2026-27 season) and the league average
+  defense: {
+    PHI:[22.6,20.1,22.7,24.3,16.7], TOR:[28.2,21.2,24.0,22.2,18.5], WAS:[22.5,22.1,25.9,22.4,18.5], DET:[23.7,18.8,22.2,18.0,22.1],
+    MIN:[28.0,19.9,14.7,25.0,19.3], DAL:[23.3,21.3,15.2,28.6,16.8], PHX:[28.7,20.2,17.3,25.2,26.4], CHA:[25.4,19.4,23.9,20.8,20.4]
+  },
+  leagueDefense: [26.1,21.8,20.8,22.3,20.8],
+  teams: {
+    // player: [name, position, season minutes per game, season points per game, status]  status: ""=playing, "Q"=questionable, "O"=out
+    PHI:{name:"76ers", players:[
+      ["Tyrese Maxey","G",36.5,26.9,""],["Jaylen Brown","G",35.8,22.3,""],["Joel Embiid","C",31.9,17.9,"Q"],
+      ["LeBron James","F",32.9,15.6,"Q"],["VJ Edgecombe","G",33.5,13.2,""],["Anfernee Simons","G",21.9,9.0,""],
+      ["Kentavious Caldwell-Pope","G",21.9,5.7,""],["Jabari Walker","F",10.9,5.3,""],["Dean Wade","F",24.7,3.2,""],
+      ["Labaron Philon Jr.","G",6.3,2.5,""],["Adem Bona","C",14.2,2.1,"O"],["Rayan Rupert","G",2.0,2.0,""],
+      ["Justin Edwards","F",2.3,1.3,""],["Tacko Fall","C",3.0,0.0,""]]},
+    TOR:{name:"Raptors", players:[
+      ["RJ Barrett","F",31.3,22.0,""],["Scottie Barnes","F",30.5,19.8,"Q"],["Kawhi Leonard","F",26.0,19.5,"O"],
+      ["Immanuel Quickley","G",28.5,17.5,""],["Ja'Kobe Walter","G",26.5,13.3,""],["Collin Murray-Boyles","F",17.8,6.8,""],
+      ["Jamison Battle","F",14.0,6.0,""],["Jamal Shead","G",21.0,6.0,""],["Allen Graves","F",16.0,5.3,""],
+      ["Trayce Jackson-Davis","F",9.3,4.5,"Q"],["Jakob Poeltl","C",19.5,2.8,"Q"],["Alijah Martin","G",4.3,2.5,""],
+      ["Jaden Bradley","G",3.8,1.5,""],["Kyle Anderson","F",6.7,0.0,""]]},
+    WAS:{name:"Wizards", players:[
+      ["Anthony Davis","F",33.0,23.4,""],["Kyshawn George","F",33.0,18.5,""],["Trae Young","G",35.2,18.4,""],
+      ["AJ Dybantsa","F",31.5,16.0,""],["Alex Sarr","C",25.8,10.6,""],["Tre Johnson","G",21.7,9.6,""],
+      ["Justin Champagnie","F",18.3,7.3,"O"],["Bilal Coulibaly","G",25.8,7.2,""],["Bub Carrington","G",19.3,5.7,""],
+      ["Deandre Ayton","C",15.2,5.3,""],["Khris Middleton","F",13.8,2.4,""],["Will Riley","G",7.1,2.0,""],
+      ["Tre Mann","G",5.5,1.0,""],["Anthony Gill","F",5.0,0.5,""],["Felix Okpara","F",2.0,0.5,""],["Reece Beekman","G",1.0,0.0,"O"]]},
+    DET:{name:"Pistons", players:[
+      ["Cade Cunningham","G",32.4,23.7,""],["Duncan Robinson","F",30.0,17.9,""],["Paul Reed","F",26.9,13.4,""],
+      ["Jalen Duren","C",19.0,13.0,"O"],["Daniss Jenkins","G",24.4,9.9,""],["Ausar Thompson","G",26.5,9.7,""],
+      ["John Collins","F",25.6,8.4,""],["Isaiah Joe","G",14.0,7.3,"O"],["Javonte Green","G",18.9,6.7,""],
+      ["Kevin Huerter","G",20.6,6.3,""],["Ronald Holland II","F",16.3,6.1,""],["Chaz Lanier","G",3.7,4.3,""],
+      ["Taurean Prince","F",7.0,2.0,""],["Ebuka Okorie","G",3.5,1.5,""],["Tolu Smith","F",3.7,0.8,""],
+      ["Isaac Jones","C",3.7,0.7,""],["Elijah Harkless","G",3.0,0.0,""]]},
+    MIN:{name:"Timberwolves", players:[
+      ["Anthony Edwards","G",33.8,33.3,"O"],["LaMelo Ball","G",26.1,16.9,""],["Jaden McDaniels","F",32.8,16.8,""],
+      ["Ayo Dosunmu","G",30.1,15.8,""],["Jonathan Kuminga","F",30.8,12.3,""],["Terrence Shannon Jr.","G",22.0,12.0,"Q"],
+      ["Rudy Gobert","C",30.1,7.4,""],["Bones Hyland","G",12.0,7.1,""],["Joan Beringer","F",18.1,6.5,""],
+      ["Trey Lyles","F",16.8,6.4,""],["Jaylen Clark","G",11.0,3.7,""],["Zyon Pullin","G",3.0,2.0,""],
+      ["Cody Williams","F",3.8,0.0,""],["Isaiah Evans","F",2.5,0.0,""]]},
+    DAL:{name:"Mavericks", players:[
+      ["Cooper Flagg","F",33.6,24.0,""],["Kyrie Irving","G",29.5,21.4,"Q"],["P.J. Washington","F",33.5,14.8,""],
+      ["Naji Marshall","F",24.7,11.9,""],["Santi Aldama","F",14.0,10.0,"Q"],["Daniel Gafford","F",22.2,9.8,""],
+      ["Morez Johnson Jr.","F",17.0,7.6,"Q"],["Zaccharie Risacher","F",25.1,7.4,""],["Walter Clayton Jr.","G",15.4,7.3,""],
+      ["Max Christie","G",21.2,6.1,"Q"],["Marcus Sasser","G",16.4,5.9,""],["Sergio de Larrea","F",11.5,5.3,"O"],
+      ["Caleb Martin","F",18.3,4.2,""],["Jett Howard","G",2.4,2.4,""],["Moussa Cisse","C",3.0,1.7,""],["Tobi Lawal","F",2.5,1.5,""]]},
+    PHX:{name:"Suns", players:[
+      ["Devin Booker","G",35.0,25.3,""],["Miles Bridges","F",32.3,16.9,""],["Dillon Brooks","F",31.1,16.8,""],
+      ["Jalen Green","G",29.0,12.4,""],["Luke Kennard","G",16.1,8.3,""],["Jordan Goodwin","G",18.6,7.8,""],
+      ["Khaman Maluach","C",19.6,7.4,""],["Collin Gillespie","G",24.6,6.8,""],["Oso Ighodaro","F",21.7,6.5,""],
+      ["Ryan Dunn","F",16.0,5.6,""],["Duop Reath","C",5.4,3.4,""],["Jamaree Bouyea","G",3.5,2.0,""],
+      ["Koa Peat","F",3.5,1.5,""],["Pat Spencer","G",4.0,1.0,""],["Rasheer Fleming","F",7.5,0.5,""]]},
+    CHA:{name:"Hornets", players:[
+      ["Brandon Miller","F",32.9,22.0,"Q"],["Naz Reid","C",29.6,16.9,""],["Grayson Allen","G",26.4,15.7,""],
+      ["Dennis Schroder","G",29.9,10.2,"O"],["Moussa Diabate","F",28.8,8.9,"Q"],["Coby White","G",17.0,5.5,""],
+      ["Tidjane Salaun","F",13.8,5.3,""],["Sion James","G",25.2,5.2,""],["Ryan Kalkbrenner","C",16.8,4.6,""],
+      ["Royce O'Neale","F",18.0,4.4,""],["Kon Knueppel","G",6.0,3.0,"O"],["Hannes Steinbach","F",7.7,2.7,""],
+      ["Christian Anderson","G",10.3,2.6,""],["Liam McNeeley","G",7.0,1.8,""],["PJ Hall","C",5.5,0.0,""]]}
+  }
+};
+
+/* Shared helpers. Everything sport-specific lives in part-sports.js */
+function gameOf(t){return SLATE.games.find(x=>x.away===t||x.home===t)}
+function opponent(t){const g=gameOf(t);return g.away===t?g.home:g.away}
+function matchupFor(t,pos){
+  const idx=(SPORT.groups[pos]||Object.values(SPORT.groups)[0]).cols, d=SLATE.defense&&SLATE.defense[opponent(t)], avg=a=>idx.reduce((s,k)=>s+a[k],0)/idx.length;
+  return d?avg(d)/avg(SLATE.leagueDefense):1;
+}
+let edits=DB.get('edits',{min:{},play:{}}); if(!edits.min||!edits.play) edits={min:{},play:{}};
+const pid=(t,i)=>SPORT.id+':'+t+':'+SLATE.teams[t].players[i][0];
+function player(t,i){
+  const [name,pos,min,pts,status]=SLATE.teams[t].players[i], id=pid(t,i);
+  const playing=id in edits.play?edits.play[id]:status!=='O';
+  const minutes=id in edits.min?edits.min[id]:min;
+  return {t,i,id,name,pos,min,pts,status,playing,minutes,edited:(id in edits.min)||(id in edits.play),opp:opponent(t),...SPORT.project(min,pts,minutes,matchupFor(t,pos))};
+}
+function roster(t){
+  const all=SLATE.teams[t].players.map((_,i)=>player(t,i));
+  return {on:all.filter(p=>p.playing).sort((a,b)=>b.result-a.result),off:all.filter(p=>!p.playing)};
+}
+function slateTeams(){return SLATE.games.flatMap(g=>[g.away,g.home])}
+function leaders(pos){
+  return slateTeams().flatMap(t=>roster(t).on).filter(p=>!pos||p.pos===pos).sort((a,b)=>b.result-a.result);
+}
+const hasEdits=()=>Object.keys(edits.min).length+Object.keys(edits.play).length>0;
+const $=s=>document.querySelector(s);
+const f1=n=>n.toFixed(1);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct=m=>{const d=Math.round((m-1)*100);return d===0?'an average amount':Math.abs(d)+'% '+(d>0?'more':'less')+' than average'};
+function day(utc){return new Date(utc).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
+function clock(utc){return new Date(utc).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
+
+/* SPORTS REGISTRY
+   To add a sport: 1) add its data file (same shape as part-data-nba.js)  2) add one registerSport({...}) block below.
+   The screens read everything from the active sport, so they need no changes. */
+const SPORTS={}, SPORT_ORDER=[];
+function registerSport(def){SPORTS[def.id]=def;SPORT_ORDER.push(def.id)}
+
+registerSport({
+  id:'nba', league:'NBA', sport:'Basketball', stat:'points', unit:'pts',
+  slate:NBA_SLATE,
+  async load(){ return this.slate; },           // the API call goes here later
+  // position groups: which defense columns each group uses, and how to name it
+  groups:{G:{cols:[0,1],name:'guards',label:'Guards'},F:{cols:[2,3],name:'forwards',label:'Forwards'},C:{cols:[4],name:'centers',label:'Centers'}},
+  steps:['Points per minute','Minutes he plays','Multiply 1 by 2','Points per game, adjusted for the defense he faces','Add 3 and 4, divide by 2'],
+  // the model from the video
+  project(seasonMin,seasonAvg,minutesTonight,matchup){
+    const rate=seasonMin>0?seasonAvg/seasonMin:0, byMinutes=rate*minutesTonight, vsDefense=seasonAvg*matchup;
+    return {rate,byMinutes,avg:seasonAvg,matchup,vsDefense,result:(byMinutes+vsDefense)/2};
+  },
+  // the same model, written out for one player (shown in his sheet)
+  explain(p){
+    const g=this.groups[p.pos]||this.groups.F;
+    return [
+      {t:'Points per minute',v:p.rate.toFixed(2)},
+      {t:'Minutes tonight',stepper:f1(p.minutes)},
+      {t:`${f1(p.minutes)} × ${p.rate.toFixed(2)}`,v:f1(p.byMinutes)},
+      {t:`${f1(p.avg)} points per game × ${p.matchup.toFixed(2)}`,sub:`${p.opp} allow ${g.name} ${pct(p.matchup)}`,v:f1(p.vsDefense)},
+      {t:`(${f1(p.byMinutes)} + ${f1(p.vsDefense)}) ÷ 2`,v:f1(p.result)}
+    ];
+  }
+});
+
+let SPORT=SPORTS[DB.get('sport','nba')]||SPORTS.nba, SLATE=SPORT.slate;
+function setSport(id){ if(!SPORTS[id]) return; SPORT=SPORTS[id]; SLATE=SPORT.slate; DB.set('sport',id); }
+
+const ICON={
+  games:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3.5"/><path d="M12 5v14M7.5 10.5v3M16.5 10.5v3"/></svg>',
+  top:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M12 20V4M19 20v-10"/></svg>',
+  formula:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 5H7l6 7-6 7h10"/></svg>',
+  back:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'
+};
+const TABS=[['games','Games'],['top','Top'],['formula','Formula']];
+let nav=DB.get('nav',null);
+if(!nav||!TABS.some(t=>t[0]===nav.tab)||!Array.isArray(nav.stack)||nav.stack.some(s=>!SLATE.games.some(g=>g.id===s.id))) nav={tab:'games',stack:[]};
+let topPos=''; let sheet=null;
+const cur=()=>nav.stack[nav.stack.length-1]||null;
+function pageTitle(){
+  const c=cur(); if(c){const g=SLATE.games.find(x=>x.id===c.id);return g.away+' at '+g.home}
+  return {games:'Games',top:'Top picks',formula:'Formula'}[nav.tab];
+}
+function head(eyebrow,title,sub){
+  return `<header class="lt-wrap"><span class="eyebrow">${eyebrow}</span><h1 class="lt" id="lt">${esc(title)}</h1>${sub?`<span class="sub">${sub}</span>`:''}</header>`;
+}
+function sideHTML(t){
+  const top=roster(t).on[0];
+  return `<div class="side"><span class="abbr">${t}</span><span class="nm">${SLATE.teams[t].name}<span class="topp">${top?esc(top.name):'No players'}</span></span><span class="big num">${top?f1(top.result):''}</span></div>`;
+}
+function viewGames(){
+  const best=leaders()[0], d0=day(SLATE.games[0].utc);
+  return sportPicker()+head(SPORT.league+' · next slate','Games',`${SLATE.games.length} games · ${d0}, your time`)+
+  (best?`<button class="hero" data-do="player" data-t="${best.t}" data-i="${best.i}" aria-label="Top projection: ${esc(best.name)}, ${f1(best.result)} ${SPORT.stat}">
+    <span class="hero-k">Top projection</span><span class="hero-n">${esc(best.name)}</span>
+    <span class="hero-s">${SLATE.teams[best.t].name} vs ${SLATE.teams[best.opp].name}</span>
+    <span class="hero-v num">${f1(best.result)}<small>${SPORT.unit}</small></span></button>`:'')+
+  `<div class="sec">Tip-offs</div>`+
+  SLATE.games.map(g=>`<button class="card game" data-do="open" data-id="${g.id}" aria-label="${g.away} at ${g.home}, open players">
+    <div class="ghead"><span>${day(g.utc)} · ${clock(g.utc)}</span><i class="chev"></i></div>${sideHTML(g.away)}${sideHTML(g.home)}</button>`).join('')+
+  `<p class="note">Each game shows its top projected scorer. Tap a game for every player.</p>`;
+}
+function rowHTML(p,rank,withTeam){
+  const pill=p.status==='Q'&&p.playing?'<span class="pill q">Questionable</span>':(!p.playing?'<span class="pill o">Out</span>':'');
+  const ed=p.id in edits.min?'<span class="pill e">Edited</span>':'';
+  const sub=withTeam?`${p.t} vs ${p.opp} · ${p.pos}`:`${p.pos} · ${f1(p.minutes)} min`;
+  return `<button class="row ${p.playing?'':'off'}" data-do="player" data-t="${p.t}" data-i="${p.i}">
+    <span class="rk num">${rank||''}</span><span class="who"><b>${esc(p.name)}${pill}${ed}</b><span class="num">${sub}</span></span>
+    <span class="proj num">${p.playing?f1(p.result):'–'}</span></button>`;
+}
+function viewGame(c){
+  const g=SLATE.games.find(x=>x.id===c.id), r=roster(c.team);
+  return head(SPORT.league+' · '+day(g.utc)+' · '+clock(g.utc),g.away+' at '+g.home,'')+
+  `<div class="seg" role="group" aria-label="Team">${[g.away,g.home].map(x=>`<button data-do="team" data-t="${x}" aria-pressed="${x===c.team}">${SLATE.teams[x].name}</button>`).join('')}</div>
+  <div class="sec">Projected ${SPORT.stat}</div>
+  <div class="card">${r.on.map((p,k)=>rowHTML(p,k+1)).join('')||'<div class="row plain">No players</div>'}</div>
+  ${r.off.length?`<div class="sec">Not playing</div><div class="card">${r.off.map(p=>rowHTML(p)).join('')}</div>`:''}
+  <p class="note">Tap a player to see the 5 steps and change his minutes.</p>`;
+}
+function viewTop(){
+  const list=leaders(topPos).slice(0,25);
+  return head(SPORT.league+' · next slate','Top picks','Highest projections across all games')+
+  `<div class="seg" role="group" aria-label="Position">${[['','All'],...Object.entries(SPORT.groups).map(([k,g])=>[k,g.label])].map(([k,l])=>`<button data-do="pos" data-p="${k}" aria-pressed="${k===topPos}">${l}</button>`).join('')}</div>
+  <div class="card">${list.map((p,k)=>rowHTML(p,k+1,true)).join('')||'<div class="row plain">No players</div>'}</div>`;
+}
+function stepsHTML(p){
+  const rows=p?SPORT.explain(p):SPORT.steps.map(t=>({t}));
+  return rows.map((r,k)=>`<div class="step"><span class="n">${k+1}</span><span class="t">${r.t}${r.sub?`<small>${r.sub}</small>`:''}</span>${
+    r.stepper!=null?`<span class="stepper"><button data-do="min" data-d="-1" aria-label="One minute less">−</button><b class="num">${r.stepper}</b><button data-do="min" data-d="1" aria-label="One minute more">+</button></span>`
+    :r.v!=null?`<span class="v num">${r.v}</span>`:''}</div>`).join('');
+}
+function sportPicker(){
+  if(SPORT_ORDER.length<2) return '';
+  return `<div class="seg" role="group" aria-label="Sport">${SPORT_ORDER.map(id=>`<button data-do="sport" data-s="${id}" aria-pressed="${id===SPORT.id}">${SPORTS[id].league}</button>`).join('')}</div>`;
+}
+function viewFormula(){
+  const R=(k,v)=>`<div class="row plain"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+  return head(SPORT.league+' · how it works','Formula',`${SPORT.steps.length} steps for every player`)+
+  `<div class="card steps">${stepsHTML()}</div>
+  <div class="sec">Where the numbers come from</div>
+  <div class="card">${R('Sport',SPORT.sport+' · '+SPORT.league)}${R('Player stats','ESPN')}${R('Injuries','ESPN')}${R('Defense by position','Hashtag Basketball')}${R('Checked',SLATE.checked)}</div>
+  <p class="note">Questionable players may not play. This is a simple estimate, not a guarantee.</p>
+  ${hasEdits()?'<button class="btn2" data-do="resetall">Reset my changes</button>':''}
+  ${STANDALONE?'':'<div class="sec">Install</div><div class="card"><div class="row plain"><span class="k">In Safari, tap Share, then Add to Home Screen.</span></div></div>'}`;
+}
+function sheetBody(){
+  const p=player(sheet.t,sheet.i);
+  return `<div class="card result"><span>Projected ${SPORT.stat}<br>${p.t} vs ${p.opp}</span><b class="num">${p.playing?f1(p.result):'–'}</b></div>
+  <div class="card steps">${stepsHTML(p)}</div>
+  <div class="card steps"><div class="step"><span class="t" style="font-size:1.0625rem">Playing tonight</span><button class="sw" role="switch" aria-checked="${p.playing}" aria-label="Playing tonight" data-do="play"></button></div></div>
+  ${p.edited?'<button class="btn2" data-do="reset">Reset his minutes and status</button>':''}`;
+}
+function sheetShell(title,body){
+  return `<div class="scrim" data-do="close"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+  <div class="grab"></div><div class="sh-head"><span class="sp"></span><h2>${esc(title)}</h2><button data-do="close" id="sh-done">Done</button></div>
+  <div class="sh-body" id="sh-body">${body}</div></div>`;
+}
+
+const view=$('#view'), navEl=$('#nav'), bar=$('#tabbar'), root=$('#sheet-root'), toastEl=$('#toast');
+const REDUCE=()=>{try{return matchMedia('(prefers-reduced-motion:reduce)').matches}catch(e){return false}};
+let ltObs=null, pgUntil=0;
+function renderAll(){
+  const c=cur();
+  view.innerHTML=c?viewGame(c):nav.tab==='games'?viewGames():nav.tab==='top'?viewTop():viewFormula();
+  navEl.innerHTML=`<div class="nav-bg"></div><div class="nav-row">${c?`<button class="glassbtn" data-do="back" aria-label="Back">${ICON.back}</button>`:'<span class="nb-sp"></span>'}<span class="nav-title" aria-hidden="true">${esc(pageTitle())}</span><span class="nb-sp"></span></div>`;
+  navEl.classList.remove('show-title');
+  bar.style.setProperty('--i',TABS.findIndex(t=>t[0]===nav.tab));
+  bar.querySelectorAll('button').forEach(b=>b.dataset.tab===nav.tab?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
+  if(ltObs) ltObs.disconnect();
+  const lt=$('#lt');
+  if(lt&&'IntersectionObserver' in window){
+    ltObs=new IntersectionObserver(e=>navEl.classList.toggle('show-title',!e[0].isIntersecting),{rootMargin:'-56px 0px 0px 0px'});
+    ltObs.observe(lt);
+  }
+  DB.set('nav',nav);
+}
+/* page slide */
+function pgSnap(){
+  const c=view.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+  c.className='view pg'; c.setAttribute('aria-hidden','true'); c.inert=true; c.style.top=(-scrollY)+'px';
+  document.body.appendChild(c); document.documentElement.classList.add('pg-run'); return c;
+}
+function pgRun(dir,snap){
+  const a=dir==='fwd'?'pg-in':'pg-back-in'; view.classList.add(a); snap.classList.add(dir==='fwd'?'pg-under':'pg-out');
+  pgUntil=Date.now()+480;
+  setTimeout(()=>{snap.remove();view.classList.remove(a);document.documentElement.classList.remove('pg-run')},REDUCE()?160:480);
+}
+function push(entry){ if(Date.now()<pgUntil) return; const s=pgSnap(); (cur()||nav).y=scrollY; nav.stack.push(entry); renderAll(); scrollTo(0,0); pgRun('fwd',s); }
+function pop(){ if(Date.now()<pgUntil||!cur()) return; const s=pgSnap(); nav.stack.pop(); renderAll(); scrollTo(0,(cur()||nav).y||0); pgRun('back',s); }
+/* tab bar */
+bar.style.setProperty('--n',TABS.length);
+bar.innerHTML='<span class="tb-ind"></span>'+TABS.map(([k,l])=>`<button data-do="tab" data-tab="${k}">${ICON[k]}<span>${l}</span></button>`).join('');
+let lastY=0;
+addEventListener('scroll',()=>{
+  const y=scrollY;
+  if(y<=8) bar.classList.remove('min'); else if(y>lastY+4&&y>12) bar.classList.add('min'); else if(y<lastY-4) bar.classList.remove('min');
+  lastY=y;
+},{passive:true});
+function tapBar(){bar.classList.remove('tap');void bar.offsetWidth;bar.classList.add('tap');setTimeout(()=>bar.classList.remove('tap'),650)}
+/* sheet */
+let opener=null;
+function openSheet(t,i){
+  if(sheet) return; sheet={t,i}; opener={t,i};
+  root.classList.remove('closing'); root.innerHTML=sheetShell(player(t,i).name,sheetBody());
+  document.documentElement.style.setProperty('--sy',(scrollY-view.offsetTop+innerHeight*.3)+'px');
+  document.body.classList.add('sheet-open'); view.inert=true; bar.inert=true; navEl.inert=true;
+  const d=$('#sh-done'); if(d) d.focus({preventScroll:true});
+  bindDrag(root.querySelector('.sheet'));
+}
+function closeSheet(){
+  if(!sheet) return; sheet=null; root.classList.add('closing');
+  document.body.classList.remove('sheet-open'); document.documentElement.style.removeProperty('--pscale');
+  view.inert=false; bar.inert=false; navEl.inert=false;
+  const sc=root.querySelector('.scrim'); if(sc) sc.style.opacity='';
+  setTimeout(()=>{ if(!sheet){root.innerHTML='';root.classList.remove('closing')} },REDUCE()?20:300);
+  if(opener){const b=view.querySelector(`[data-do="player"][data-t="${opener.t}"][data-i="${opener.i}"]`); if(b) b.focus({preventScroll:true});}
+}
+function bindDrag(el){
+  let y0=null,dy=0,t0=0,h=0; const body=el.querySelector('.sh-body'), sc=root.querySelector('.scrim');
+  el.addEventListener('touchstart',e=>{
+    if(e.target.closest('button')&&!e.target.closest('.sh-head')) {y0=null;return}
+    if(body.contains(e.target)&&body.scrollTop>0){y0=null;return}
+    y0=e.touches[0].clientY;dy=0;t0=Date.now();h=el.offsetHeight;el.style.animation='none';el.style.transition='none';
+  },{passive:true});
+  el.addEventListener('touchmove',e=>{
+    if(y0==null) return; dy=e.touches[0].clientY-y0;
+    const m=dy>0?dy:dy/6; el.style.transform=`translateY(${m}px)`;
+    const pr=Math.max(0,Math.min(1,dy/h));
+    document.documentElement.style.setProperty('--pscale',.95+.05*pr); if(sc) sc.style.opacity=1-pr;
+    if(dy>0&&e.cancelable) e.preventDefault();
+  },{passive:false});
+  el.addEventListener('touchend',()=>{
+    if(y0==null) return; const v=dy/Math.max(1,Date.now()-t0); y0=null;
+    if(dy>h*.28||(v>.5&&dy>24)){
+      el.style.transition='transform .3s cubic-bezier(.32,.72,0,1)'; el.style.transform=`translateY(${h+32}px)`;
+      sheet=sheet; const s=sheet; sheet=null; document.body.classList.remove('sheet-open'); document.documentElement.style.removeProperty('--pscale');
+      view.inert=false; bar.inert=false; navEl.inert=false; if(sc){sc.style.transition='opacity .3s';sc.style.opacity=0}
+      setTimeout(()=>{ if(!sheet) root.innerHTML='' },300);
+    }else{
+      el.style.transition='transform .42s cubic-bezier(.2,.9,.3,1)'; el.style.transform='';
+      document.documentElement.style.removeProperty('--pscale'); if(sc) sc.style.opacity='';
+    }
+  });
+}
+/* toast */
+let toastT=0, undo=null;
+function toast(msg,undoFn){
+  undo=undoFn||null; toastEl.innerHTML=`<span>${esc(msg)}</span>${undo?'<button data-do="undo">Undo</button>':''}`;
+  toastEl.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove('on'),4000);
+}
+function refresh(){ const y=scrollY; renderAll(); scrollTo(0,y); if(sheet){const b=$('#sh-body'); if(b) b.innerHTML=sheetBody();} }
+/* events */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-do]'); if(!b) return; const d=b.dataset;
+  switch(d.do){
+    case 'tab':
+      tapBar();
+      if(d.tab===nav.tab&&!cur()){ scrollTo({top:0,behavior:REDUCE()?'auto':'smooth'}); break; }
+      nav.tab=d.tab; nav.stack=[]; nav.y=0; renderAll(); scrollTo(0,0); break;
+    case 'open': push({v:'game',id:d.id,team:SLATE.games.find(g=>g.id===d.id).away}); break;
+    case 'back': pop(); break;
+    case 'team': cur().team=d.t; refresh(); break;
+    case 'pos': topPos=d.p; refresh(); break;
+    case 'sport': setSport(d.s); topPos=''; nav={tab:'games',stack:[]}; renderAll(); scrollTo(0,0); break;
+    case 'player': openSheet(d.t,+d.i); break;
+    case 'close': closeSheet(); break;
+    case 'undo': if(undo){undo();undo=null;toastEl.classList.remove('on')} break;
+    case 'resetall': { const old=JSON.parse(JSON.stringify(edits)); edits={min:{},play:{}}; DB.set('edits',edits); refresh();
+      toast('Changes reset',()=>{edits=old;DB.set('edits',edits);refresh()}); break; }
+    default: if(sheet){
+      const p=player(sheet.t,sheet.i);
+      if(d.do==='min') edits.min[p.id]=Math.max(0,Math.min(48,Math.round(p.minutes+(+d.d))));
+      if(d.do==='play') edits.play[p.id]=!p.playing;
+      if(d.do==='reset'){delete edits.min[p.id];delete edits.play[p.id]}
+      DB.set('edits',edits); refresh();
+    }
+  }
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&sheet) closeSheet(); });
+SPORT.load().then(s=>{ SLATE=s; renderAll(); scrollTo(0,0); });
+if('serviceWorker' in navigator && location.protocol==='https:'){ try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){} }
+
+</script>
+</body>
+</html>
