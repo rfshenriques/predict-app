@@ -3,7 +3,7 @@
   --label:#FFFFFF; --label2:rgba(235,235,245,.64); --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --sw-off:rgba(120,120,128,.42);
   --tint:#FF8FA6; --tint-bg:rgba(255,143,166,.16);
   --attn:#FEC40B; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.2);
-  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158;
+  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158; --pos:#30D158; --pos-bg:rgba(48,209,88,.2); --on-tint:#1C1C1E;
   --scrim:rgba(0,0,0,.58); --seg-on:#636366;
   --lg-tint:rgba(44,44,46,.68); --lg-edge2:rgba(255,255,255,.1); --lg-rim:rgba(255,255,255,.16); --lg-rim2:rgba(255,255,255,.05);
   --lg-act:rgba(255,255,255,.14); --lg-ink:rgba(255,255,255,.9); --lg-sh:rgba(0,0,0,.5); --lg-spec:rgba(255,255,255,.06); --lg-flash:rgba(255,255,255,.22);

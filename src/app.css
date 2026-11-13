@@ -6,7 +6,7 @@
   --label:#1C1C1E; --label2:rgba(60,60,67,.66); --sep:rgba(60,60,67,.18); --fill:rgba(120,120,128,.12); --sw-off:rgba(120,120,128,.3);
   --tint:#731328; --tint-bg:rgba(115,19,40,.09);
   --attn:#7A5200; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.28);
-  --red:#C5221F; --red-bg:rgba(255,59,48,.12); --green:#34C759;
+  --red:#C5221F; --red-bg:rgba(255,59,48,.12); --green:#34C759; --pos:#1A7F37; --pos-bg:rgba(52,199,89,.16); --on-tint:#FFFFFF;
   --scrim:rgba(0,0,0,.46); --seg-on:#FFFFFF;
   --lg-tint:rgba(255,255,255,.62); --lg-edge2:rgba(60,60,67,.16); --lg-rim:#fff; --lg-rim2:rgba(60,60,67,.2);
   --lg-act:rgba(120,120,128,.16); --lg-ink:rgba(28,28,30,.82); --lg-sh:rgba(0,0,0,.18); --lg-spec:rgba(255,255,255,.5); --lg-flash:rgba(255,255,255,.85);
@@ -122,8 +122,8 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 
 /* sheet */
 .scrim{position:fixed;inset:0;z-index:10;background:var(--scrim);animation:fade .3s ease both}
-.sheet{position:fixed;z-index:11;left:1rem;right:1rem;bottom:1rem;max-width:36rem;margin:0 auto;height:auto;
-  max-height:calc(100% - max(env(safe-area-inset-top),1.25rem) - 1.625rem);display:flex;flex-direction:column;overflow:hidden;
+.sheet{position:fixed;z-index:11;left:1rem;right:1rem;bottom:calc(1rem + var(--kb,0px));max-width:36rem;margin:0 auto;height:auto;
+  max-height:calc(100% - max(env(safe-area-inset-top),1.25rem) - 1.625rem - var(--kb,0px));display:flex;flex-direction:column;overflow:hidden;
   background:var(--sheet);border-radius:2rem;box-shadow:0 0 0 .5px var(--lg-edge2),0 .75rem 2.5rem rgba(0,0,0,.32);
   animation:rise .42s cubic-bezier(.32,.72,0,1) both;touch-action:pan-y}
 .sheet .card{background:var(--inset);border-radius:1rem}
@@ -132,8 +132,9 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 .grab{flex:none;width:36px;height:5px;border-radius:3px;background:var(--sw-off);margin:.5rem auto 0}
 .sh-head{flex:none;display:flex;align-items:center;min-height:3rem;padding:0 1.25rem}
 .sh-head h2{flex:1;margin:0;font-size:1.0625rem;font-weight:600;text-align:center;overflow-wrap:anywhere}
-.sh-head .sp{width:3.5rem;flex:none}
-.sh-head button{width:3.5rem;flex:none;min-height:2.75rem;color:var(--tint);font-weight:600;text-align:right}
+.sh-head .sp{width:4.25rem;flex:none}
+.sh-head button.lead{text-align:left;font-weight:400}
+.sh-head button{width:4.25rem;flex:none;min-height:2.75rem;color:var(--tint);font-weight:600;text-align:right}
 .sh-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:.5rem 1rem 1rem;display:flex;flex-direction:column;gap:.75rem}
 .result{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:1rem}
 .result span{font-size:.9375rem;color:var(--label2)}
@@ -147,12 +148,40 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 .sw::after{content:"";position:absolute;top:2px;left:2px;width:1.6875rem;height:1.6875rem;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
 .sw[aria-checked="true"]{background:var(--green)}.sw[aria-checked="true"]::after{transform:translateX(1.25rem)}
 
+/* bets */
+.pos{color:var(--pos)}.neg{color:var(--red)}.tintc{color:var(--tint);font-weight:600}
+.sum{display:grid;grid-template-columns:1fr 1fr;width:100%;transition:background .15s}
+button.sum:active{background:var(--fill)}
+.tile{display:flex;flex-direction:column;gap:.1rem;padding:.8rem 1rem;min-width:0}
+.tile:nth-child(odd){border-right:.5px solid var(--sep)}.tile:nth-child(-n+2){border-bottom:.5px solid var(--sep)}
+.tk{font-size:.75rem;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.04em}
+.tv{font-size:1.5rem;font-weight:700;line-height:1.2}
+.ts{font-size:.8125rem;color:var(--label2)}
+.chips{display:flex;gap:.5rem;overflow-x:auto;scrollbar-width:none;margin:0 -1rem;padding:.25rem 1rem}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;position:relative;min-height:2.25rem;padding:0 .9rem;border-radius:999px;background:var(--fill);font-size:.875rem;font-weight:600;color:var(--label2);white-space:nowrap}
+.chip::after{content:"";position:absolute;inset:-.25rem 0}
+.chip[aria-pressed="true"]{background:var(--tint);color:var(--on-tint)}
+.row.nork + .row.nork::before,.row.nork::before{left:1rem}
+.row .pl{flex:none;font-weight:700;text-align:right}
+.pill.w{background:var(--pos-bg);color:var(--pos)}.pill.l{background:var(--red-bg);color:var(--red)}.pill.v{background:var(--fill);color:var(--label2)}.pill.op{background:var(--attn-bg);color:var(--attn)}
+.fld{display:flex;align-items:center;gap:.75rem;min-height:3rem;padding:0 1rem}
+.fld + .fld{border-top:.5px solid var(--sep)}
+.fld span{flex:1}
+.fld input{flex:none;width:7.5rem;font:inherit;font-size:1.0625rem;text-align:right;color:var(--label);background:none;border:0;border-radius:.5rem;padding:.5rem .25rem;font-variant-numeric:tabular-nums}
+.fld input:focus-visible,.ta:focus-visible{outline:2px solid var(--tint);outline-offset:1px}
+.fld input::placeholder{color:var(--label2);opacity:.7}
+.ta{width:100%;min-height:8rem;font:1rem/1.4 var(--font);border:0;border-radius:1rem;padding:.75rem;background:var(--inset);color:var(--label);resize:none}
+.btn2.danger{color:var(--red);background:var(--red-bg)}
+.result.small b{font-size:2rem}
+.sheet .note{padding:0 .25rem}
+
 /* toast */
 #toast{position:fixed;z-index:20;left:50%;bottom:calc(5.75rem);transform:translate(-50%,1rem);opacity:0;pointer-events:none;display:flex;align-items:center;gap:.75rem;
-  padding:.65rem 1.1rem;border-radius:999px;font-size:.9375rem;font-weight:600;color:var(--lg-ink);background:var(--lg-tint);
+  padding:0 1.1rem;min-height:2.75rem;border-radius:999px;font-size:.9375rem;font-weight:600;color:var(--lg-ink);background:var(--lg-tint);
   -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px var(--lg-edge2),0 6px 20px var(--lg-sh);transition:opacity .25s,transform .25s;max-width:calc(100% - 2rem)}
 #toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-#toast button{color:var(--tint);font-weight:700;min-height:2rem}
+#toast button{color:var(--tint);font-weight:700;min-height:2.75rem;min-width:2.75rem}
 
 /* page slide */
 .pg{position:fixed;top:0;left:0;right:0;z-index:1;pointer-events:none}

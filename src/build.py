@@ -1,8 +1,8 @@
-import json,os,shutil
+import json,os,shutil,glob
 R=os.path.dirname(os.path.abspath(__file__)); rd=lambda f:open(os.path.join(R,f),encoding='utf-8').read()
 dark=rd('dark.css')
 css=rd('app.css').replace('/*DARK*/','@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){\n'+dark+'}}\n:root[data-theme="dark"]{\n'+dark+'}')
-js='\n'.join(rd(f) for f in ['part-standalone.js','part-data-nba.js','part-core.js','part-sports.js','part-ui.js','part-nav.js'])
+js='\n'.join(rd(f) for f in ['part-standalone.js']+sorted(os.path.basename(f) for f in glob.glob(os.path.join(R,'part-data-*.js')))+['part-core.js','part-bets.js','part-sports.js','part-ui.js','part-nav.js'])
 sp=os.path.join(R,'icons','splash','index.json'); splash=''
 if os.path.exists(sp):
     for s in json.load(open(sp)):

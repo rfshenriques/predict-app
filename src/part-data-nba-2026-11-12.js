@@ -1,5 +1,6 @@
 /* NBA DATA. Today this is a saved snapshot. When the API is linked, load() in part-sports.js returns the same shape. */
-const NBA_SLATE = {
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({
+  date: "2026-11-12", sources: {stats:"ESPN", injuries:"ESPN", defense:"Hashtag Basketball"},
   checked: "12 Nov 2026",
   games: [
     {id:"tor-phi", utc:"2026-11-13T00:00:00Z", away:"TOR", home:"PHI"},
@@ -65,4 +66,4 @@ const NBA_SLATE = {
       ["Royce O'Neale","F",18.0,4.4,""],["Kon Knueppel","G",6.0,3.0,"O"],["Hannes Steinbach","F",7.7,2.7,""],
       ["Christian Anderson","G",10.3,2.6,""],["Liam McNeeley","G",7.0,1.8,""],["PJ Hall","C",5.5,0.0,""]]}
   }
-};
+});

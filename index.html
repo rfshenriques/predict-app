@@ -48,7 +48,7 @@
   --label:#1C1C1E; --label2:rgba(60,60,67,.66); --sep:rgba(60,60,67,.18); --fill:rgba(120,120,128,.12); --sw-off:rgba(120,120,128,.3);
   --tint:#731328; --tint-bg:rgba(115,19,40,.09);
   --attn:#7A5200; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.28);
-  --red:#C5221F; --red-bg:rgba(255,59,48,.12); --green:#34C759;
+  --red:#C5221F; --red-bg:rgba(255,59,48,.12); --green:#34C759; --pos:#1A7F37; --pos-bg:rgba(52,199,89,.16); --on-tint:#FFFFFF;
   --scrim:rgba(0,0,0,.46); --seg-on:#FFFFFF;
   --lg-tint:rgba(255,255,255,.62); --lg-edge2:rgba(60,60,67,.16); --lg-rim:#fff; --lg-rim2:rgba(60,60,67,.2);
   --lg-act:rgba(120,120,128,.16); --lg-ink:rgba(28,28,30,.82); --lg-sh:rgba(0,0,0,.18); --lg-spec:rgba(255,255,255,.5); --lg-flash:rgba(255,255,255,.85);
@@ -59,7 +59,7 @@
   --label:#FFFFFF; --label2:rgba(235,235,245,.64); --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --sw-off:rgba(120,120,128,.42);
   --tint:#FF8FA6; --tint-bg:rgba(255,143,166,.16);
   --attn:#FEC40B; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.2);
-  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158;
+  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158; --pos:#30D158; --pos-bg:rgba(48,209,88,.2); --on-tint:#1C1C1E;
   --scrim:rgba(0,0,0,.58); --seg-on:#636366;
   --lg-tint:rgba(44,44,46,.68); --lg-edge2:rgba(255,255,255,.1); --lg-rim:rgba(255,255,255,.16); --lg-rim2:rgba(255,255,255,.05);
   --lg-act:rgba(255,255,255,.14); --lg-ink:rgba(255,255,255,.9); --lg-sh:rgba(0,0,0,.5); --lg-spec:rgba(255,255,255,.06); --lg-flash:rgba(255,255,255,.22);
@@ -70,7 +70,7 @@
   --label:#FFFFFF; --label2:rgba(235,235,245,.64); --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --sw-off:rgba(120,120,128,.42);
   --tint:#FF8FA6; --tint-bg:rgba(255,143,166,.16);
   --attn:#FEC40B; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.2);
-  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158;
+  --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158; --pos:#30D158; --pos-bg:rgba(48,209,88,.2); --on-tint:#1C1C1E;
   --scrim:rgba(0,0,0,.58); --seg-on:#636366;
   --lg-tint:rgba(44,44,46,.68); --lg-edge2:rgba(255,255,255,.1); --lg-rim:rgba(255,255,255,.16); --lg-rim2:rgba(255,255,255,.05);
   --lg-act:rgba(255,255,255,.14); --lg-ink:rgba(255,255,255,.9); --lg-sh:rgba(0,0,0,.5); --lg-spec:rgba(255,255,255,.06); --lg-flash:rgba(255,255,255,.22);
@@ -185,8 +185,8 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 
 /* sheet */
 .scrim{position:fixed;inset:0;z-index:10;background:var(--scrim);animation:fade .3s ease both}
-.sheet{position:fixed;z-index:11;left:1rem;right:1rem;bottom:1rem;max-width:36rem;margin:0 auto;height:auto;
-  max-height:calc(100% - max(env(safe-area-inset-top),1.25rem) - 1.625rem);display:flex;flex-direction:column;overflow:hidden;
+.sheet{position:fixed;z-index:11;left:1rem;right:1rem;bottom:calc(1rem + var(--kb,0px));max-width:36rem;margin:0 auto;height:auto;
+  max-height:calc(100% - max(env(safe-area-inset-top),1.25rem) - 1.625rem - var(--kb,0px));display:flex;flex-direction:column;overflow:hidden;
   background:var(--sheet);border-radius:2rem;box-shadow:0 0 0 .5px var(--lg-edge2),0 .75rem 2.5rem rgba(0,0,0,.32);
   animation:rise .42s cubic-bezier(.32,.72,0,1) both;touch-action:pan-y}
 .sheet .card{background:var(--inset);border-radius:1rem}
@@ -195,8 +195,9 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 .grab{flex:none;width:36px;height:5px;border-radius:3px;background:var(--sw-off);margin:.5rem auto 0}
 .sh-head{flex:none;display:flex;align-items:center;min-height:3rem;padding:0 1.25rem}
 .sh-head h2{flex:1;margin:0;font-size:1.0625rem;font-weight:600;text-align:center;overflow-wrap:anywhere}
-.sh-head .sp{width:3.5rem;flex:none}
-.sh-head button{width:3.5rem;flex:none;min-height:2.75rem;color:var(--tint);font-weight:600;text-align:right}
+.sh-head .sp{width:4.25rem;flex:none}
+.sh-head button.lead{text-align:left;font-weight:400}
+.sh-head button{width:4.25rem;flex:none;min-height:2.75rem;color:var(--tint);font-weight:600;text-align:right}
 .sh-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:.5rem 1rem 1rem;display:flex;flex-direction:column;gap:.75rem}
 .result{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:1rem}
 .result span{font-size:.9375rem;color:var(--label2)}
@@ -210,12 +211,40 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 .sw::after{content:"";position:absolute;top:2px;left:2px;width:1.6875rem;height:1.6875rem;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
 .sw[aria-checked="true"]{background:var(--green)}.sw[aria-checked="true"]::after{transform:translateX(1.25rem)}
 
+/* bets */
+.pos{color:var(--pos)}.neg{color:var(--red)}.tintc{color:var(--tint);font-weight:600}
+.sum{display:grid;grid-template-columns:1fr 1fr;width:100%;transition:background .15s}
+button.sum:active{background:var(--fill)}
+.tile{display:flex;flex-direction:column;gap:.1rem;padding:.8rem 1rem;min-width:0}
+.tile:nth-child(odd){border-right:.5px solid var(--sep)}.tile:nth-child(-n+2){border-bottom:.5px solid var(--sep)}
+.tk{font-size:.75rem;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.04em}
+.tv{font-size:1.5rem;font-weight:700;line-height:1.2}
+.ts{font-size:.8125rem;color:var(--label2)}
+.chips{display:flex;gap:.5rem;overflow-x:auto;scrollbar-width:none;margin:0 -1rem;padding:.25rem 1rem}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;position:relative;min-height:2.25rem;padding:0 .9rem;border-radius:999px;background:var(--fill);font-size:.875rem;font-weight:600;color:var(--label2);white-space:nowrap}
+.chip::after{content:"";position:absolute;inset:-.25rem 0}
+.chip[aria-pressed="true"]{background:var(--tint);color:var(--on-tint)}
+.row.nork + .row.nork::before,.row.nork::before{left:1rem}
+.row .pl{flex:none;font-weight:700;text-align:right}
+.pill.w{background:var(--pos-bg);color:var(--pos)}.pill.l{background:var(--red-bg);color:var(--red)}.pill.v{background:var(--fill);color:var(--label2)}.pill.op{background:var(--attn-bg);color:var(--attn)}
+.fld{display:flex;align-items:center;gap:.75rem;min-height:3rem;padding:0 1rem}
+.fld + .fld{border-top:.5px solid var(--sep)}
+.fld span{flex:1}
+.fld input{flex:none;width:7.5rem;font:inherit;font-size:1.0625rem;text-align:right;color:var(--label);background:none;border:0;border-radius:.5rem;padding:.5rem .25rem;font-variant-numeric:tabular-nums}
+.fld input:focus-visible,.ta:focus-visible{outline:2px solid var(--tint);outline-offset:1px}
+.fld input::placeholder{color:var(--label2);opacity:.7}
+.ta{width:100%;min-height:8rem;font:1rem/1.4 var(--font);border:0;border-radius:1rem;padding:.75rem;background:var(--inset);color:var(--label);resize:none}
+.btn2.danger{color:var(--red);background:var(--red-bg)}
+.result.small b{font-size:2rem}
+.sheet .note{padding:0 .25rem}
+
 /* toast */
 #toast{position:fixed;z-index:20;left:50%;bottom:calc(5.75rem);transform:translate(-50%,1rem);opacity:0;pointer-events:none;display:flex;align-items:center;gap:.75rem;
-  padding:.65rem 1.1rem;border-radius:999px;font-size:.9375rem;font-weight:600;color:var(--lg-ink);background:var(--lg-tint);
+  padding:0 1.1rem;min-height:2.75rem;border-radius:999px;font-size:.9375rem;font-weight:600;color:var(--lg-ink);background:var(--lg-tint);
   -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px var(--lg-edge2),0 6px 20px var(--lg-sh);transition:opacity .25s,transform .25s;max-width:calc(100% - 2rem)}
 #toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-#toast button{color:var(--tint);font-weight:700;min-height:2rem}
+#toast button{color:var(--tint);font-weight:700;min-height:2.75rem;min-width:2.75rem}
 
 /* page slide */
 .pg{position:fixed;top:0;left:0;right:0;z-index:1;pointer-events:none}
@@ -259,7 +288,8 @@ const DB={
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 
 /* NBA DATA. Today this is a saved snapshot. When the API is linked, load() in part-sports.js returns the same shape. */
-const NBA_SLATE = {
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({
+  date: "2026-11-12", sources: {stats:"ESPN", injuries:"ESPN", defense:"Hashtag Basketball"},
   checked: "12 Nov 2026",
   games: [
     {id:"tor-phi", utc:"2026-11-13T00:00:00Z", away:"TOR", home:"PHI"},
@@ -325,7 +355,304 @@ const NBA_SLATE = {
       ["Royce O'Neale","F",18.0,4.4,""],["Kon Knueppel","G",6.0,3.0,"O"],["Hannes Steinbach","F",7.7,2.7,""],
       ["Christian Anderson","G",10.3,2.6,""],["Liam McNeeley","G",7.0,1.8,""],["PJ Hall","C",5.5,0.0,""]]}
   }
-};
+});
+
+/* NBA slate for Fri 13 Nov 2026 (US date). player: [name, position, minutes per game, points per game, status, starter]
+   status: O out, D doubtful, Q questionable, P probable */
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-13","checked":"13 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball"},"games":[{"id":"mil-orl","utc":"2026-11-14T00:00:00Z","away":"MIL","home":"ORL"},{"id":"nyk-ind","utc":"2026-11-14T00:00:00Z","away":"NYK","home":"IND"},{"id":"mem-nop","utc":"2026-11-14T01:00:00Z","away":"MEM","home":"NOP"},{"id":"atl-chi","utc":"2026-11-14T01:00:00Z","away":"ATL","home":"CHI"},{"id":"cle-mia","utc":"2026-11-14T01:00:00Z","away":"CLE","home":"MIA"},{"id":"uta-hou","utc":"2026-11-14T01:30:00Z","away":"UTA","home":"HOU"},{"id":"gsw-sas","utc":"2026-11-14T02:30:00Z","away":"GSW","home":"SAS"},{"id":"por-sac","utc":"2026-11-14T03:00:00Z","away":"POR","home":"SAC"},{"id":"okc-lac","utc":"2026-11-14T03:30:00Z","away":"OKC","home":"LAC"}],"defense":{"NYK":[25.4,21.4,23.1,17.3,14.7],"IND":[22.5,23.8,18.9,23.4,25.5],"MIL":[27.6,23.5,21.7,23.6,25.2],"ORL":[24.0,23.0,24.8,21.3,17.6],"MEM":[29.0,21.4,18.9,21.0,19.5],"NOP":[32.3,23.7,17.6,22.8,24.1],"ATL":[22.7,20.6,23.8,23.2,26.3],"CHI":[32.5,23.5,24.7,24.8,23.8],"CLE":[26.3,23.4,20.0,21.9,20.2],"MIA":[30.5,25.7,21.5,20.4,19.3],"UTA":[30.4,19.5,20.0,26.8,16.3],"HOU":[26.3,21.3,18.1,20.7,18.5],"GSW":[24.3,21.7,22.9,20.8,20.6],"SAS":[25.4,21.8,17.0,21.7,21.9],"POR":[29.0,22.3,15.3,21.7,24.8],"SAC":[28.0,22.6,21.0,27.0,22.2],"OKC":[22.4,20.8,22.1,22.7,18.1],"LAC":[28.7,25.0,17.1,21.9,21.3]},"leagueDefense":[26.1,21.9,20.8,22.5,20.7],"teams":{"NYK":
+  {"name":"Knicks","players":[
+    ["Jalen Brunson","G",33.6,26.0,"",1],
+    ["Karl-Anthony Towns","C",31.4,20.9,"",1],
+    ["OG Anunoby","F",32.7,16.5,"",1],
+    ["Landry Shamet","G",25.9,9.6,""],
+    ["Josh Hart","G",30.9,8.3,"",1],
+    ["Miles McBride","G",18.9,7.9,""],
+    ["Jordan Clarkson","G",10.6,6.0,""],
+    ["Mikal Bridges","G",24.4,5.9,"",1],
+    ["Dalton Knecht","F",9.7,4.3,""],
+    ["Andre Drummond","C",13.5,4.3,""],
+    ["Pacome Dadiet","F",5.3,4.0,""],
+    ["Tyler Kolek","G",12.8,3.4,""],
+    ["Mohamed Diawara","F",12.0,2.8,""],
+    ["Jose Alvarado","G",10.4,2.0,""],
+    ["James Wiseman","C",5.2,1.6,""],
+    ["Jaden Akins","G",1.0,0.0,""]]},"IND":
+  {"name":"Pacers","players":[
+    ["Pascal Siakam","F",32.2,22.2,"",1],
+    ["Tyrese Haliburton","G",33.0,21.8,"O"],
+    ["Andrew Nembhard","G",33.2,17.1,"",1],
+    ["Obi Toppin","F",21.9,13.4,""],
+    ["Aaron Nesmith","G",25.6,12.8,"Q",1],
+    ["Quenton Jackson","G",21.6,10.0,""],
+    ["Kelly Oubre Jr.","G",22.3,9.1,"",1],
+    ["Ivica Zubac","C",21.7,9.0,"",1],
+    ["Jarace Walker","F",22.2,7.4,""],
+    ["Jay Huff","C",18.2,7.1,""],
+    ["Kobe Brown","G",13.7,4.7,""],
+    ["Larry Nance Jr.","F",15.6,4.6,""],
+    ["T.J. McConnell","G",8.5,4.0,"P"],
+    ["Jalen Slawson","F",14.9,3.8,""],
+    ["Braden Smith","G",13.3,3.8,""],
+    ["Ben Sheppard","G",12.0,3.0,"O"]]},"MIL":
+  {"name":"Bucks","players":[
+    ["Tyler Herro","G",30.7,21.4,"",1],
+    ["Jaime Jaquez Jr.","F",27.8,15.2,"",1],
+    ["Kyle Kuzma","F",27.4,11.6,"",1],
+    ["Ryan Rollins","G",23.3,10.7,""],
+    ["Brayden Burries","G",21.0,10.5,"",1],
+    ["Kel'el Ware","C",17.3,8.6,""],
+    ["Nate Ament","F",16.0,7.8,""],
+    ["AJ Green","G",20.2,7.5,""],
+    ["Myles Turner","C",27.1,7.1,"",1],
+    ["Kasparas Jakucionis","G",18.6,6.4,""],
+    ["Ousmane Dieng","F",10.7,3.1,""],
+    ["Gary Trent Jr.","G",6.5,3.0,""],
+    ["Bogoljub Markovic","F",5.0,2.0,""],
+    ["Jericho Sims","C",7.7,0.3,""]]},"ORL":
+  {"name":"Magic","players":[
+    ["Paolo Banchero","F",34.0,24.5,"O"],
+    ["Franz Wagner","F",36.4,20.8,"",1],
+    ["Desmond Bane","G",34.5,17.5,"",1],
+    ["Anthony Black","G",30.0,15.7,"",1],
+    ["Tristan da Silva","F",30.6,15.1,"Q"],
+    ["Wendell Carter Jr.","C",33.6,14.8,"",1],
+    ["Jalen Suggs","G",33.3,8.0,"Q",1],
+    ["Jamal Cain","F",19.6,7.2,"Q"],
+    ["Jase Richardson","G",22.7,5.9,""],
+    ["Jevon Carter","G",14.2,4.0,""],
+    ["Goga Bitadze","C",8.9,3.7,""],
+    ["Colin Castleton","C",4.0,3.0,""],
+    ["Nikola Vucevic","C",8.6,2.4,""],
+    ["Alex Morales","G",9.0,0.8,""]]},"MEM":
+  {"name":"Grizzlies","players":[
+    ["Ty Jerome","G",30.6,26.7,"",1],
+    ["Cameron Boozer","F",32.2,16.2,"",1],
+    ["Cedric Coward","F",28.4,12.6,"",1],
+    ["Isaiah Stewart","C",18.3,11.9,"",1],
+    ["Jaylen Wells","F",27.0,11.0,"",1],
+    ["Jerami Grant","F",23.9,10.4,""],
+    ["Cam Spencer","G",19.3,8.7,""],
+    ["Javon Small","G",21.3,8.7,""],
+    ["Zach Edey","C",20.8,8.2,"O"],
+    ["GG Jackson","F",15.8,6.8,""],
+    ["Scotty Pippen Jr.","G",16.0,6.4,"O"],
+    ["Quinten Post","C",13.0,5.0,"O"],
+    ["Taylor Hendricks","F",6.6,3.8,""],
+    ["Olivier-Maxence Prosper","F",5.2,2.4,""],
+    ["Karim Lopez","F",3.7,1.3,""],
+    ["Kris Murray","F",12.1,1.3,""],
+    ["Carson Cooper","C",3.0,1.0,""],
+    ["Jahmai Mashack","G",2.7,0.7,""]]},"NOP":
+  {"name":"Pelicans","players":[
+    ["Zion Williamson","F",32.7,21.7,"",1],
+    ["Trey Murphy III","F",32.8,15.6,"D"],
+    ["Saddiq Bey","F",26.9,15.4,""],
+    ["Jeremiah Fears","G",28.8,15.3,"",1],
+    ["Dejounte Murray","G",31.3,13.4,"",1],
+    ["Derik Queen","C",21.6,12.2,""],
+    ["Yves Missi","C",19.5,9.5,"D"],
+    ["Karlo Matkovic","F",18.6,8.5,"",1],
+    ["Jordan Poole","G",19.8,7.5,""],
+    ["Trendon Watford","F",17.7,7.2,"O"],
+    ["Bennedict Mathurin","G",15.8,6.0,"D"],
+    ["Herbert Jones","F",22.8,5.7,"",1],
+    ["DeAndre Jordan","C",14.7,4.0,""],
+    ["Jaron Pierre Jr.","G",7.0,4.0,""],
+    ["Bryce McGowens","G",10.6,3.7,"D"],
+    ["Julian Reese","F",5.5,1.5,""],
+    ["AJ Johnson","G",6.3,1.5,""]]},"ATL":
+  {"name":"Hawks","players":[
+    ["Nickeil Alexander-Walker","G",30.3,21.1,"",1],
+    ["Jalen Johnson","F",32.6,18.1,"",1],
+    ["CJ McCollum","G",26.8,14.3,""],
+    ["Aaron Wiggins","G",25.4,13.8,""],
+    ["Onyeka Okongwu","F",28.9,12.0,"",1],
+    ["Dyson Daniels","G",29.1,9.8,"",1],
+    ["Luguentz Dort","G",24.6,9.3,""],
+    ["Corey Kispert","F",8.5,7.5,""],
+    ["Kingston Flemings","G",20.3,7.1,"Q",1],
+    ["Jock Landale","C",15.3,6.3,""],
+    ["RayJ Dennis","G",8.0,4.0,""],
+    ["Asa Newell","F",11.3,4.0,"O"],
+    ["Zuby Ejiofor","F",8.0,2.0,""],
+    ["Dorian Finney-Smith","F",4.3,1.0,""]]},"CHI":
+  {"name":"Bulls","players":[
+    ["Caleb Wilson","F",32.4,19.3,"O"],
+    ["Norman Powell","G",28.8,19.3,"Q",1],
+    ["Matas Buzelis","F",25.8,13.6,"",1],
+    ["Jalen Smith","F",23.3,11.7,"",1],
+    ["Tre Jones","G",17.8,10.3,""],
+    ["Josh Giddey","G",27.8,10.3,"",1],
+    ["Leonard Miller","F",17.6,7.1,""],
+    ["Isaac Okoro","F",18.7,5.8,"",1],
+    ["Buddy Hield","G",13.0,5.6,""],
+    ["Patrick Williams","F",22.0,5.5,""],
+    ["Noa Essengue","F",14.1,5.3,""],
+    ["Jaylin Sellers","G",9.2,4.6,""],
+    ["Nic Claxton","C",18.0,4.0,""],
+    ["Jordan Hawkins","G",7.8,3.4,""],
+    ["Dailyn Swain","G",9.5,2.5,"Q"],
+    ["Tobe Awaka","F",10.3,2.0,"O"],
+    ["Zach Collins","F",8.7,1.5,""]]},"CLE":
+  {"name":"Cavaliers","players":[
+    ["Donovan Mitchell","G",33.1,22.8,"",1],
+    ["Evan Mobley","C",32.0,16.9,"O"],
+    ["James Harden","G",32.7,16.7,"",1],
+    ["Meleek Thomas","G",23.0,13.1,""],
+    ["Jarrett Allen","C",25.4,12.9,"",1],
+    ["Peyton Watson","G",28.0,11.0,"",1],
+    ["Thomas Bryant","C",12.5,8.7,""],
+    ["Mario Hezonja","F",18.9,7.8,""],
+    ["Sam Merrill","G",23.1,7.7,"O"],
+    ["Jaylon Tyson","G",21.2,7.0,"",1],
+    ["Tyrese Proctor","G",17.1,6.8,""],
+    ["Riley Minix","F",11.0,3.3,""],
+    ["Tristan Enaruna","F",10.0,2.3,""],
+    ["Craig Porter Jr.","G",10.0,1.6,""],
+    ["Norchad Omier","C",7.5,0.0,""]]},"MIA":
+  {"name":"Heat","players":[
+    ["Giannis Antetokounmpo","F",32.6,27.7,"P",1],
+    ["Bam Adebayo","C",33.2,17.8,"",1],
+    ["Davion Mitchell","G",35.8,16.5,"",1],
+    ["Klay Thompson","G",24.8,14.4,"Q",1],
+    ["Pelle Larsson","G",29.5,11.4,"Q",1],
+    ["Andrew Wiggins","F",25.7,8.7,""],
+    ["Bobby Portis","F",20.4,6.8,""],
+    ["Tim Hardaway Jr.","G",14.7,4.6,""],
+    ["Ryan Conwell","G",12.4,4.2,""],
+    ["Dru Smith","G",8.3,2.5,""],
+    ["Nikola Jovic","F",12.1,2.4,""],
+    ["Nick Richards","C",2.0,1.4,""],
+    ["Myron Gardner","F",3.3,1.3,""],
+    ["Simone Fontecchio","F",4.0,1.2,""]]},"UTA":
+  {"name":"Jazz","players":[
+    ["Keyonte George","G",32.1,21.1,"",1],
+    ["Lauri Markkanen","F",30.9,18.0,"O"],
+    ["Jaren Jackson Jr.","F",26.0,16.3,"O"],
+    ["Darryn Peterson","G",30.7,14.8,"",1],
+    ["Ace Bailey","G",30.6,11.9,"",1],
+    ["Jaxson Hayes","C",25.4,8.6,"",1],
+    ["Mo Bamba","C",17.5,7.7,""],
+    ["Brice Sensabaugh","F",14.2,7.3,""],
+    ["Isaiah Collier","G",15.6,6.2,""],
+    ["Josh Green","G",18.0,3.9,"",1],
+    ["Josh Okogie","G",18.4,3.4,""],
+    ["Svi Mykhailiuk","G",15.2,3.3,""],
+    ["Kyle Filipowski","F",7.9,2.6,""],
+    ["Tony Bradley","C",3.8,1.0,""]]},"HOU":
+  {"name":"Rockets","players":[
+    ["Alperen Sengun","C",34.7,21.3,"",1],
+    ["Kevin Durant","F",34.3,21.0,"",1],
+    ["Jabari Smith Jr.","F",35.3,17.0,"",1],
+    ["Amen Thompson","G",33.5,14.9,"",1],
+    ["Fred VanVleet","G",30.0,13.2,"",1],
+    ["Reed Sheppard","G",20.1,9.8,""],
+    ["Tari Eason","F",23.7,9.6,""],
+    ["Marcus Smart","G",22.0,8.6,"O"],
+    ["Bogdan Bogdanovic","G",11.4,5.3,""],
+    ["Steven Adams","C",8.0,4.0,"O"],
+    ["Clint Capela","C",14.2,3.2,"O"],
+    ["Oscar Tshiebwe","C",7.0,2.8,""],
+    ["Isaiah Crawford","F",4.4,2.0,""],
+    ["Bruce Thornton","G",2.7,1.7,""],
+    ["Jae'Sean Tate","F",2.7,0.0,""]]},"GSW":
+  {"name":"Warriors","players":[
+    ["Stephen Curry","G",26.3,27.8,"O"],
+    ["Yaxel Lendeborg","F",32.3,21.7,"",1],
+    ["Brandin Podziemski","G",33.4,17.3,"",1],
+    ["Brandon Williams","G",16.1,10.4,"O"],
+    ["De'Anthony Melton","G",22.4,10.1,"",1],
+    ["Georges Niang","F",20.3,8.0,""],
+    ["Charles Bassey","C",12.5,7.6,"P"],
+    ["Will Richard","G",17.4,5.5,""],
+    ["Gui Santos","F",18.3,5.4,"",1],
+    ["Gary Payton II","G",13.4,5.0,""],
+    ["Graham Ike","F",9.2,4.8,""],
+    ["Al Horford","C",17.9,4.7,""],
+    ["LJ Cryer","G",7.6,4.6,""],
+    ["Draymond Green","F",26.8,3.2,"",1],
+    ["Malevy Leons","F",4.7,0.3,""]]},"SAS":
+  {"name":"Spurs","players":[
+    ["Victor Wembanyama","F",30.0,30.3,"",1],
+    ["Dylan Harper","G",31.8,18.0,"",1],
+    ["De'Aaron Fox","G",29.5,14.2,"Q",1],
+    ["Stephon Castle","G",29.2,14.0,"",1],
+    ["Devin Vassell","G",30.0,11.9,"Q",1],
+    ["Julian Champagnie","F",26.6,10.3,""],
+    ["Keldon Johnson","F",24.1,8.0,""],
+    ["Harrison Barnes","F",13.7,5.5,""],
+    ["Carter Bryant","F",10.9,3.7,""],
+    ["Luke Kornet","C",14.9,3.4,""],
+    ["Ja'Kobi Gillespie","G",2.0,2.5,""],
+    ["Tarris Reed Jr.","C",5.4,2.0,""],
+    ["Jordan McLaughlin","G",7.4,1.9,""],
+    ["David Jones Garcia","F",3.5,1.0,""],
+    ["Maliq Brown","F",1.0,0.0,""]]},"POR":
+  {"name":"Trail Blazers","players":[
+    ["Deni Avdija","F",32.5,23.0,"",1],
+    ["Damian Lillard","G",29.1,19.8,"",1],
+    ["Ja Morant","G",25.8,15.8,"O"],
+    ["Jrue Holiday","G",26.2,13.4,""],
+    ["Toumani Camara","F",28.5,13.1,"",1],
+    ["Donovan Clingan","C",25.3,10.8,"",1],
+    ["Scoot Henderson","G",22.0,8.4,""],
+    ["Sidy Cissoko","G",23.1,8.3,"",1],
+    ["Robert Williams III","C",16.4,7.6,""],
+    ["Chris Youngblood","G",13.3,6.0,"O"],
+    ["John Tonje","F",5.0,5.0,""],
+    ["Yang Hansen","C",9.3,4.0,""],
+    ["Micah Potter","C",7.5,3.0,""],
+    ["Vit Krejci","G",10.3,2.7,"O"],
+    ["Jayson Kent","G",9.5,2.0,""],
+    ["Branden Carlson","C",8.2,1.7,""]]},"SAC":
+  {"name":"Kings","players":[
+    ["Darius Acuff Jr.","G",37.1,25.9,"",1],
+    ["Zach LaVine","G",32.7,21.4,"",1],
+    ["Domantas Sabonis","F",35.6,15.3,"",1],
+    ["De'Andre Hunter","F",31.2,13.1,"",1],
+    ["Precious Achiuwa","F",27.5,10.4,"Q",1],
+    ["Malik Monk","G",16.9,8.6,""],
+    ["Keegan Murray","F",25.7,8.0,""],
+    ["Leaky Black","F",19.2,5.8,""],
+    ["Dylan Cardwell","C",15.7,5.7,""],
+    ["Emanuel Sharp","G",18.1,4.9,""],
+    ["Daeqwon Plowden","G",12.3,3.0,""],
+    ["Jonathan Mogbo","F",14.4,3.0,""],
+    ["Nique Clifford","G",6.3,1.6,""],
+    ["Alex Karaban","F",9.8,1.4,""]]},"OKC":
+  {"name":"Thunder","players":[
+    ["Shai Gilgeous-Alexander","G",32.8,29.9,"",1],
+    ["Ajay Mitchell","G",27.3,18.9,"Q",1],
+    ["Jalen Williams","G",31.7,13.7,"O"],
+    ["Jared McCain","G",25.2,12.1,""],
+    ["Chet Holmgren","C",30.0,12.0,"O"],
+    ["Aday Mara","C",19.7,8.1,"",1],
+    ["Bennett Stirtz","G",18.0,7.6,""],
+    ["Alex Caruso","G",18.4,7.0,"",1],
+    ["Isaiah Hartenstein","C",24.1,6.9,"",1],
+    ["Kenrich Williams","G",18.4,6.8,""],
+    ["Cason Wallace","G",16.3,6.3,"O"],
+    ["Micah Peavy","G",17.0,4.3,""],
+    ["Jaylin Williams","F",18.4,2.9,"O"],
+    ["Josh Dix","G",14.7,2.3,""],
+    ["Brooks Barnhizer","F",5.4,1.4,""],
+    ["Dalen Terry","G",5.5,1.0,""]]},"LAC":
+  {"name":"Clippers","players":[
+    ["Darius Garland","G",33.8,20.9,"",1],
+    ["Rui Hachimura","F",31.2,14.7,"",1],
+    ["Brook Lopez","C",23.5,13.5,"",1],
+    ["Keaton Wagler","G",23.8,12.0,""],
+    ["Derrick Jones Jr.","F",29.9,11.6,"",1],
+    ["Kobe Sanders","G",24.4,10.1,""],
+    ["Max Strus","G",23.0,10.0,""],
+    ["Isaiah Jackson","F",21.0,8.6,""],
+    ["Kris Dunn","G",30.4,8.5,"",1],
+    ["Gradey Dick","G",14.8,6.0,""],
+    ["Nick Martinelli","F",5.0,3.8,""],
+    ["Jalen Pickett","G",5.3,2.3,""],
+    ["Baba Miller","F",8.4,2.3,""],
+    ["Cam Christie","G",6.8,1.8,""],
+    ["Blake Wesley","G",4.5,1.0,""]]}}});
 
 /* Shared helpers. Everything sport-specific lives in part-sports.js */
 function gameOf(t){return SLATE.games.find(x=>x.away===t||x.home===t)}
@@ -335,12 +662,12 @@ function matchupFor(t,pos){
   return d?avg(d)/avg(SLATE.leagueDefense):1;
 }
 let edits=DB.get('edits',{min:{},play:{}}); if(!edits.min||!edits.play) edits={min:{},play:{}};
-const pid=(t,i)=>SPORT.id+':'+t+':'+SLATE.teams[t].players[i][0];
+const pid=(t,i)=>SPORT.id+':'+SLATE.date+':'+t+':'+SLATE.teams[t].players[i][0];
 function player(t,i){
-  const [name,pos,min,pts,status]=SLATE.teams[t].players[i], id=pid(t,i);
-  const playing=id in edits.play?edits.play[id]:status!=='O';
+  const [name,pos,min,pts,status,st]=SLATE.teams[t].players[i], id=pid(t,i);
+  const playing=id in edits.play?edits.play[id]:(status!=='O'&&status!=='D');
   const minutes=id in edits.min?edits.min[id]:min;
-  return {t,i,id,name,pos,min,pts,status,playing,minutes,edited:(id in edits.min)||(id in edits.play),opp:opponent(t),...SPORT.project(min,pts,minutes,matchupFor(t,pos))};
+  return {t,i,id,name,pos,min,pts,status,starter:!!st,playing,minutes,edited:(id in edits.min)||(id in edits.play),opp:opponent(t),...SPORT.project(min,pts,minutes,matchupFor(t,pos))};
 }
 function roster(t){
   const all=SLATE.teams[t].players.map((_,i)=>player(t,i));
@@ -358,16 +685,33 @@ const pct=m=>{const d=Math.round((m-1)*100);return d===0?'an average amount':Mat
 function day(utc){return new Date(utc).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
 function clock(utc){return new Date(utc).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
 
+/* BETS. Saved on the device. One record per bet, for any sport. */
+let bets=DB.get('bets',[]); if(!Array.isArray(bets)) bets=[];
+const saveBets=()=>DB.set('bets',bets);
+// profit or loss of one bet: won = stake x (odds - 1), lost = -stake, open and void = 0
+function betPL(b){ return b.status==='won'?b.stake*(b.odds-1):b.status==='lost'?-b.stake:0; }
+function betStats(list){
+  const s={pl:0,won:0,lost:0,void:0,open:0,openStake:0,staked:0};
+  for(const b of list){ s.pl+=betPL(b); s[b.status]++; if(b.status==='open') s.openStake+=b.stake; else if(b.status!=='void') s.staked+=b.stake; }
+  s.settled=s.won+s.lost; s.green=s.settled?s.won/s.settled*100:null; s.roi=s.staked?s.pl/s.staked*100:null;
+  return s;
+}
+const money=n=>'€'+Math.abs(n).toFixed(2);
+const signed=n=>(n>0.004?'+':n<-0.004?'−':'')+'€'+Math.abs(n).toFixed(2);
+const num=v=>{ const n=parseFloat(String(v).replace(',','.')); return isFinite(n)?n:null; };
+function betsFor(p){ return bets.filter(b=>b.sport===SPORT.id&&b.date===SLATE.date&&b.team===p.t&&b.player===p.name); }
+function validBet(b){ return b&&typeof b.id==='string'&&typeof b.player==='string'&&typeof b.stake==='number'&&typeof b.odds==='number'&&['open','won','lost','void'].includes(b.status); }
+
 /* SPORTS REGISTRY
-   To add a sport: 1) add its data file (same shape as part-data-nba.js)  2) add one registerSport({...}) block below.
+   To add a sport: 1) add its data files (same shape as part-data-nba-DATE.js, one per day)  2) add one registerSport({...}) block below.
    The screens read everything from the active sport, so they need no changes. */
 const SPORTS={}, SPORT_ORDER=[];
 function registerSport(def){SPORTS[def.id]=def;SPORT_ORDER.push(def.id)}
 
 registerSport({
   id:'nba', league:'NBA', sport:'Basketball', stat:'points', unit:'pts',
-  slate:NBA_SLATE,
-  async load(){ return this.slate; },           // the API call goes here later
+  slates:NBA_SLATES.sort((a,b)=>a.date<b.date?-1:1),   // one entry per day, oldest first
+  async load(){ return this.slates; },           // the API call goes here later
   // position groups: which defense columns each group uses, and how to name it
   groups:{G:{cols:[0,1],name:'guards',label:'Guards'},F:{cols:[2,3],name:'forwards',label:'Forwards'},C:{cols:[4],name:'centers',label:'Centers'}},
   steps:['Points per minute','Minutes he plays','Multiply 1 by 2','Points per game, adjusted for the defense he faces','Add 3 and 4, divide by 2'],
@@ -389,26 +733,49 @@ registerSport({
   }
 });
 
-let SPORT=SPORTS[DB.get('sport','nba')]||SPORTS.nba, SLATE=SPORT.slate;
-function setSport(id){ if(!SPORTS[id]) return; SPORT=SPORTS[id]; SLATE=SPORT.slate; DB.set('sport',id); }
+let SPORT=SPORTS[DB.get('sport','nba')]||SPORTS.nba, DAY=SPORT.slates.length-1, SLATE=SPORT.slates[DAY];
+function setDay(i){ if(!SPORT.slates[i]) return; DAY=i; SLATE=SPORT.slates[i]; }
+function setSport(id){ if(!SPORTS[id]) return; SPORT=SPORTS[id]; setDay(SPORT.slates.length-1); DB.set('sport',id); }
 
 const ICON={
   games:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3.5"/><path d="M12 5v14M7.5 10.5v3M16.5 10.5v3"/></svg>',
   top:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M12 20V4M19 20v-10"/></svg>',
+  bets:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14.5 9.5v5"/></svg>',
   formula:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 5H7l6 7-6 7h10"/></svg>',
   back:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'
 };
-const TABS=[['games','Games'],['top','Top'],['formula','Formula']];
+const TABS=[['games','Games'],['top','Top'],['bets','Bets'],['formula','Formula']];
 let nav=DB.get('nav',null);
 if(!nav||!TABS.some(t=>t[0]===nav.tab)||!Array.isArray(nav.stack)||nav.stack.some(s=>!SLATE.games.some(g=>g.id===s.id))) nav={tab:'games',stack:[]};
-let topPos=''; let sheet=null;
+let topPos='', sheet=null;
 const cur=()=>nav.stack[nav.stack.length-1]||null;
+const isLatest=()=>DAY===SPORT.slates.length-1;
+const slateTag=()=>SPORT.league+(isLatest()?' · latest slate':' · past slate');
 function pageTitle(){
   const c=cur(); if(c){const g=SLATE.games.find(x=>x.id===c.id);return g.away+' at '+g.home}
-  return {games:'Games',top:'Top picks',formula:'Formula'}[nav.tab];
+  return {games:'Games',top:'Top picks',bets:'Bets',formula:'Formula'}[nav.tab];
 }
 function head(eyebrow,title,sub){
   return `<header class="lt-wrap"><span class="eyebrow">${eyebrow}</span><h1 class="lt" id="lt">${esc(title)}</h1>${sub?`<span class="sub">${sub}</span>`:''}</header>`;
+}
+function sportPicker(){
+  if(SPORT_ORDER.length<2) return '';
+  return `<div class="seg" role="group" aria-label="Sport">${SPORT_ORDER.map(id=>`<button data-do="sport" data-s="${id}" aria-pressed="${id===SPORT.id}">${SPORTS[id].league}</button>`).join('')}</div>`;
+}
+function dayPicker(){
+  const n=SPORT.slates.length; if(n<2) return '';
+  return `<div class="chips" role="group" aria-label="Day">${SPORT.slates.map((s,i)=>[s,i]).reverse().map(([s,i])=>
+    `<button class="chip" data-do="day" data-i="${i}" aria-pressed="${i===DAY}">${day(s.games[0].utc)}</button>`).join('')}</div>`;
+}
+/* bets summary: P/L, won vs lost, open bets and stakes, % of greens */
+function sumHTML(asButton){
+  const s=betStats(bets), c=s.pl>0.004?'pos':s.pl<-0.004?'neg':'';
+  const T=(k,v,sub,cls)=>`<span class="tile"><span class="tk">${k}</span><b class="tv num ${cls||''}">${v}</b><span class="ts num">${sub}</span></span>`;
+  const inner=T('Profit / loss',signed(s.pl),s.roi==null?'No settled bets yet':`ROI ${s.roi>0?'+':s.roi<0?'−':''}${Math.abs(s.roi).toFixed(0)}%`,c)+
+    T('Won – lost',`${s.won} – ${s.lost}`,s.void?`${s.void} void`:'Settled bets')+
+    T('Open bets',s.open,`${money(s.openStake)} at stake`)+
+    T('Greens',s.green==null?'–':s.green.toFixed(0)+'%','Won out of settled');
+  return asButton?`<button class="card sum" data-do="gotab" data-tab="bets" aria-label="My bets summary, open bets">${inner}</button>`:`<div class="card sum">${inner}</div>`;
 }
 function sideHTML(t){
   const top=roster(t).on[0];
@@ -416,7 +783,8 @@ function sideHTML(t){
 }
 function viewGames(){
   const best=leaders()[0], d0=day(SLATE.games[0].utc);
-  return sportPicker()+head(SPORT.league+' · next slate','Games',`${SLATE.games.length} games · ${d0}, your time`)+
+  return sportPicker()+head(slateTag(),'Games',`${SLATE.games.length} games · ${d0}, your time`)+
+  `<div class="sec">My bets</div>`+sumHTML(true)+dayPicker()+
   (best?`<button class="hero" data-do="player" data-t="${best.t}" data-i="${best.i}" aria-label="Top projection: ${esc(best.name)}, ${f1(best.result)} ${SPORT.stat}">
     <span class="hero-k">Top projection</span><span class="hero-n">${esc(best.name)}</span>
     <span class="hero-s">${SLATE.teams[best.t].name} vs ${SLATE.teams[best.opp].name}</span>
@@ -427,11 +795,12 @@ function viewGames(){
   `<p class="note">Each game shows its top projected scorer. Tap a game for every player.</p>`;
 }
 function rowHTML(p,rank,withTeam){
-  const pill=p.status==='Q'&&p.playing?'<span class="pill q">Questionable</span>':(!p.playing?'<span class="pill o">Out</span>':'');
+  const pill=!p.playing?`<span class="pill o">${p.status==='D'?'Doubtful':'Out'}</span>`:p.status==='Q'?'<span class="pill q">Questionable</span>':p.status==='D'?'<span class="pill q">Doubtful</span>':'';
   const ed=p.id in edits.min?'<span class="pill e">Edited</span>':'';
-  const sub=withTeam?`${p.t} vs ${p.opp} · ${p.pos}`:`${p.pos} · ${f1(p.minutes)} min`;
+  const bt=betsFor(p).length?'<span class="pill e">Bet</span>':'';
+  const sub=withTeam?`${p.t} vs ${p.opp} · ${p.pos}`:`${p.pos} · ${f1(p.minutes)} min${p.starter?' · Starter':''}`;
   return `<button class="row ${p.playing?'':'off'}" data-do="player" data-t="${p.t}" data-i="${p.i}">
-    <span class="rk num">${rank||''}</span><span class="who"><b>${esc(p.name)}${pill}${ed}</b><span class="num">${sub}</span></span>
+    <span class="rk num">${rank||''}</span><span class="who"><b>${esc(p.name)}${pill}${ed}${bt}</b><span class="num">${sub}</span></span>
     <span class="proj num">${p.playing?f1(p.result):'–'}</span></button>`;
 }
 function viewGame(c){
@@ -441,13 +810,33 @@ function viewGame(c){
   <div class="sec">Projected ${SPORT.stat}</div>
   <div class="card">${r.on.map((p,k)=>rowHTML(p,k+1)).join('')||'<div class="row plain">No players</div>'}</div>
   ${r.off.length?`<div class="sec">Not playing</div><div class="card">${r.off.map(p=>rowHTML(p)).join('')}</div>`:''}
-  <p class="note">Tap a player to see the 5 steps and change his minutes.</p>`;
+  <p class="note">Tap a player to see the steps, change his minutes or add a bet.</p>`;
 }
 function viewTop(){
   const list=leaders(topPos).slice(0,25);
-  return head(SPORT.league+' · next slate','Top picks','Highest projections across all games')+
+  return head(slateTag(),'Top picks',`Highest projections · ${day(SLATE.games[0].utc)}`)+dayPicker()+
   `<div class="seg" role="group" aria-label="Position">${[['','All'],...Object.entries(SPORT.groups).map(([k,g])=>[k,g.label])].map(([k,l])=>`<button data-do="pos" data-p="${k}" aria-pressed="${k===topPos}">${l}</button>`).join('')}</div>
   <div class="card">${list.map((p,k)=>rowHTML(p,k+1,true)).join('')||'<div class="row plain">No players</div>'}</div>`;
+}
+/* bets */
+const BSTAT={open:['op','Open'],won:['w','Won'],lost:['l','Lost'],void:['v','Void']};
+function betLine(b){ return `${b.side==='under'?'Under':'Over'}${b.line!=null?' '+b.line:''} ${b.stat}`; }
+function betRow(b){
+  const pl=betPL(b), st=BSTAT[b.status];
+  return `<button class="row nork" data-do="bet" data-id="${b.id}"><span class="who"><b>${esc(b.player)}<span class="pill ${st[0]}">${st[1]}</span></b>
+    <span class="num">${b.team} vs ${b.opp} · ${betLine(b)}<br>${money(b.stake)} at ${b.odds.toFixed(2)}</span></span>
+    <span class="pl num ${pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'':signed(pl)}</span></button>`;
+}
+function viewBets(){
+  const open=bets.filter(b=>b.status==='open').sort((a,b)=>b.ts-a.ts), done=bets.filter(b=>b.status!=='open');
+  const days=[...new Set(done.map(b=>b.date))].sort().reverse();
+  return head('All sports','Bets',bets.length?`${bets.length} bet${bets.length===1?'':'s'} tracked`:'Nothing tracked yet')+sumHTML(false)+
+  (bets.length?'':`<div class="card"><div class="row plain"><span class="k">To add a bet: open a game, tap a player, then tap Add a bet.</span></div></div>`)+
+  (open.length?`<div class="sec">Open</div><div class="card">${open.map(betRow).join('')}</div>`:'')+
+  days.map(d=>{const l=done.filter(b=>b.date===d), s=betStats(l);
+    return `<div class="sec">${day(l[0].when)} · <span class="${s.pl>0?'pos':s.pl<0?'neg':''}">${signed(s.pl)}</span></div><div class="card">${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
+  `<button class="btn2" data-do="backup">Back up or restore bets</button>
+  <p class="note">Bets are saved on this iPhone only. Amounts are in euros and odds are decimal.</p>`;
 }
 function stepsHTML(p){
   const rows=p?SPORT.explain(p):SPORT.steps.map(t=>({t}));
@@ -455,31 +844,44 @@ function stepsHTML(p){
     r.stepper!=null?`<span class="stepper"><button data-do="min" data-d="-1" aria-label="One minute less">−</button><b class="num">${r.stepper}</b><button data-do="min" data-d="1" aria-label="One minute more">+</button></span>`
     :r.v!=null?`<span class="v num">${r.v}</span>`:''}</div>`).join('');
 }
-function sportPicker(){
-  if(SPORT_ORDER.length<2) return '';
-  return `<div class="seg" role="group" aria-label="Sport">${SPORT_ORDER.map(id=>`<button data-do="sport" data-s="${id}" aria-pressed="${id===SPORT.id}">${SPORTS[id].league}</button>`).join('')}</div>`;
-}
 function viewFormula(){
-  const R=(k,v)=>`<div class="row plain"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+  const R=(k,v)=>`<div class="row plain"><span class="k">${k}</span><span class="v">${v}</span></div>`, src=SLATE.sources||{};
   return head(SPORT.league+' · how it works','Formula',`${SPORT.steps.length} steps for every player`)+
   `<div class="card steps">${stepsHTML()}</div>
   <div class="sec">Where the numbers come from</div>
-  <div class="card">${R('Sport',SPORT.sport+' · '+SPORT.league)}${R('Player stats','ESPN')}${R('Injuries','ESPN')}${R('Defense by position','Hashtag Basketball')}${R('Checked',SLATE.checked)}</div>
+  <div class="card">${R('Sport',SPORT.sport+' · '+SPORT.league)}${R('Player stats',src.stats||'–')}${R('Lineups and injuries',src.injuries||'–')}${R('Defense by position',src.defense||'–')}${R('Checked',SLATE.checked)}</div>
   <p class="note">Questionable players may not play. This is a simple estimate, not a guarantee.</p>
-  ${hasEdits()?'<button class="btn2" data-do="resetall">Reset my changes</button>':''}
+  ${hasEdits()?'<button class="btn2" data-do="resetall">Reset my minute changes</button>':''}
   ${STANDALONE?'':'<div class="sec">Install</div><div class="card"><div class="row plain"><span class="k">In Safari, tap Share, then Add to Home Screen.</span></div></div>'}`;
 }
-function sheetBody(){
-  const p=player(sheet.t,sheet.i);
+/* sheets */
+function playerBody(p){
+  const mine=betsFor(p);
   return `<div class="card result"><span>Projected ${SPORT.stat}<br>${p.t} vs ${p.opp}</span><b class="num">${p.playing?f1(p.result):'–'}</b></div>
   <div class="card steps">${stepsHTML(p)}</div>
   <div class="card steps"><div class="step"><span class="t" style="font-size:1.0625rem">Playing tonight</span><button class="sw" role="switch" aria-checked="${p.playing}" aria-label="Playing tonight" data-do="play"></button></div></div>
+  <div class="card">${mine.map(betRow).join('')}<button class="row nork plain" data-do="addbet"><span class="k tintc">Add a bet</span></button></div>
   ${p.edited?'<button class="btn2" data-do="reset">Reset his minutes and status</button>':''}`;
 }
-function sheetShell(title,body){
-  return `<div class="scrim" data-do="close"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-  <div class="grab"></div><div class="sh-head"><span class="sp"></span><h2>${esc(title)}</h2><button data-do="close" id="sh-done">Done</button></div>
-  <div class="sh-body" id="sh-body">${body}</div></div>`;
+function betBody(){
+  const d=sheet.draft, S=(k,opts,val)=>`<div class="seg" role="group">${opts.map(([v,l])=>`<button data-do="${k}" data-v="${v}" aria-pressed="${v===val}">${l}</button>`).join('')}</div>`;
+  const F=(id,label,ph)=>`<label class="fld" for="bf-${id}"><span>${label}</span><input id="bf-${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}" value="${esc(d[id])}"></label>`;
+  return `<div class="card result small"><span>${esc(d.player)}<br>${d.team} vs ${d.opp} · projected</span><b class="num">${f1(d.proj)}</b></div>
+  ${S('bside',[['over','Over'],['under','Under']],d.side)}
+  <div class="card">${F('line','Line ('+d.stat+')','Optional')}${F('stake','Stake (€)','10')}${F('odds','Odds','1.85')}</div>
+  <div class="sec">Result</div>
+  ${S('bstatus',[['open','Open'],['won','Won'],['lost','Lost'],['void','Void']],d.status)}
+  ${sheet.id?'<button class="btn2 danger" data-do="betdel">Delete bet</button>':''}`;
+}
+function backupBody(){
+  return `<p class="note">Copy this text and keep it somewhere safe, like Notes. To restore, paste a saved copy here and tap Restore.</p>
+  <textarea id="bk" class="ta" spellcheck="false" autocomplete="off" aria-label="Bets backup text">${esc(JSON.stringify(bets))}</textarea>
+  <button class="btn2" data-do="bkcopy">Copy</button><button class="btn2" data-do="bkrestore">Restore from this text</button>`;
+}
+function sheetParts(){
+  if(sheet.kind==='player'){ const p=player(sheet.t,sheet.i); return {title:p.name,left:null,right:['Done','close'],body:playerBody(p)}; }
+  if(sheet.kind==='bet') return {title:sheet.id?'Edit bet':'New bet',left:['Cancel','betcancel'],right:['Save','betsave'],body:betBody()};
+  return {title:'Back up bets',left:null,right:['Done','close'],body:backupBody()};
 }
 
 const view=$('#view'), navEl=$('#nav'), bar=$('#tabbar'), root=$('#sheet-root'), toastEl=$('#toast');
@@ -487,7 +889,7 @@ const REDUCE=()=>{try{return matchMedia('(prefers-reduced-motion:reduce)').match
 let ltObs=null, pgUntil=0;
 function renderAll(){
   const c=cur();
-  view.innerHTML=c?viewGame(c):nav.tab==='games'?viewGames():nav.tab==='top'?viewTop():viewFormula();
+  view.innerHTML=c?viewGame(c):nav.tab==='games'?viewGames():nav.tab==='top'?viewTop():nav.tab==='bets'?viewBets():viewFormula();
   navEl.innerHTML=`<div class="nav-bg"></div><div class="nav-row">${c?`<button class="glassbtn" data-do="back" aria-label="Back">${ICON.back}</button>`:'<span class="nb-sp"></span>'}<span class="nav-title" aria-hidden="true">${esc(pageTitle())}</span><span class="nb-sp"></span></div>`;
   navEl.classList.remove('show-title');
   bar.style.setProperty('--i',TABS.findIndex(t=>t[0]===nav.tab));
@@ -513,6 +915,7 @@ function pgRun(dir,snap){
 }
 function push(entry){ if(Date.now()<pgUntil) return; const s=pgSnap(); (cur()||nav).y=scrollY; nav.stack.push(entry); renderAll(); scrollTo(0,0); pgRun('fwd',s); }
 function pop(){ if(Date.now()<pgUntil||!cur()) return; const s=pgSnap(); nav.stack.pop(); renderAll(); scrollTo(0,(cur()||nav).y||0); pgRun('back',s); }
+function goTab(tab){ nav.tab=tab; nav.stack=[]; nav.y=0; renderAll(); scrollTo(0,0); }
 /* tab bar */
 bar.style.setProperty('--n',TABS.length);
 bar.innerHTML='<span class="tb-ind"></span>'+TABS.map(([k,l])=>`<button data-do="tab" data-tab="${k}">${ICON[k]}<span>${l}</span></button>`).join('');
@@ -525,18 +928,29 @@ addEventListener('scroll',()=>{
 function tapBar(){bar.classList.remove('tap');void bar.offsetWidth;bar.classList.add('tap');setTimeout(()=>bar.classList.remove('tap'),650)}
 /* sheet */
 let opener=null;
-function openSheet(t,i){
-  if(sheet) return; sheet={t,i}; opener={t,i};
-  root.classList.remove('closing'); root.innerHTML=sheetShell(player(t,i).name,sheetBody());
+function renderSheet(){
+  const el=root.querySelector('.sheet'); if(!el||!sheet) return; const p=sheetParts();
+  el.setAttribute('aria-label',p.title);
+  el.querySelector('.sh-head').innerHTML=`${p.left?`<button class="lead" data-do="${p.left[1]}">${p.left[0]}</button>`:'<span class="sp"></span>'}<h2>${esc(p.title)}</h2><button data-do="${p.right[1]}" id="sh-done">${p.right[0]}</button>`;
+  $('#sh-body').innerHTML=p.body;
+}
+function openSheet(s){
+  if(sheet) return; sheet=s; opener=s.kind==='player'?{t:s.t,i:s.i}:null;
+  root.classList.remove('closing');
+  root.innerHTML='<div class="scrim" data-do="close"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div class="sh-head"></div><div class="sh-body" id="sh-body"></div></div>';
+  renderSheet();
   document.documentElement.style.setProperty('--sy',(scrollY-view.offsetTop+innerHeight*.3)+'px');
   document.body.classList.add('sheet-open'); view.inert=true; bar.inert=true; navEl.inert=true;
   const d=$('#sh-done'); if(d) d.focus({preventScroll:true});
   bindDrag(root.querySelector('.sheet'));
 }
-function closeSheet(){
-  if(!sheet) return; sheet=null; root.classList.add('closing');
+function releasePage(){
   document.body.classList.remove('sheet-open'); document.documentElement.style.removeProperty('--pscale');
   view.inert=false; bar.inert=false; navEl.inert=false;
+}
+function closeSheet(){
+  if(!sheet) return; sheet=null; root.classList.add('closing'); releasePage();
+  if(document.activeElement&&root.contains(document.activeElement)) document.activeElement.blur();
   const sc=root.querySelector('.scrim'); if(sc) sc.style.opacity='';
   setTimeout(()=>{ if(!sheet){root.innerHTML='';root.classList.remove('closing')} },REDUCE()?20:300);
   if(opener){const b=view.querySelector(`[data-do="player"][data-t="${opener.t}"][data-i="${opener.i}"]`); if(b) b.focus({preventScroll:true});}
@@ -544,13 +958,13 @@ function closeSheet(){
 function bindDrag(el){
   let y0=null,dy=0,t0=0,h=0; const body=el.querySelector('.sh-body'), sc=root.querySelector('.scrim');
   el.addEventListener('touchstart',e=>{
-    if(e.target.closest('button')&&!e.target.closest('.sh-head')) {y0=null;return}
+    if(e.target.closest('input,textarea')||(e.target.closest('button')&&!e.target.closest('.sh-head'))){y0=null;return}
     if(body.contains(e.target)&&body.scrollTop>0){y0=null;return}
     y0=e.touches[0].clientY;dy=0;t0=Date.now();h=el.offsetHeight;el.style.animation='none';el.style.transition='none';
   },{passive:true});
   el.addEventListener('touchmove',e=>{
     if(y0==null) return; dy=e.touches[0].clientY-y0;
-    const m=dy>0?dy:dy/6; el.style.transform=`translateY(${m}px)`;
+    el.style.transform=`translateY(${dy>0?dy:dy/6}px)`;
     const pr=Math.max(0,Math.min(1,dy/h));
     document.documentElement.style.setProperty('--pscale',.95+.05*pr); if(sc) sc.style.opacity=1-pr;
     if(dy>0&&e.cancelable) e.preventDefault();
@@ -559,8 +973,7 @@ function bindDrag(el){
     if(y0==null) return; const v=dy/Math.max(1,Date.now()-t0); y0=null;
     if(dy>h*.28||(v>.5&&dy>24)){
       el.style.transition='transform .3s cubic-bezier(.32,.72,0,1)'; el.style.transform=`translateY(${h+32}px)`;
-      sheet=sheet; const s=sheet; sheet=null; document.body.classList.remove('sheet-open'); document.documentElement.style.removeProperty('--pscale');
-      view.inert=false; bar.inert=false; navEl.inert=false; if(sc){sc.style.transition='opacity .3s';sc.style.opacity=0}
+      sheet=null; releasePage(); if(sc){sc.style.transition='opacity .3s';sc.style.opacity=0}
       setTimeout(()=>{ if(!sheet) root.innerHTML='' },300);
     }else{
       el.style.transition='transform .42s cubic-bezier(.2,.9,.3,1)'; el.style.transform='';
@@ -568,13 +981,24 @@ function bindDrag(el){
     }
   });
 }
+/* keep the sheet above the keyboard */
+if(window.visualViewport){
+  const kb=()=>document.documentElement.style.setProperty('--kb',Math.max(0,innerHeight-visualViewport.height-visualViewport.offsetTop)+'px');
+  visualViewport.addEventListener('resize',kb); visualViewport.addEventListener('scroll',kb);
+}
 /* toast */
 let toastT=0, undo=null;
 function toast(msg,undoFn){
   undo=undoFn||null; toastEl.innerHTML=`<span>${esc(msg)}</span>${undo?'<button data-do="undo">Undo</button>':''}`;
   toastEl.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove('on'),4000);
 }
-function refresh(){ const y=scrollY; renderAll(); scrollTo(0,y); if(sheet){const b=$('#sh-body'); if(b) b.innerHTML=sheetBody();} }
+function syncDraft(){ if(sheet&&sheet.kind==='bet') ['line','stake','odds'].forEach(k=>{const e=$('#bf-'+k); if(e) sheet.draft[k]=e.value}); }
+function refresh(){ const y=scrollY; syncDraft(); renderAll(); scrollTo(0,y); if(sheet) renderSheet(); }
+function backFromBet(){ if(sheet.from){ sheet={kind:'player',t:sheet.from.t,i:sheet.from.i}; refresh(); } else { closeSheet(); refresh(); } }
+function editBet(b,from){
+  const s={kind:'bet',id:b.id,from,draft:{...b,line:b.line==null?'':String(b.line),stake:String(b.stake),odds:String(b.odds)}};
+  if(sheet){ sheet=s; renderSheet(); } else openSheet(s);
+}
 /* events */
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-do]'); if(!b) return; const d=b.dataset;
@@ -582,18 +1006,43 @@ document.addEventListener('click',e=>{
     case 'tab':
       tapBar();
       if(d.tab===nav.tab&&!cur()){ scrollTo({top:0,behavior:REDUCE()?'auto':'smooth'}); break; }
-      nav.tab=d.tab; nav.stack=[]; nav.y=0; renderAll(); scrollTo(0,0); break;
+      goTab(d.tab); break;
+    case 'gotab': goTab(d.tab); break;
     case 'open': push({v:'game',id:d.id,team:SLATE.games.find(g=>g.id===d.id).away}); break;
     case 'back': pop(); break;
     case 'team': cur().team=d.t; refresh(); break;
     case 'pos': topPos=d.p; refresh(); break;
-    case 'sport': setSport(d.s); topPos=''; nav={tab:'games',stack:[]}; renderAll(); scrollTo(0,0); break;
-    case 'player': openSheet(d.t,+d.i); break;
+    case 'day': setDay(+d.i); nav.stack=[]; refresh(); break;
+    case 'sport': setSport(d.s); topPos=''; goTab('games'); break;
+    case 'player': openSheet({kind:'player',t:d.t,i:+d.i}); break;
     case 'close': closeSheet(); break;
     case 'undo': if(undo){undo();undo=null;toastEl.classList.remove('on')} break;
     case 'resetall': { const old=JSON.parse(JSON.stringify(edits)); edits={min:{},play:{}}; DB.set('edits',edits); refresh();
       toast('Changes reset',()=>{edits=old;DB.set('edits',edits);refresh()}); break; }
-    default: if(sheet){
+    /* bets */
+    case 'addbet': { if(!sheet||sheet.kind!=='player') break; const p=player(sheet.t,sheet.i), g=gameOf(p.t);
+      sheet={kind:'bet',id:null,from:{t:sheet.t,i:sheet.i},draft:{sport:SPORT.id,date:SLATE.date,when:g.utc,team:p.t,opp:p.opp,player:p.name,stat:SPORT.stat,proj:+p.result.toFixed(1),side:'over',line:'',stake:'',odds:'',status:'open'}};
+      renderSheet(); break; }
+    case 'bet': { const x=bets.find(q=>q.id===d.id); if(x) editBet(x,sheet&&sheet.kind==='player'?{t:sheet.t,i:sheet.i}:null); break; }
+    case 'bside': syncDraft(); sheet.draft.side=d.v; renderSheet(); break;
+    case 'bstatus': syncDraft(); sheet.draft.status=d.v; renderSheet(); break;
+    case 'betcancel': backFromBet(); break;
+    case 'betsave': { syncDraft(); const q=sheet.draft, stake=num(q.stake), odds=num(q.odds), hasLine=String(q.line).trim()!=='', line=hasLine?num(q.line):null;
+      if(!(stake>0)||!(odds>1)){ toast('Enter a stake, and odds above 1.00'); break; }
+      if(hasLine&&line==null){ toast('The line must be a number'); break; }
+      const rec={id:sheet.id||('b'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)),sport:q.sport,date:q.date,when:q.when,team:q.team,opp:q.opp,player:q.player,stat:q.stat,proj:q.proj,side:q.side,line,stake,odds,status:q.status,ts:q.ts||Date.now()};
+      const ix=bets.findIndex(x=>x.id===rec.id); if(ix>=0) bets[ix]=rec; else bets.push(rec); saveBets();
+      backFromBet(); toast(ix>=0?'Bet updated':'Bet saved'); break; }
+    case 'betdel': { const old=bets.slice(); bets=bets.filter(x=>x.id!==sheet.id); saveBets(); backFromBet();
+      toast('Bet deleted',()=>{bets=old;saveBets();refresh()}); break; }
+    case 'backup': openSheet({kind:'backup'}); break;
+    case 'bkcopy': { const t=$('#bk').value; const ok=()=>toast('Copied'), no=()=>{ $('#bk').select(); toast('Select all the text and copy it'); };
+      try{ navigator.clipboard.writeText(t).then(ok,no); }catch(err){ no(); } break; }
+    case 'bkrestore': { let arr=null; try{ arr=JSON.parse($('#bk').value); }catch(err){}
+      if(!Array.isArray(arr)||!arr.every(validBet)){ toast('That text is not a bets backup'); break; }
+      const old=bets.slice(); bets=arr; saveBets(); closeSheet(); refresh();
+      toast(`Restored ${arr.length} bet${arr.length===1?'':'s'}`,()=>{bets=old;saveBets();refresh()}); break; }
+    default: if(sheet&&sheet.kind==='player'){
       const p=player(sheet.t,sheet.i);
       if(d.do==='min') edits.min[p.id]=Math.max(0,Math.min(48,Math.round(p.minutes+(+d.d))));
       if(d.do==='play') edits.play[p.id]=!p.playing;
@@ -603,7 +1052,7 @@ document.addEventListener('click',e=>{
   }
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&sheet) closeSheet(); });
-SPORT.load().then(s=>{ SLATE=s; renderAll(); scrollTo(0,0); });
+SPORT.load().then(()=>{ renderAll(); scrollTo(0,0); });
 if('serviceWorker' in navigator && location.protocol==='https:'){ try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){} }
 
 </script>

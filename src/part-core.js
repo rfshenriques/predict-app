@@ -6,12 +6,12 @@ function matchupFor(t,pos){
   return d?avg(d)/avg(SLATE.leagueDefense):1;
 }
 let edits=DB.get('edits',{min:{},play:{}}); if(!edits.min||!edits.play) edits={min:{},play:{}};
-const pid=(t,i)=>SPORT.id+':'+t+':'+SLATE.teams[t].players[i][0];
+const pid=(t,i)=>SPORT.id+':'+SLATE.date+':'+t+':'+SLATE.teams[t].players[i][0];
 function player(t,i){
-  const [name,pos,min,pts,status]=SLATE.teams[t].players[i], id=pid(t,i);
-  const playing=id in edits.play?edits.play[id]:status!=='O';
+  const [name,pos,min,pts,status,st]=SLATE.teams[t].players[i], id=pid(t,i);
+  const playing=id in edits.play?edits.play[id]:(status!=='O'&&status!=='D');
   const minutes=id in edits.min?edits.min[id]:min;
-  return {t,i,id,name,pos,min,pts,status,playing,minutes,edited:(id in edits.min)||(id in edits.play),opp:opponent(t),...SPORT.project(min,pts,minutes,matchupFor(t,pos))};
+  return {t,i,id,name,pos,min,pts,status,starter:!!st,playing,minutes,edited:(id in edits.min)||(id in edits.play),opp:opponent(t),...SPORT.project(min,pts,minutes,matchupFor(t,pos))};
 }
 function roster(t){
   const all=SLATE.teams[t].players.map((_,i)=>player(t,i));
