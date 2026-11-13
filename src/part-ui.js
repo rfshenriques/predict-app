@@ -123,7 +123,9 @@ function betRow(b){
 function totalsHTML(list,showPL){
   const st=list.reduce((s,b)=>s+b.stake,0), ret=list.reduce((s,b)=>s+b.stake*b.odds,0), s=betStats(list);
   const C=(k,v,cls)=>`<span><span class="tk">${k}</span><b class="num ${cls||''}">${v}</b></span>`;
-  return `<div class="tot">${C('Staked',money(st))}${C('Possible return',money(ret))}${C('Possible profit',money(ret-st))}${showPL?C('Result',signed(s.pl),s.pl>0.004?'pos':s.pl<-0.004?'neg':''):''}</div>`;
+  // all settled: just stake and P/L; anything still open: stake, return and profit if every open bet wins
+  return s.open===0&&showPL?`<div class="tot">${C('Staked',money(st))}${C('P/L',signed(s.pl),s.pl>0.004?'pos':s.pl<-0.004?'neg':'')}</div>`
+    :`<div class="tot">${C('Staked',money(st))}${C('Return',money(ret))}${C('Profit',money(ret-st))}</div>`;
 }
 function viewBets(){
   const open=bets.filter(b=>b.status==='open').sort((a,b)=>b.ts-a.ts), done=bets.filter(b=>b.status!=='open');
@@ -134,7 +136,7 @@ function viewBets(){
   days.map(d=>{const l=done.filter(b=>b.date===d);
     return `<div class="sec">${day(l[0].when)} · ${l.length} settled</div><div class="card glist">${totalsHTML(l,true)}${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
   `<button class="btn2" data-do="backup">Back up or restore bets</button>
-  <p class="note">Bets are saved on this iPhone only. Amounts are in euros and odds are decimal. Possible return is stake × odds; possible profit is that minus the stake.</p>`;
+  <p class="note">Bets are saved on this iPhone only. Amounts are in euros and odds are decimal. For open bets, Return is stake × odds if they win and Profit is that minus the stake.</p>`;
 }
 /* results: projection vs what he scored */
 function accHTML(){
