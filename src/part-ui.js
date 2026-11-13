@@ -7,7 +7,13 @@ const ICON={
   addbet:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
   info:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.500M12 7.600v.1"/></svg>'
 };
-const MARK='<svg viewBox="0 0 1024 1024" aria-hidden="true"><defs><linearGradient id="mk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9C2040"/><stop offset="1" stop-color="#4A0A18"/></linearGradient></defs><rect width="1024" height="1024" rx="230" fill="url(#mk)"/><rect x="208" y="448" width="608" height="80" rx="40" fill="#FDEFD6"/><circle cx="296" cy="784" r="36" fill="#FDEFD6"/><circle cx="374" cy="690" r="42" fill="#FDEFD6"/><circle cx="452" cy="600" r="48" fill="#FDEFD6"/><circle cx="680" cy="296" r="128" fill="#FEC40B"/></svg>';
+/* filled versions, shown on the selected tab */
+const ICONF={
+  home:'<svg class="ic f" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 3.3 10.8a1 1 0 0 0 .7 1.7H5V19a1.5 1.5 0 0 0 1.5 1.5h3.5v-5h4v5h3.5A1.5 1.5 0 0 0 19 19v-6.5h1a1 1 0 0 0 .7-1.7z"/></svg>',
+  players:'<svg class="ic f" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.8" r="4.2"/><path d="M3.8 20.2c.6-4.400 3.900-6.900 8.200-6.900s7.600 2.500 8.200 6.900a.9.9 0 0 1-.9 1H4.700a.9.9 0 0 1-.9-1z"/></svg>',
+  bets:'<svg class="ic f" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M6 5h12a3 3 0 0 1 3 3v2.200a.8.8 0 0 1-.6.8 1.900 1.900 0 0 0 0 2 .8.8 0 0 1 .6.8V16a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-2.200a.8.8 0 0 1 .6-.8 1.900 1.900 0 0 0 0-2 .8.8 0 0 1-.6-.8V8a3 3 0 0 1 3-3zm7.700 4.200v5.600h1.600V9.200z"/></svg>',
+  results:'<svg class="ic f" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.500a9.500 9.500 0 1 1 0 19 9.500 9.500 0 0 1 0-19zm4.600 6.300a1 1 0 0 0-1.400.1l-4.300 5-2.100-2.100a1 1 0 0 0-1.400 1.400l2.900 2.900a1 1 0 0 0 1.500-.1l5-5.800a1 1 0 0 0-.2-1.400z"/></svg>'
+};
 const TABS=[['home','Home'],['players','Players'],['bets','Bets'],['results','Results']];
 let nav=DB.get('nav',null);
 if(!nav||!TABS.some(t=>t[0]===nav.tab)||!Array.isArray(nav.stack)||nav.stack.some(s=>!SLATE.games.some(g=>g.id===s.id))) nav={tab:'home',stack:[]};
@@ -54,7 +60,7 @@ function gameCard(g){
 }
 function viewHome(){
   const top=leaders().slice(0,6);
-  return sportPicker()+`<span class="brand">${MARK}Propline</span>`+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
+  return sportPicker()+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
   `<div class="sec">My bets</div>`+sumHTML(true)+
   `<div class="sec row-sec"><span>Top projections</span><button class="link" data-do="gotab" data-tab="players">All players</button></div>
   <div class="hs">${top.map(p=>`<button class="pc" style="${tstyle(p.t)}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
@@ -62,7 +68,7 @@ function viewHome(){
   `<p class="note">Each team shows its top projected scorer. Tap a game for every player and to set the odds.</p>`;
 }
 /* players */
-function gapPill(p){ const a=actualOf(p); if(a==null||!p.playing) return ''; const g=a-p.result, v=verdict(g); return `<span class="pill ${v[0]}">${v[1]} ${sgn(g)}</span>`; }
+function gapPill(p){ const a=actualOf(p); if(a==null||!p.playing) return ''; const g=a-p.result; return `<span class="pill ${verdict(g)}" title="Scored ${a}, projected ${f1(p.result)}">${sgn(g)}</span>`; }
 function rowHTML(p,rank,withTeam){
   const pill=!p.playing?`<span class="pill o">${p.status==='D'?'Doubtful':'Out'}</span>`:p.status==='Q'?'<span class="pill q">Questionable</span>':'';
   const ed=p.id in edits.min?'<span class="pill e">Edited</span>':'', bt=betsFor(p).length?'<span class="pill e">Bet</span>':'', a=actualOf(p);
@@ -106,43 +112,59 @@ function viewGame(c){
 const BSTAT={open:['op','Open'],won:['w','Won'],lost:['l','Lost'],void:['v','Void']};
 function betLine(b){ return `${b.side==='under'?'Under':'Over'}${b.line!=null?' '+b.line:''} ${b.stat}`; }
 function betRow(b){
-  const pl=betPL(b), st=BSTAT[b.status];
-  return `<button class="row nork" data-do="bet" data-id="${b.id}"><span class="who"><b>${esc(sn(b.player))}<span class="pill ${st[0]}">${st[1]}</span></b>
-    <span class="num">${b.team} vs ${b.opp} · ${betLine(b)}<br>${money(b.stake)} at ${b.odds.toFixed(2)}</span></span>
-    <span class="pl num ${pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'':signed(pl)}</span></button>`;
+  const pl=betPL(b), st=BSTAT[b.status], ret=b.stake*b.odds;
+  return `<button class="bet" data-do="bet" data-id="${b.id}">
+    <span class="bt-top"><b>${esc(sn(b.player))}</b><span class="pill ${st[0]}">${st[1]}</span></span>
+    <span class="bt-mid">${tile(b.team,'sm')}<span>vs ${b.opp} · ${betLine(b)}</span></span>
+    <span class="bt-row num"><span>Projected <b>${b.proj!=null?f1(b.proj):'–'}</b></span><span>${money(b.stake)} at ${b.odds.toFixed(2)}</span>
+      <span class="${b.status==='open'?'':pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'Returns '+money(ret):signed(pl)}</span></span></button>`;
+}
+/* totals for a group of bets: stake, what it pays back if every bet wins, and the profit in that case */
+function totalsHTML(list,showPL){
+  const st=list.reduce((s,b)=>s+b.stake,0), ret=list.reduce((s,b)=>s+b.stake*b.odds,0), s=betStats(list);
+  const C=(k,v,cls)=>`<span><span class="tk">${k}</span><b class="num ${cls||''}">${v}</b></span>`;
+  return `<div class="tot">${C('Staked',money(st))}${C('Possible return',money(ret))}${C('Possible profit',money(ret-st))}${showPL?C('Result',signed(s.pl),s.pl>0.004?'pos':s.pl<-0.004?'neg':''):''}</div>`;
 }
 function viewBets(){
   const open=bets.filter(b=>b.status==='open').sort((a,b)=>b.ts-a.ts), done=bets.filter(b=>b.status!=='open');
   const days=[...new Set(done.map(b=>b.date))].sort().reverse();
   return head('All sports','Bets',bets.length?`${bets.length} bet${bets.length===1?'':'s'} tracked`:'Nothing tracked yet')+sumHTML(false)+
-  (bets.length?'':`<div class="card"><div class="row plain"><span class="k">To add a bet: open a game, tap a player, then tap Add a bet.</span></div></div>`)+
-  (open.length?`<div class="sec">Open</div><div class="card">${open.map(betRow).join('')}</div>`:'')+
-  days.map(d=>{const l=done.filter(b=>b.date===d), s=betStats(l);
-    return `<div class="sec">${day(l[0].when)} · <span class="${s.pl>0?'pos':s.pl<0?'neg':''}">${signed(s.pl)}</span></div><div class="card">${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
+  (bets.length?'':`<div class="card"><div class="row plain"><span class="k">To add a bet: tap the plus next to any player.</span></div></div>`)+
+  (open.length?`<div class="sec">Open · ${open.length}</div><div class="card glist">${totalsHTML(open,false)}${open.map(betRow).join('')}</div>`:'')+
+  days.map(d=>{const l=done.filter(b=>b.date===d);
+    return `<div class="sec">${day(l[0].when)} · ${l.length} settled</div><div class="card glist">${totalsHTML(l,true)}${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
   `<button class="btn2" data-do="backup">Back up or restore bets</button>
-  <p class="note">Bets are saved on this iPhone only. Amounts are in euros and odds are decimal.</p>`;
+  <p class="note">Bets are saved on this iPhone only. Amounts are in euros and odds are decimal. Possible return is stake × odds; possible profit is that minus the stake.</p>`;
 }
 /* results: projection vs what he scored */
 function accHTML(){
   const a=accuracy(slateTeams().flatMap(t=>roster(t).on));
   const T=(k,v,sub)=>`<span class="tile"><span class="tk">${k}</span><b class="tv num">${v}</b><span class="ts num">${sub}</span></span>`;
   return T('Players checked',a.n,a.n?'With a real score':'None entered yet')+T('Average gap',a.n?a.avg.toFixed(1):'–',SPORT.stat+' off, on average')+
-    T('Close',a.n?a.close.toFixed(0)+'%':'–',`Within ${CLOSE} ${SPORT.stat}`)+T('Biggest miss',a.n?sgn(a.worst.gap):'–',a.n?esc(sn(a.worst.p.name)):'–');
+    T('Beat projection',a.n?a.beat.toFixed(0)+'%':'–','Scored the same or more')+T('Biggest miss',a.n?sgn(a.worst.gap):'–',a.n?esc(sn(a.worst.p.name)):'–');
 }
+let resOpen={};
 function resRow(p){
-  const a=actualOf(p);
-  return `<div class="rrow">${tile(p.t,'sm')}<span class="who"><b>${esc(sn(p.name))}</b><span class="num">Projected ${f1(p.result)} <span class="gapc" data-gap="${p.t}-${p.i}">${gapPill(p)}</span></span></span>
-    <input data-in="act" data-t="${p.t}" data-i="${p.i}" inputmode="numeric" autocomplete="off" placeholder="–" aria-label="${esc(p.name)} real ${SPORT.stat}" value="${a==null?'':a}"></div>`;
+  const a=actualOf(p), dnp=!p.playing;
+  return `<div class="rrow ${dnp?'off':''}"><span class="who"><b>${esc(sn(p.name))}</b><span class="num">Projected ${dnp?'–':f1(p.result)} <span class="gapc" data-gap="${p.t}-${p.i}">${dnp?'<span class="pill v">Did not play</span>':a==null?'<span class="pill v">No points yet</span>':gapPill(p)}</span></span></span>
+    ${dnp?'':`<input data-in="act" data-t="${p.t}" data-i="${p.i}" inputmode="numeric" autocomplete="off" placeholder="–" aria-label="${esc(p.name)} real ${SPORT.stat}" value="${a==null?'':a}">`}</div>`;
+}
+function resTeam(g,t,k){
+  const all=SLATE.teams[t].players.map((_,i)=>player(t,i)), sc=all.filter(p=>p.playing&&actualOf(p)!=null).sort((x,y)=>actualOf(y)-actualOf(x));
+  const none=all.filter(p=>p.playing&&actualOf(p)==null).sort((x,y)=>y.result-x.result), dnp=all.filter(p=>!p.playing);
+  const key=g.id+':'+t, open=key in resOpen?resOpen[key]:k===0, f=g.final;
+  return `<details class="card tblock" data-key="${key}" ${open?'open':''}><summary>${tile(t)}<span class="nm">${SLATE.teams[t].name}<span class="topp">${sc.length} of ${sc.length+none.length} with points</span></span>${f?`<b class="fin num">${f[k?'home':'away']}</b>`:''}<i class="chev"></i></summary>
+    ${[...sc,...none,...dnp].map(resRow).join('')}</details>`;
 }
 function viewResults(){
   if(!resGame||!SLATE.games.some(g=>g.id===resGame)) resGame=SLATE.games[0].id;
-  const g=SLATE.games.find(x=>x.id===resGame), f=g.final;
+  const g=SLATE.games.find(x=>x.id===resGame);
   return head(`${SPORT.league} · ${slateDay()}`,'Results','Projection against what he really scored')+dayPicker()+
   `<div class="card sum" id="acc">${accHTML()}</div>
-  <div class="sec">Enter real ${SPORT.stat}</div>
+  <div class="sec">Real ${SPORT.stat} by game</div>
   <div class="chips" role="group" aria-label="Game">${SLATE.games.map(x=>`<button class="chip alt" data-do="resgame" data-id="${x.id}" aria-pressed="${x.id===resGame}">${x.away} at ${x.home}</button>`).join('')}</div>
-  ${[g.away,g.home].map((t,k)=>`<div class="sec">${dot(t)}${SLATE.teams[t].name}${f?` · ${f[k?'home':'away']}`:''}</div><div class="card">${roster(t).on.map(resRow).join('')}</div>`).join('')}
-  <p class="note">Close means within ${CLOSE} ${SPORT.stat} of the projection, Near within ${NEAR}, Off is further away. A plus sign means he scored more than projected.</p>`;
+  ${resTeam(g,g.away,0)}${resTeam(g,g.home,1)}
+  <p class="note legend"><span class="pill w">+</span> scored the projection or more <span class="pill y">−3</span> up to ${CLOSE} under <span class="pill or">−6</span> up to ${NEAR} under <span class="pill l">−7</span> more than ${NEAR} under. Players are sorted by points scored.</p>`;
 }
 /* sheets */
 function stepsHTML(p){
@@ -157,7 +179,7 @@ function playerBody(p){
   <div class="card steps">${stepsHTML(p)}</div>
   <div class="card"><div class="fld"><span>Playing tonight</span><button class="sw" role="switch" aria-checked="${p.playing}" aria-label="Playing tonight" data-do="play"></button></div>
     <label class="fld" for="sh-act"><span>Real ${SPORT.stat} scored <span class="gapc" data-gap="${p.t}-${p.i}">${gapPill(p)}</span></span><input id="sh-act" data-in="act" data-t="${p.t}" data-i="${p.i}" inputmode="numeric" autocomplete="off" placeholder="After the game" value="${a==null?'':a}"></label></div>
-  <div class="card">${mine.map(betRow).join('')}<button class="row nork plain" data-do="addbet"><span class="k tintc">Add a bet</span></button></div>
+  <div class="card glist">${mine.map(betRow).join('')}<button class="row nork plain" data-do="addbet"><span class="k tintc">Add a bet</span></button></div>
   ${p.edited?'<button class="btn2" data-do="reset">Reset his minutes and status</button>':''}`;
 }
 function betHint(d){

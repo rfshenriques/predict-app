@@ -33,13 +33,14 @@ function clock(utc){return new Date(utc).toLocaleTimeString('en-GB',{hour:'2-dig
 let acts=DB.get('acts',{}); if(!acts||typeof acts!=='object') acts={};
 function actualOf(p){ if(p.id in acts) return acts[p.id]; const a=SLATE.actual&&SLATE.actual[p.t]; return a&&(p.name in a)?a[p.name]:null; }
 const CLOSE=3, NEAR=6;
-function verdict(gap){ const a=Math.abs(gap); return a<=CLOSE?['w','Close']:a<=NEAR?['q','Near']:['l','Off']; }
+// at or above the projection: green; up to 3 under: yellow; up to 6 under: orange; more than 6 under: red
+function verdict(gap){ return gap>=-0.05?'w':gap>=-CLOSE?'y':gap>=-NEAR?'or':'l'; }
 const sgn=n=>(n>0.04?'+':n<-0.04?'−':'')+Math.abs(n).toFixed(1);
 function accuracy(list){
-  const r=list.map(p=>({p,a:actualOf(p)})).filter(x=>x.a!=null).map(x=>({p:x.p,gap:x.a-x.p.result}));
+  const r=list.map(p=>({p,a:actualOf(p)})).filter(x=>x.a!=null).map(x=>({p:x.p,gap:x.a-x.p.result})).filter(x=>isFinite(x.gap));
   if(!r.length) return {n:0};
-  const abs=r.map(x=>Math.abs(x.gap)), worst=r.reduce((m,x)=>Math.abs(x.gap)>Math.abs(m.gap)?x:m);
-  return {n:r.length,avg:abs.reduce((s,x)=>s+x,0)/r.length,close:abs.filter(x=>x<=CLOSE).length/r.length*100,worst};
+  const abs=r.map(x=>Math.abs(x.gap)), worst=r.reduce((m,x)=>x.gap<m.gap?x:m);
+  return {n:r.length,avg:abs.reduce((s,x)=>s+x,0)/r.length,beat:r.filter(x=>x.gap>=-0.05).length/r.length*100,worst};
 }
 /* moneyline odds (decimal): data from the slate, or what you typed */
 let oddsEd=DB.get('odds',{}); if(!oddsEd||typeof oddsEd!=='object') oddsEd={};
@@ -55,8 +56,7 @@ function implied(o){ if(o.away&&o.home){ const a=1/o.away,h=1/o.home; return {aw
 /* team colours */
 function lum(hex){ const c=[1,3,5].map(i=>parseInt(hex.substr(i,2),16)/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)); return .2126*c[0]+.7152*c[1]+.0722*c[2]; }
 function tstyle(t){ const c=(SPORT.colors&&SPORT.colors[t])||['#8E8E93','#8E8E93'], p=c[0], s=c[1]||p, lp=lum(p), ls=lum(s);
-  const contrast=(Math.max(lp,ls)+.05)/(Math.min(lp,ls)+.05);            // letters take the second colour when it reads well on the first
-  return `--tc:${p};--tc2:${s};--tf:${contrast>=4.5?s:lp>.4?'#000':'#fff'};--tcd:${lp>=.05?p:ls>=.05?s:'#8E8E93'}`; }
+  return `--tc:${p};--tc2:${s};--tf:${Math.min(lp,ls)>.45?'#000':'#fff'};--tsh:${Math.min(lp,ls)>.45?'none':'0 1px 2px rgba(0,0,0,.45)'};--tcd:${lp>=.05?p:ls>=.05?s:'#8E8E93'}`; }
 /* short names: a known nickname, else the last name; first initial or full name only when two players would clash */
 const SUFFIX=/\s+(Jr\.?|Sr\.?|II|III|IV)$/;
 let _sn={};

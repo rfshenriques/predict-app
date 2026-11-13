@@ -32,7 +32,7 @@ function pop(){ if(Date.now()<pgUntil||!cur()) return; const s=pgSnap(); nav.sta
 function goTab(tab){ nav.tab=tab; nav.stack=[]; nav.y=0; renderAll(); scrollTo(0,0); }
 /* tab bar */
 bar.style.setProperty('--n',TABS.length);
-bar.innerHTML='<span class="tb-ind"></span>'+TABS.map(([k,l])=>`<button data-do="tab" data-tab="${k}">${ICON[k]}<span>${l}</span></button>`).join('');
+bar.innerHTML='<span class="tb-ind"></span>'+TABS.map(([k,l])=>`<button data-do="tab" data-tab="${k}">${ICON[k].replace('class="ic"','class="ic o"')}${ICONF[k]}<span>${l}</span></button>`).join('');
 let lastY=0;
 addEventListener('scroll',()=>{
   const y=scrollY;
@@ -185,7 +185,8 @@ document.addEventListener('click',e=>{
   }
 });
 /* typed values: real points, moneyline odds, player search. Only the affected bits are redrawn so the keyboard stays up. */
-function paintGap(p){ document.querySelectorAll(`[data-gap="${p.t}-${p.i}"]`).forEach(e=>e.innerHTML=gapPill(p)); const a=$('#acc'); if(a) a.innerHTML=accHTML(); }
+document.addEventListener('toggle',e=>{ const d=e.target; if(d.classList&&d.classList.contains('tblock')) resOpen[d.dataset.key]=d.open; },true);
+function paintGap(p){ document.querySelectorAll(`[data-gap="${p.t}-${p.i}"]`).forEach(e=>e.innerHTML=gapPill(p)||(e.closest('.rrow')?'<span class="pill v">No points yet</span>':'')); const a=$('#acc'); if(a) a.innerHTML=accHTML(); }
 document.addEventListener('change',e=>{
   const el=e.target, d=el.dataset; if(!d||!d.in) return;
   if(d.in==='act'){
