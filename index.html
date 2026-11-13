@@ -49,6 +49,7 @@
   --tint:#731328; --tint-bg:rgba(115,19,40,.09);
   --attn:#7A5200; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.28);
   --red:#C5221F; --red-bg:rgba(255,59,48,.12); --green:#34C759; --pos:#1A7F37; --pos-bg:rgba(52,199,89,.16); --on-tint:#FFFFFF; --tile-ring:rgba(0,0,0,.06);
+  --glow:radial-gradient(120% 100% at 0% 0%,rgba(115,19,40,.2),transparent 62%),radial-gradient(90% 90% at 100% 0%,rgba(254,196,11,.17),transparent 60%);
   --scrim:rgba(0,0,0,.46); --seg-on:#FFFFFF;
   --lg-tint:rgba(255,255,255,.62); --lg-edge2:rgba(60,60,67,.16); --lg-rim:#fff; --lg-rim2:rgba(60,60,67,.2);
   --lg-act:rgba(120,120,128,.16); --lg-ink:rgba(28,28,30,.82); --lg-sh:rgba(0,0,0,.18); --lg-spec:rgba(255,255,255,.5); --lg-flash:rgba(255,255,255,.85);
@@ -60,6 +61,7 @@
   --tint:#FF8FA6; --tint-bg:rgba(255,143,166,.16);
   --attn:#FEC40B; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.2);
   --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158; --pos:#30D158; --pos-bg:rgba(48,209,88,.2); --on-tint:#1C1C1E; --tile-ring:rgba(255,255,255,.22);
+  --glow:radial-gradient(120% 100% at 0% 0%,rgba(190,40,78,.42),transparent 62%),radial-gradient(90% 90% at 100% 0%,rgba(254,196,11,.1),transparent 60%);
   --scrim:rgba(0,0,0,.58); --seg-on:#636366;
   --lg-tint:rgba(44,44,46,.68); --lg-edge2:rgba(255,255,255,.1); --lg-rim:rgba(255,255,255,.16); --lg-rim2:rgba(255,255,255,.05);
   --lg-act:rgba(255,255,255,.14); --lg-ink:rgba(255,255,255,.9); --lg-sh:rgba(0,0,0,.5); --lg-spec:rgba(255,255,255,.06); --lg-flash:rgba(255,255,255,.22);
@@ -71,6 +73,7 @@
   --tint:#FF8FA6; --tint-bg:rgba(255,143,166,.16);
   --attn:#FEC40B; --attn-fill:#FEC40B; --attn-bg:rgba(254,196,11,.2);
   --red:#FF6961; --red-bg:rgba(255,69,58,.2); --green:#30D158; --pos:#30D158; --pos-bg:rgba(48,209,88,.2); --on-tint:#1C1C1E; --tile-ring:rgba(255,255,255,.22);
+  --glow:radial-gradient(120% 100% at 0% 0%,rgba(190,40,78,.42),transparent 62%),radial-gradient(90% 90% at 100% 0%,rgba(254,196,11,.1),transparent 60%);
   --scrim:rgba(0,0,0,.58); --seg-on:#636366;
   --lg-tint:rgba(44,44,46,.68); --lg-edge2:rgba(255,255,255,.1); --lg-rim:rgba(255,255,255,.16); --lg-rim2:rgba(255,255,255,.05);
   --lg-act:rgba(255,255,255,.14); --lg-ink:rgba(255,255,255,.9); --lg-sh:rgba(0,0,0,.5); --lg-spec:rgba(255,255,255,.06); --lg-flash:rgba(255,255,255,.22);
@@ -84,11 +87,11 @@ button:focus-visible{outline:2px solid var(--tint);outline-offset:2px}
 .num{font-variant-numeric:tabular-nums}
 svg.ic{width:1.5rem;height:1.5rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .dot{background:var(--tcd)}}
-:root[data-theme="dark"] .dot{background:var(--tcd)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pc{--tg:var(--tcd)}}
+:root[data-theme="dark"] .pc{--tg:var(--tcd)}
 
 /* page */
-.view{max-width:36rem;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--bg);
+.view{max-width:36rem;margin:0 auto;min-height:100vh;min-height:100dvh;background-color:var(--bg);background-image:var(--glow);background-repeat:no-repeat;background-size:100% 24rem;
   padding:calc(env(safe-area-inset-top) + 3.75rem) calc(1rem + env(safe-area-inset-right)) 1rem calc(1rem + env(safe-area-inset-left));
   display:flex;flex-direction:column;gap:1.25rem}
 #view,#nav{transition:transform .5s cubic-bezier(.32,.72,0,1);transform-origin:50% var(--sy,0px)}
@@ -103,6 +106,8 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 
 /* top area */
 #nav{position:fixed;top:0;left:0;right:0;z-index:5;pointer-events:none}
+.nav-bg{opacity:0;transition:opacity .25s}
+#nav.show-title .nav-bg{opacity:1}
 .nav-bg{position:absolute;inset:0 0 -1rem 0;background:linear-gradient(rgba(var(--bg-rgb),.72),rgba(var(--bg-rgb),0))}
 .nav-bg::before{content:"";position:absolute;inset:0;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);-webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent)}
 .nav-row{position:relative;max-width:36rem;margin:0 auto;display:flex;align-items:center;gap:.5rem;height:3.25rem;
@@ -151,7 +156,7 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 .ghead{display:flex;justify-content:space-between;align-items:center;font-size:.8125rem;font-weight:600;color:var(--label2)}
 .chev{width:.55rem;height:.55rem;border-right:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);opacity:.6;flex:none;margin-right:.15rem}
 .side{display:flex;align-items:center;gap:.75rem}
-.abbr{flex:none;width:3.125rem;height:2.125rem;border-radius:.625rem;background:var(--tc,var(--fill));color:var(--tf,var(--label));box-shadow:inset 0 0 0 1px var(--tile-ring);display:grid;place-items:center;font:700 .8125rem var(--round);letter-spacing:.04em}
+.abbr{flex:none;width:3.125rem;height:2.125rem;border-radius:.625rem;background:var(--tc,var(--fill));color:var(--tf,var(--label));box-shadow:inset 0 -4px 0 var(--tc2,transparent),inset 0 0 0 1px var(--tile-ring);display:grid;place-items:center;font:700 .8125rem var(--round);letter-spacing:.04em}
 .side .nm{flex:1;min-width:0;font-weight:600}
 .side .topp{display:block;font-size:.8125rem;font-weight:400;color:var(--label2);overflow-wrap:anywhere}
 .side .big{font:700 1.375rem var(--round)}
@@ -224,9 +229,13 @@ button.rbet:active{background:var(--tint-bg)}
 .fld .stin{width:4.25rem;text-align:center;font-weight:700}
 
 /* teams, odds, results */
-.abbr.sm{display:inline-grid;width:2.625rem;height:1.75rem;font-size:.6875rem;border-radius:.5rem;vertical-align:middle}
+.abbr.sm{display:inline-grid;width:2.625rem;height:1.75rem;font-size:.6875rem;border-radius:.5rem;vertical-align:middle;box-shadow:inset 0 -3px 0 var(--tc2,transparent),inset 0 0 0 1px var(--tile-ring)}
+.abbr.lg{box-shadow:inset 0 -5px 0 var(--tc2,transparent),inset 0 0 0 1px var(--tile-ring)}
+.brand{display:inline-flex;align-items:center;gap:.5rem;font-size:.9375rem;font-weight:700;padding:0 .25rem;margin-bottom:-.5rem}
+.brand svg{width:1.625rem;height:1.625rem;border-radius:.4rem}
+.fld input::placeholder{font-weight:400}
 .abbr.lg{width:4.25rem;height:2.875rem;font-size:1.0625rem;border-radius:.875rem}
-.dot{display:inline-block;width:.625rem;height:.625rem;border-radius:50%;background:var(--tc);box-shadow:0 0 0 1px var(--tile-ring);margin-right:.45rem;flex:none}
+.dot{display:inline-block;width:.75rem;height:.75rem;border-radius:50%;background:linear-gradient(135deg,var(--tc) 50%,var(--tc2,var(--tc)) 50%);box-shadow:0 0 0 1px var(--tile-ring);margin-right:.45rem;flex:none}
 .seg .dot{vertical-align:.02em}
 .gh-r{display:inline-flex;align-items:center;gap:.5rem}
 .odd{flex:none;min-width:3.25rem;text-align:center;padding:.3rem .5rem;border-radius:.55rem;background:var(--fill);font-weight:700;font-size:.9375rem}
@@ -236,8 +245,8 @@ button.rbet:active{background:var(--tint-bg)}
 .link::after{content:"";position:absolute;inset:-.75rem -.5rem}
 .hs{display:flex;gap:.75rem;overflow-x:auto;scrollbar-width:none;margin:0 -1rem;padding:.25rem 1rem;scroll-snap-type:x proximity}
 .hs::-webkit-scrollbar{display:none}
-.pc{flex:none;width:8.5rem;display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;padding:.875rem;border-radius:1.25rem;background:var(--card);box-shadow:0 0 0 .5px var(--sep);scroll-snap-align:start;transition:background .15s}
-.pc:active{background:var(--fill)}
+.pc{flex:none;width:8.5rem;display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;padding:.875rem;border-radius:1.25rem;--tg:var(--tc);background:linear-gradient(160deg,color-mix(in srgb,var(--tg) 24%,var(--card)),var(--card) 68%);box-shadow:0 0 0 .5px var(--sep);scroll-snap-align:start;transition:opacity .15s}
+.pc:active{opacity:.6}
 .pc b{font-size:.9375rem;font-weight:600;line-height:1.2;min-height:2.25rem;overflow-wrap:anywhere}
 .pcv{font-size:1.75rem;font-weight:700;line-height:1;color:var(--tint)}
 .pcs{font-size:.75rem;color:var(--label2)}
@@ -410,7 +419,7 @@ const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').match
 
 /* NBA slate for Fri 13 Nov 2026 (US date). player: [name, position, minutes per game, points per game, status, starter]
    status: O out, D doubtful, Q questionable, P probable */
-(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-13","checked":"13 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball"},"games":[{"id":"mil-orl","ml":{"home":1.27,"away":null,"src":"RotoWire composite"},"utc":"2026-11-14T00:00:00Z","away":"MIL","home":"ORL"},{"id":"nyk-ind","ml":{"away":1.32,"home":null,"src":"RotoWire composite"},"utc":"2026-11-14T00:00:00Z","away":"NYK","home":"IND"},{"id":"mem-nop","ml":{"away":1.62,"home":null,"src":"RotoWire composite"},"utc":"2026-11-14T01:00:00Z","away":"MEM","home":"NOP"},{"id":"atl-chi","ml":{"away":1.35,"home":null,"src":"RotoWire composite"},"utc":"2026-11-14T01:00:00Z","away":"ATL","home":"CHI"},{"id":"cle-mia","ml":{"home":1.75,"away":null,"src":"RotoWire composite"},"utc":"2026-11-14T01:00:00Z","away":"CLE","home":"MIA"},{"id":"uta-hou","ml":{"home":1.05,"away":null,"src":"RotoWire composite"},"utc":"2026-11-14T01:30:00Z","away":"UTA","home":"HOU"},{"id":"gsw-sas","ml":{"home":1.15,"away":null,"src":"RotoWire composite"},"utc":"2026-11-14T02:30:00Z","away":"GSW","home":"SAS"},{"id":"por-sac","ml":{"away":1.19,"home":null,"src":"RotoWire composite"},"utc":"2026-11-14T03:00:00Z","away":"POR","home":"SAC"},{"id":"okc-lac","ml":{"away":1.38,"home":null,"src":"RotoWire composite"},"utc":"2026-11-14T03:30:00Z","away":"OKC","home":"LAC"}],"defense":{"NYK":[25.4,21.4,23.1,17.3,14.7],"IND":[22.5,23.8,18.9,23.4,25.5],"MIL":[27.6,23.5,21.7,23.6,25.2],"ORL":[24.0,23.0,24.8,21.3,17.6],"MEM":[29.0,21.4,18.9,21.0,19.5],"NOP":[32.3,23.7,17.6,22.8,24.1],"ATL":[22.7,20.6,23.8,23.2,26.3],"CHI":[32.5,23.5,24.7,24.8,23.8],"CLE":[26.3,23.4,20.0,21.9,20.2],"MIA":[30.5,25.7,21.5,20.4,19.3],"UTA":[30.4,19.5,20.0,26.8,16.3],"HOU":[26.3,21.3,18.1,20.7,18.5],"GSW":[24.3,21.7,22.9,20.8,20.6],"SAS":[25.4,21.8,17.0,21.7,21.9],"POR":[29.0,22.3,15.3,21.7,24.8],"SAC":[28.0,22.6,21.0,27.0,22.2],"OKC":[22.4,20.8,22.1,22.7,18.1],"LAC":[28.7,25.0,17.1,21.9,21.3]},"leagueDefense":[26.1,21.9,20.8,22.5,20.7],"teams":{"NYK":
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-13","checked":"13 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball"},"games":[{"id":"mil-orl","ml":{"away":3.9,"home":1.26,"src":"Bovada"},"utc":"2026-11-14T00:00:00Z","away":"MIL","home":"ORL"},{"id":"nyk-ind","ml":{"away":1.38,"home":3.15,"src":"Bovada"},"utc":"2026-11-14T00:00:00Z","away":"NYK","home":"IND"},{"id":"mem-nop","ml":{"away":1.62,"home":2.35,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"MEM","home":"NOP"},{"id":"atl-chi","ml":{"away":1.38,"home":3.15,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"ATL","home":"CHI"},{"id":"cle-mia","ml":{"away":2.2,"home":1.71,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"CLE","home":"MIA"},{"id":"uta-hou","ml":{"away":9.0,"home":1.07,"src":"BetMGM"},"utc":"2026-11-14T01:30:00Z","away":"UTA","home":"HOU"},{"id":"gsw-sas","ml":{"away":6.25,"home":1.15,"src":"BetMGM and RotoWire"},"utc":"2026-11-14T02:30:00Z","away":"GSW","home":"SAS"},{"id":"por-sac","ml":{"away":1.2,"home":null,"src":"BetMGM"},"utc":"2026-11-14T03:00:00Z","away":"POR","home":"SAC"},{"id":"okc-lac","ml":{"away":1.36,"home":3.26,"src":"YouWager"},"utc":"2026-11-14T03:30:00Z","away":"OKC","home":"LAC"}],"defense":{"NYK":[25.4,21.4,23.1,17.3,14.7],"IND":[22.5,23.8,18.9,23.4,25.5],"MIL":[27.6,23.5,21.7,23.6,25.2],"ORL":[24.0,23.0,24.8,21.3,17.6],"MEM":[29.0,21.4,18.9,21.0,19.5],"NOP":[32.3,23.7,17.6,22.8,24.1],"ATL":[22.7,20.6,23.8,23.2,26.3],"CHI":[32.5,23.5,24.7,24.8,23.8],"CLE":[26.3,23.4,20.0,21.9,20.2],"MIA":[30.5,25.7,21.5,20.4,19.3],"UTA":[30.4,19.5,20.0,26.8,16.3],"HOU":[26.3,21.3,18.1,20.7,18.5],"GSW":[24.3,21.7,22.9,20.8,20.6],"SAS":[25.4,21.8,17.0,21.7,21.9],"POR":[29.0,22.3,15.3,21.7,24.8],"SAC":[28.0,22.6,21.0,27.0,22.2],"OKC":[22.4,20.8,22.1,22.7,18.1],"LAC":[28.7,25.0,17.1,21.9,21.3]},"leagueDefense":[26.1,21.9,20.8,22.5,20.7],"teams":{"NYK":
   {"name":"Knicks","players":[
     ["Jalen Brunson","G",33.6,26.0,"",1],
     ["Karl-Anthony Towns","C",31.4,20.9,"",1],
@@ -751,12 +760,32 @@ function accuracy(list){
 /* moneyline odds (decimal): data from the slate, or what you typed */
 let oddsEd=DB.get('odds',{}); if(!oddsEd||typeof oddsEd!=='object') oddsEd={};
 const oddsKey=g=>SPORT.id+':'+SLATE.date+':'+g.id;
-function gameOdds(g){ const e=oddsEd[oddsKey(g)]||{}, m=g.ml||{}; return {away:'away' in e?e.away:(m.away||null),home:'home' in e?e.home:(m.home||null),src:m.src||null}; }
+// if only one team has a price, the other is estimated from it (typical bookmaker margin of 4.5%) and flagged in est
+function gameOdds(g){
+  const e=oddsEd[oddsKey(g)]||{}, m=g.ml||{}, o={away:'away' in e?e.away:(m.away||null),home:'home' in e?e.home:(m.home||null),src:m.src||null,est:{}};
+  for(const [x,y] of [['away','home'],['home','away']]) if(!o[x]&&o[y]&&!(x in e)){ const p=1.045-1/o[y]; if(p>.01){ o[x]=Math.round(100/p)/100; o.est[x]=true; } }
+  return o;
+}
+const oddTxt=(o,k)=>o[k]?(o.est[k]?'~':'')+o[k].toFixed(2):'–';
 function implied(o){ if(o.away&&o.home){ const a=1/o.away,h=1/o.home; return {away:a/(a+h)*100,home:h/(a+h)*100}; } return {away:o.away?100/o.away:null,home:o.home?100/o.home:null}; }
 /* team colours */
 function lum(hex){ const c=[1,3,5].map(i=>parseInt(hex.substr(i,2),16)/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)); return .2126*c[0]+.7152*c[1]+.0722*c[2]; }
-function tstyle(t){ const c=(SPORT.colors&&SPORT.colors[t])||['#8E8E93','#8E8E93'], p=c[0], s=c[1]||p;
-  return `--tc:${p};--tf:${lum(p)>.4?'#000':'#fff'};--tcd:${lum(p)>=.05?p:lum(s)>=.05?s:'#8E8E93'}`; }
+function tstyle(t){ const c=(SPORT.colors&&SPORT.colors[t])||['#8E8E93','#8E8E93'], p=c[0], s=c[1]||p, lp=lum(p), ls=lum(s);
+  const contrast=(Math.max(lp,ls)+.05)/(Math.min(lp,ls)+.05);            // letters take the second colour when it reads well on the first
+  return `--tc:${p};--tc2:${s};--tf:${contrast>=4.5?s:lp>.4?'#000':'#fff'};--tcd:${lp>=.05?p:ls>=.05?s:'#8E8E93'}`; }
+/* short names: a known nickname, else the last name; first initial or full name only when two players would clash */
+const SUFFIX=/\s+(Jr\.?|Sr\.?|II|III|IV)$/;
+let _sn={};
+function shortNames(){
+  const key=SPORT.id+SLATE.date; if(_sn.key===key) return _sn.map;
+  const names=slateTeams().flatMap(t=>SLATE.teams[t].players.map(r=>r[0])), nick=SPORT.nick||{}, last=n=>n.replace(SUFFIX,'').split(' ').slice(1).join(' ')||n, cnt={}, map={}, c2={};
+  names.forEach(n=>{ if(!nick[n]){ const l=last(n); cnt[l]=(cnt[l]||0)+1; } });
+  names.forEach(n=>{ map[n]=nick[n]||(cnt[last(n)]>1?n[0]+'. '+last(n):last(n)); });
+  Object.values(map).forEach(v=>c2[v]=(c2[v]||0)+1);
+  names.forEach(n=>{ if(c2[map[n]]>1&&!nick[n]) map[n]=n.replace(SUFFIX,''); });
+  _sn={key,map}; return map;
+}
+const sn=name=>shortNames()[name]||(SPORT.nick&&SPORT.nick[name])||name;
 
 /* BETS. Saved on the device. One record per bet, for any sport. */
 let bets=DB.get('bets',[]); if(!Array.isArray(bets)) bets=[];
@@ -785,6 +814,8 @@ registerSport({
   id:'nba', league:'NBA', sport:'Basketball', stat:'points', unit:'pts',
   slates:NBA_SLATES.sort((a,b)=>a.date<b.date?-1:1),   // one entry per day, oldest first
   async load(){ return this.slates; },           // the API call goes here later
+  // what people actually call them; everyone else is shown by last name
+  nick:{"Shai Gilgeous-Alexander":"SGA","Victor Wembanyama":"Wemby","Giannis Antetokounmpo":"Giannis","Karl-Anthony Towns":"KAT","Nickeil Alexander-Walker":"NAW","Kentavious Caldwell-Pope":"KCP","LeBron James":"LeBron","Stephen Curry":"Steph","Kevin Durant":"KD","Anthony Davis":"AD","Anthony Edwards":"Ant","Damian Lillard":"Dame","Zion Williamson":"Zion","Ja Morant":"Ja","Luka Doncic":"Luka","Kyrie Irving":"Kyrie","Trae Young":"Trae","LaMelo Ball":"LaMelo","Cade Cunningham":"Cade","Paolo Banchero":"Paolo","Scottie Barnes":"Scottie","Draymond Green":"Draymond","Klay Thompson":"Klay","Bam Adebayo":"Bam","Jrue Holiday":"Jrue","Chet Holmgren":"Chet","Tyrese Haliburton":"Hali","Donovan Mitchell":"Spida","Jaylen Brown":"JB","Franz Wagner":"Franz","Deni Avdija":"Deni","Kawhi Leonard":"Kawhi","Jimmy Butler":"Jimmy","Kristaps Porzingis":"KP","Russell Westbrook":"Russ","RJ Barrett":"RJ","OG Anunoby":"OG","CJ McCollum":"CJ","Scoot Henderson":"Scoot","Jalen Williams":"J-Dub","Jabari Smith Jr.":"Jabari","Amen Thompson":"Amen","Ausar Thompson":"Ausar","Dejounte Murray":"Dejounte","Fred VanVleet":"FVV","Bones Hyland":"Bones","Jaren Jackson Jr.":"JJJ","Herbert Jones":"Herb Jones","P.J. Washington":"PJ","Isaiah Hartenstein":"I-Hart"},
   // team colours: [primary, secondary]
   colors:{"ATL":["#E03A3E","#C1D32F"],"BOS":["#007A33","#BA9653"],"BKN":["#000000","#FFFFFF"],"CHA":["#1D1160","#00788C"],"CHI":["#CE1141","#000000"],"CLE":["#860038","#041E42"],"DAL":["#00538C","#002B5E"],"DEN":["#0E2240","#FEC524"],"DET":["#C8102E","#1D42BA"],"GSW":["#1D428A","#FFC72C"],"HOU":["#CE1141","#000000"],"IND":["#002D62","#FDBB30"],"LAC":["#C8102E","#1D428A"],"LAL":["#552583","#FDB927"],"MEM":["#5D76A9","#12173F"],"MIA":["#98002E","#F9A01B"],"MIL":["#00471B","#EEE1C6"],"MIN":["#0C2340","#236192"],"NOP":["#0C2340","#C8102E"],"NYK":["#006BB6","#F58426"],"OKC":["#007AC1","#EF3B24"],"ORL":["#0077C0","#C4CED4"],"PHI":["#006BB6","#ED174C"],"PHX":["#1D1160","#E56020"],"POR":["#E03A3E","#000000"],"SAC":["#5A2D81","#63727A"],"SAS":["#C4CED4","#000000"],"TOR":["#CE1141","#000000"],"UTA":["#002B5C","#00471B"],"WAS":["#002B5C","#E31837"]},
   // position groups: which defense columns each group uses, and how to name it
@@ -821,6 +852,7 @@ const ICON={
   addbet:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
   info:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.500M12 7.600v.1"/></svg>'
 };
+const MARK='<svg viewBox="0 0 1024 1024" aria-hidden="true"><defs><linearGradient id="mk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9C2040"/><stop offset="1" stop-color="#4A0A18"/></linearGradient></defs><rect width="1024" height="1024" rx="230" fill="url(#mk)"/><rect x="208" y="448" width="608" height="80" rx="40" fill="#FDEFD6"/><circle cx="296" cy="784" r="36" fill="#FDEFD6"/><circle cx="374" cy="690" r="42" fill="#FDEFD6"/><circle cx="452" cy="600" r="48" fill="#FDEFD6"/><circle cx="680" cy="296" r="128" fill="#FEC40B"/></svg>';
 const TABS=[['home','Home'],['players','Players'],['bets','Bets'],['results','Results']];
 let nav=DB.get('nav',null);
 if(!nav||!TABS.some(t=>t[0]===nav.tab)||!Array.isArray(nav.stack)||nav.stack.some(s=>!SLATE.games.some(g=>g.id===s.id))) nav={tab:'home',stack:[]};
@@ -860,17 +892,17 @@ function sumHTML(asButton){
 function gameCard(g){
   const o=gameOdds(g), f=g.final;
   const side=(t,k)=>{ const top=roster(t).on[0], lost=f&&f[k]<f[k==='away'?'home':'away'];
-    return `<div class="side">${tile(t)}<span class="nm">${SLATE.teams[t].name}<span class="topp">${top?esc(top.name)+' · '+f1(top.result):'No players'}</span></span>
-      ${f?`<b class="fin num ${lost?'dim':''}">${f[k]}</b>`:''}<span class="odd num" aria-label="Moneyline">${o[k]?o[k].toFixed(2):'–'}</span></div>`; };
+    return `<div class="side">${tile(t)}<span class="nm">${SLATE.teams[t].name}<span class="topp">${top?esc(sn(top.name))+' · '+f1(top.result):'No players'}</span></span>
+      ${f?`<b class="fin num ${lost?'dim':''}">${f[k]}</b>`:''}<span class="odd num" aria-label="Moneyline">${oddTxt(o,k)}</span></div>`; };
   return `<button class="card game" data-do="open" data-id="${g.id}" aria-label="${g.away} at ${g.home}, open game">
     <div class="ghead"><span>${f?'Final':clock(g.utc)}</span><span class="gh-r">Moneyline<i class="chev"></i></span></div>${side(g.away,'away')}${side(g.home,'home')}</button>`;
 }
 function viewHome(){
   const top=leaders().slice(0,6);
-  return sportPicker()+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
+  return sportPicker()+`<span class="brand">${MARK}Propline</span>`+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
   `<div class="sec">My bets</div>`+sumHTML(true)+
   `<div class="sec row-sec"><span>Top projections</span><button class="link" data-do="gotab" data-tab="players">All players</button></div>
-  <div class="hs">${top.map(p=>`<button class="pc" data-do="player" data-t="${p.t}" data-i="${p.i}">${tile(p.t,'sm')}<b>${esc(p.name)}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
+  <div class="hs">${top.map(p=>`<button class="pc" style="${tstyle(p.t)}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
   <div class="sec">Games</div>`+SLATE.games.map(gameCard).join('')+
   `<p class="note">Each team shows its top projected scorer. Tap a game for every player and to set the odds.</p>`;
 }
@@ -881,12 +913,12 @@ function rowHTML(p,rank,withTeam){
   const ed=p.id in edits.min?'<span class="pill e">Edited</span>':'', bt=betsFor(p).length?'<span class="pill e">Bet</span>':'', a=actualOf(p);
   const sub=withTeam?`vs ${p.opp} · ${p.pos}${p.starter?' · Starter':''}`:`${p.pos} · ${f1(p.minutes)} min${p.starter?' · Starter':''}`;
   return `<div class="row prow ${p.playing?'':'off'}"><button class="rmain" data-do="player" data-t="${p.t}" data-i="${p.i}">
-    ${withTeam?tile(p.t,'sm'):`<span class="rk num">${rank||''}</span>`}<span class="who"><b>${esc(p.name)}${pill}${ed}${bt}${gapPill(p)}</b><span class="num">${sub}</span></span>
+    ${withTeam?tile(p.t,'sm'):`<span class="rk num">${rank||''}</span>`}<span class="who"><b>${esc(sn(p.name))}${pill}${ed}${bt}${gapPill(p)}</b><span class="num">${sub}</span></span>
     <span class="proj num">${p.playing?f1(p.result):'–'}${a!=null?`<small>scored ${a}</small>`:''}</span></button>${
     p.playing?`<button class="rbet" data-do="quickbet" data-t="${p.t}" data-i="${p.i}" aria-label="Add a bet on ${esc(p.name)}">${ICON.addbet}</button>`:'<span class="rbet"></span>'}</div>`;
 }
 function playerList(){
-  const q=pq.trim().toLowerCase(), all=leaders(topPos).filter(p=>!q||p.name.toLowerCase().includes(q)||p.t.toLowerCase().includes(q)), list=q?all:all.slice(0,40);
+  const q=pq.trim().toLowerCase(), all=leaders(topPos).filter(p=>!q||p.name.toLowerCase().includes(q)||sn(p.name).toLowerCase().includes(q)||p.t.toLowerCase().includes(q)), list=q?all:all.slice(0,40);
   return list.map((p,k)=>rowHTML(p,k+1,true)).join('')||'<div class="row plain"><span class="k">No player matches.</span></div>';
 }
 function viewPlayers(){
@@ -900,12 +932,12 @@ function viewPlayers(){
 function impliedText(g){
   const o=gameOdds(g), im=implied(o), a=SLATE.teams[g.away].name, h=SLATE.teams[g.home].name;
   const part=(n,v)=>v==null?'':`${n} ${v.toFixed(0)}%`, t=[part(a,im.away),part(h,im.home)].filter(Boolean).join(' · ');
-  return (t?`Implied chance: ${t}. `:'No odds yet. ')+(o.src?`Loaded from ${o.src}. `:'')+'Type your own decimal odds to change them.';
+  return (t?`Implied chance: ${t}. `:'No odds yet. ')+(o.src?`Loaded from ${o.src}. `:'')+(o.est.away||o.est.home?'The grey price is an estimate from the other team\'s odds. ':'')+'Type your own decimal odds to change them.';
 }
 function viewGame(c){
   const g=SLATE.games.find(x=>x.id===c.id), r=roster(c.team), o=gameOdds(g), f=g.final;
   const tm=(t,k)=>`<span class="tm">${tile(t,'lg')}<b>${SLATE.teams[t].name}</b>${f?`<span class="sc num">${f[k]}</span>`:''}</span>`;
-  const F=(t,k)=>`<label class="fld" for="od-${k}"><span>${dot(t)}${SLATE.teams[t].name}</span><input id="od-${k}" data-in="odds" data-g="${g.id}" data-side="${k}" inputmode="decimal" autocomplete="off" placeholder="–" value="${o[k]?o[k].toFixed(2):''}"></label>`;
+  const F=(t,k)=>`<label class="fld" for="od-${k}"><span>${dot(t)}${SLATE.teams[t].name}</span><input id="od-${k}" data-in="odds" data-g="${g.id}" data-side="${k}" inputmode="decimal" autocomplete="off" placeholder="${o.est[k]?'~'+o[k].toFixed(2):'–'}" value="${o[k]&&!o.est[k]?o[k].toFixed(2):''}"></label>`;
   return head(`${SPORT.league} · ${day(g.utc)} · ${f?'Final':clock(g.utc)}`,g.away+' at '+g.home,'')+
   `<div class="card mu">${tm(g.away,'away')}<span class="at">at</span>${tm(g.home,'home')}</div>
   <div class="sec">Moneyline (decimal)</div><div class="card">${F(g.away,'away')}${F(g.home,'home')}</div><p class="note" id="imp">${impliedText(g)}</p>
@@ -920,7 +952,7 @@ const BSTAT={open:['op','Open'],won:['w','Won'],lost:['l','Lost'],void:['v','Voi
 function betLine(b){ return `${b.side==='under'?'Under':'Over'}${b.line!=null?' '+b.line:''} ${b.stat}`; }
 function betRow(b){
   const pl=betPL(b), st=BSTAT[b.status];
-  return `<button class="row nork" data-do="bet" data-id="${b.id}"><span class="who"><b>${esc(b.player)}<span class="pill ${st[0]}">${st[1]}</span></b>
+  return `<button class="row nork" data-do="bet" data-id="${b.id}"><span class="who"><b>${esc(sn(b.player))}<span class="pill ${st[0]}">${st[1]}</span></b>
     <span class="num">${b.team} vs ${b.opp} · ${betLine(b)}<br>${money(b.stake)} at ${b.odds.toFixed(2)}</span></span>
     <span class="pl num ${pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'':signed(pl)}</span></button>`;
 }
@@ -940,11 +972,11 @@ function accHTML(){
   const a=accuracy(slateTeams().flatMap(t=>roster(t).on));
   const T=(k,v,sub)=>`<span class="tile"><span class="tk">${k}</span><b class="tv num">${v}</b><span class="ts num">${sub}</span></span>`;
   return T('Players checked',a.n,a.n?'With a real score':'None entered yet')+T('Average gap',a.n?a.avg.toFixed(1):'–',SPORT.stat+' off, on average')+
-    T('Close',a.n?a.close.toFixed(0)+'%':'–',`Within ${CLOSE} ${SPORT.stat}`)+T('Biggest miss',a.n?sgn(a.worst.gap):'–',a.n?esc(a.worst.p.name):'–');
+    T('Close',a.n?a.close.toFixed(0)+'%':'–',`Within ${CLOSE} ${SPORT.stat}`)+T('Biggest miss',a.n?sgn(a.worst.gap):'–',a.n?esc(sn(a.worst.p.name)):'–');
 }
 function resRow(p){
   const a=actualOf(p);
-  return `<div class="rrow">${tile(p.t,'sm')}<span class="who"><b>${esc(p.name)}</b><span class="num">Projected ${f1(p.result)} <span class="gapc" data-gap="${p.t}-${p.i}">${gapPill(p)}</span></span></span>
+  return `<div class="rrow">${tile(p.t,'sm')}<span class="who"><b>${esc(sn(p.name))}</b><span class="num">Projected ${f1(p.result)} <span class="gapc" data-gap="${p.t}-${p.i}">${gapPill(p)}</span></span></span>
     <input data-in="act" data-t="${p.t}" data-i="${p.i}" inputmode="numeric" autocomplete="off" placeholder="–" aria-label="${esc(p.name)} real ${SPORT.stat}" value="${a==null?'':a}"></div>`;
 }
 function viewResults(){

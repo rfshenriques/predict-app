@@ -44,9 +44,29 @@ function accuracy(list){
 /* moneyline odds (decimal): data from the slate, or what you typed */
 let oddsEd=DB.get('odds',{}); if(!oddsEd||typeof oddsEd!=='object') oddsEd={};
 const oddsKey=g=>SPORT.id+':'+SLATE.date+':'+g.id;
-function gameOdds(g){ const e=oddsEd[oddsKey(g)]||{}, m=g.ml||{}; return {away:'away' in e?e.away:(m.away||null),home:'home' in e?e.home:(m.home||null),src:m.src||null}; }
+// if only one team has a price, the other is estimated from it (typical bookmaker margin of 4.5%) and flagged in est
+function gameOdds(g){
+  const e=oddsEd[oddsKey(g)]||{}, m=g.ml||{}, o={away:'away' in e?e.away:(m.away||null),home:'home' in e?e.home:(m.home||null),src:m.src||null,est:{}};
+  for(const [x,y] of [['away','home'],['home','away']]) if(!o[x]&&o[y]&&!(x in e)){ const p=1.045-1/o[y]; if(p>.01){ o[x]=Math.round(100/p)/100; o.est[x]=true; } }
+  return o;
+}
+const oddTxt=(o,k)=>o[k]?(o.est[k]?'~':'')+o[k].toFixed(2):'–';
 function implied(o){ if(o.away&&o.home){ const a=1/o.away,h=1/o.home; return {away:a/(a+h)*100,home:h/(a+h)*100}; } return {away:o.away?100/o.away:null,home:o.home?100/o.home:null}; }
 /* team colours */
 function lum(hex){ const c=[1,3,5].map(i=>parseInt(hex.substr(i,2),16)/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)); return .2126*c[0]+.7152*c[1]+.0722*c[2]; }
-function tstyle(t){ const c=(SPORT.colors&&SPORT.colors[t])||['#8E8E93','#8E8E93'], p=c[0], s=c[1]||p;
-  return `--tc:${p};--tf:${lum(p)>.4?'#000':'#fff'};--tcd:${lum(p)>=.05?p:lum(s)>=.05?s:'#8E8E93'}`; }
+function tstyle(t){ const c=(SPORT.colors&&SPORT.colors[t])||['#8E8E93','#8E8E93'], p=c[0], s=c[1]||p, lp=lum(p), ls=lum(s);
+  const contrast=(Math.max(lp,ls)+.05)/(Math.min(lp,ls)+.05);            // letters take the second colour when it reads well on the first
+  return `--tc:${p};--tc2:${s};--tf:${contrast>=4.5?s:lp>.4?'#000':'#fff'};--tcd:${lp>=.05?p:ls>=.05?s:'#8E8E93'}`; }
+/* short names: a known nickname, else the last name; first initial or full name only when two players would clash */
+const SUFFIX=/\s+(Jr\.?|Sr\.?|II|III|IV)$/;
+let _sn={};
+function shortNames(){
+  const key=SPORT.id+SLATE.date; if(_sn.key===key) return _sn.map;
+  const names=slateTeams().flatMap(t=>SLATE.teams[t].players.map(r=>r[0])), nick=SPORT.nick||{}, last=n=>n.replace(SUFFIX,'').split(' ').slice(1).join(' ')||n, cnt={}, map={}, c2={};
+  names.forEach(n=>{ if(!nick[n]){ const l=last(n); cnt[l]=(cnt[l]||0)+1; } });
+  names.forEach(n=>{ map[n]=nick[n]||(cnt[last(n)]>1?n[0]+'. '+last(n):last(n)); });
+  Object.values(map).forEach(v=>c2[v]=(c2[v]||0)+1);
+  names.forEach(n=>{ if(c2[map[n]]>1&&!nick[n]) map[n]=n.replace(SUFFIX,''); });
+  _sn={key,map}; return map;
+}
+const sn=name=>shortNames()[name]||(SPORT.nick&&SPORT.nick[name])||name;

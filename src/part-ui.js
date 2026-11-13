@@ -7,6 +7,7 @@ const ICON={
   addbet:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
   info:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.500M12 7.600v.1"/></svg>'
 };
+const MARK='<svg viewBox="0 0 1024 1024" aria-hidden="true"><defs><linearGradient id="mk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9C2040"/><stop offset="1" stop-color="#4A0A18"/></linearGradient></defs><rect width="1024" height="1024" rx="230" fill="url(#mk)"/><rect x="208" y="448" width="608" height="80" rx="40" fill="#FDEFD6"/><circle cx="296" cy="784" r="36" fill="#FDEFD6"/><circle cx="374" cy="690" r="42" fill="#FDEFD6"/><circle cx="452" cy="600" r="48" fill="#FDEFD6"/><circle cx="680" cy="296" r="128" fill="#FEC40B"/></svg>';
 const TABS=[['home','Home'],['players','Players'],['bets','Bets'],['results','Results']];
 let nav=DB.get('nav',null);
 if(!nav||!TABS.some(t=>t[0]===nav.tab)||!Array.isArray(nav.stack)||nav.stack.some(s=>!SLATE.games.some(g=>g.id===s.id))) nav={tab:'home',stack:[]};
@@ -46,17 +47,17 @@ function sumHTML(asButton){
 function gameCard(g){
   const o=gameOdds(g), f=g.final;
   const side=(t,k)=>{ const top=roster(t).on[0], lost=f&&f[k]<f[k==='away'?'home':'away'];
-    return `<div class="side">${tile(t)}<span class="nm">${SLATE.teams[t].name}<span class="topp">${top?esc(top.name)+' · '+f1(top.result):'No players'}</span></span>
-      ${f?`<b class="fin num ${lost?'dim':''}">${f[k]}</b>`:''}<span class="odd num" aria-label="Moneyline">${o[k]?o[k].toFixed(2):'–'}</span></div>`; };
+    return `<div class="side">${tile(t)}<span class="nm">${SLATE.teams[t].name}<span class="topp">${top?esc(sn(top.name))+' · '+f1(top.result):'No players'}</span></span>
+      ${f?`<b class="fin num ${lost?'dim':''}">${f[k]}</b>`:''}<span class="odd num" aria-label="Moneyline">${oddTxt(o,k)}</span></div>`; };
   return `<button class="card game" data-do="open" data-id="${g.id}" aria-label="${g.away} at ${g.home}, open game">
     <div class="ghead"><span>${f?'Final':clock(g.utc)}</span><span class="gh-r">Moneyline<i class="chev"></i></span></div>${side(g.away,'away')}${side(g.home,'home')}</button>`;
 }
 function viewHome(){
   const top=leaders().slice(0,6);
-  return sportPicker()+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
+  return sportPicker()+`<span class="brand">${MARK}Propline</span>`+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
   `<div class="sec">My bets</div>`+sumHTML(true)+
   `<div class="sec row-sec"><span>Top projections</span><button class="link" data-do="gotab" data-tab="players">All players</button></div>
-  <div class="hs">${top.map(p=>`<button class="pc" data-do="player" data-t="${p.t}" data-i="${p.i}">${tile(p.t,'sm')}<b>${esc(p.name)}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
+  <div class="hs">${top.map(p=>`<button class="pc" style="${tstyle(p.t)}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
   <div class="sec">Games</div>`+SLATE.games.map(gameCard).join('')+
   `<p class="note">Each team shows its top projected scorer. Tap a game for every player and to set the odds.</p>`;
 }
@@ -67,12 +68,12 @@ function rowHTML(p,rank,withTeam){
   const ed=p.id in edits.min?'<span class="pill e">Edited</span>':'', bt=betsFor(p).length?'<span class="pill e">Bet</span>':'', a=actualOf(p);
   const sub=withTeam?`vs ${p.opp} · ${p.pos}${p.starter?' · Starter':''}`:`${p.pos} · ${f1(p.minutes)} min${p.starter?' · Starter':''}`;
   return `<div class="row prow ${p.playing?'':'off'}"><button class="rmain" data-do="player" data-t="${p.t}" data-i="${p.i}">
-    ${withTeam?tile(p.t,'sm'):`<span class="rk num">${rank||''}</span>`}<span class="who"><b>${esc(p.name)}${pill}${ed}${bt}${gapPill(p)}</b><span class="num">${sub}</span></span>
+    ${withTeam?tile(p.t,'sm'):`<span class="rk num">${rank||''}</span>`}<span class="who"><b>${esc(sn(p.name))}${pill}${ed}${bt}${gapPill(p)}</b><span class="num">${sub}</span></span>
     <span class="proj num">${p.playing?f1(p.result):'–'}${a!=null?`<small>scored ${a}</small>`:''}</span></button>${
     p.playing?`<button class="rbet" data-do="quickbet" data-t="${p.t}" data-i="${p.i}" aria-label="Add a bet on ${esc(p.name)}">${ICON.addbet}</button>`:'<span class="rbet"></span>'}</div>`;
 }
 function playerList(){
-  const q=pq.trim().toLowerCase(), all=leaders(topPos).filter(p=>!q||p.name.toLowerCase().includes(q)||p.t.toLowerCase().includes(q)), list=q?all:all.slice(0,40);
+  const q=pq.trim().toLowerCase(), all=leaders(topPos).filter(p=>!q||p.name.toLowerCase().includes(q)||sn(p.name).toLowerCase().includes(q)||p.t.toLowerCase().includes(q)), list=q?all:all.slice(0,40);
   return list.map((p,k)=>rowHTML(p,k+1,true)).join('')||'<div class="row plain"><span class="k">No player matches.</span></div>';
 }
 function viewPlayers(){
@@ -86,12 +87,12 @@ function viewPlayers(){
 function impliedText(g){
   const o=gameOdds(g), im=implied(o), a=SLATE.teams[g.away].name, h=SLATE.teams[g.home].name;
   const part=(n,v)=>v==null?'':`${n} ${v.toFixed(0)}%`, t=[part(a,im.away),part(h,im.home)].filter(Boolean).join(' · ');
-  return (t?`Implied chance: ${t}. `:'No odds yet. ')+(o.src?`Loaded from ${o.src}. `:'')+'Type your own decimal odds to change them.';
+  return (t?`Implied chance: ${t}. `:'No odds yet. ')+(o.src?`Loaded from ${o.src}. `:'')+(o.est.away||o.est.home?'The grey price is an estimate from the other team\'s odds. ':'')+'Type your own decimal odds to change them.';
 }
 function viewGame(c){
   const g=SLATE.games.find(x=>x.id===c.id), r=roster(c.team), o=gameOdds(g), f=g.final;
   const tm=(t,k)=>`<span class="tm">${tile(t,'lg')}<b>${SLATE.teams[t].name}</b>${f?`<span class="sc num">${f[k]}</span>`:''}</span>`;
-  const F=(t,k)=>`<label class="fld" for="od-${k}"><span>${dot(t)}${SLATE.teams[t].name}</span><input id="od-${k}" data-in="odds" data-g="${g.id}" data-side="${k}" inputmode="decimal" autocomplete="off" placeholder="–" value="${o[k]?o[k].toFixed(2):''}"></label>`;
+  const F=(t,k)=>`<label class="fld" for="od-${k}"><span>${dot(t)}${SLATE.teams[t].name}</span><input id="od-${k}" data-in="odds" data-g="${g.id}" data-side="${k}" inputmode="decimal" autocomplete="off" placeholder="${o.est[k]?'~'+o[k].toFixed(2):'–'}" value="${o[k]&&!o.est[k]?o[k].toFixed(2):''}"></label>`;
   return head(`${SPORT.league} · ${day(g.utc)} · ${f?'Final':clock(g.utc)}`,g.away+' at '+g.home,'')+
   `<div class="card mu">${tm(g.away,'away')}<span class="at">at</span>${tm(g.home,'home')}</div>
   <div class="sec">Moneyline (decimal)</div><div class="card">${F(g.away,'away')}${F(g.home,'home')}</div><p class="note" id="imp">${impliedText(g)}</p>
@@ -106,7 +107,7 @@ const BSTAT={open:['op','Open'],won:['w','Won'],lost:['l','Lost'],void:['v','Voi
 function betLine(b){ return `${b.side==='under'?'Under':'Over'}${b.line!=null?' '+b.line:''} ${b.stat}`; }
 function betRow(b){
   const pl=betPL(b), st=BSTAT[b.status];
-  return `<button class="row nork" data-do="bet" data-id="${b.id}"><span class="who"><b>${esc(b.player)}<span class="pill ${st[0]}">${st[1]}</span></b>
+  return `<button class="row nork" data-do="bet" data-id="${b.id}"><span class="who"><b>${esc(sn(b.player))}<span class="pill ${st[0]}">${st[1]}</span></b>
     <span class="num">${b.team} vs ${b.opp} · ${betLine(b)}<br>${money(b.stake)} at ${b.odds.toFixed(2)}</span></span>
     <span class="pl num ${pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'':signed(pl)}</span></button>`;
 }
@@ -126,11 +127,11 @@ function accHTML(){
   const a=accuracy(slateTeams().flatMap(t=>roster(t).on));
   const T=(k,v,sub)=>`<span class="tile"><span class="tk">${k}</span><b class="tv num">${v}</b><span class="ts num">${sub}</span></span>`;
   return T('Players checked',a.n,a.n?'With a real score':'None entered yet')+T('Average gap',a.n?a.avg.toFixed(1):'–',SPORT.stat+' off, on average')+
-    T('Close',a.n?a.close.toFixed(0)+'%':'–',`Within ${CLOSE} ${SPORT.stat}`)+T('Biggest miss',a.n?sgn(a.worst.gap):'–',a.n?esc(a.worst.p.name):'–');
+    T('Close',a.n?a.close.toFixed(0)+'%':'–',`Within ${CLOSE} ${SPORT.stat}`)+T('Biggest miss',a.n?sgn(a.worst.gap):'–',a.n?esc(sn(a.worst.p.name)):'–');
 }
 function resRow(p){
   const a=actualOf(p);
-  return `<div class="rrow">${tile(p.t,'sm')}<span class="who"><b>${esc(p.name)}</b><span class="num">Projected ${f1(p.result)} <span class="gapc" data-gap="${p.t}-${p.i}">${gapPill(p)}</span></span></span>
+  return `<div class="rrow">${tile(p.t,'sm')}<span class="who"><b>${esc(sn(p.name))}</b><span class="num">Projected ${f1(p.result)} <span class="gapc" data-gap="${p.t}-${p.i}">${gapPill(p)}</span></span></span>
     <input data-in="act" data-t="${p.t}" data-i="${p.i}" inputmode="numeric" autocomplete="off" placeholder="–" aria-label="${esc(p.name)} real ${SPORT.stat}" value="${a==null?'':a}"></div>`;
 }
 function viewResults(){
