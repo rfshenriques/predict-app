@@ -4,6 +4,7 @@ const ICON={
   bets:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14.5 9.500v5"/></svg>',
   results:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.500l2.800 2.800L16 9.500"/></svg>',
   back:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  addbet:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
   info:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.500M12 7.600v.1"/></svg>'
 };
 const TABS=[['home','Home'],['players','Players'],['bets','Bets'],['results','Results']];
@@ -65,9 +66,10 @@ function rowHTML(p,rank,withTeam){
   const pill=!p.playing?`<span class="pill o">${p.status==='D'?'Doubtful':'Out'}</span>`:p.status==='Q'?'<span class="pill q">Questionable</span>':'';
   const ed=p.id in edits.min?'<span class="pill e">Edited</span>':'', bt=betsFor(p).length?'<span class="pill e">Bet</span>':'', a=actualOf(p);
   const sub=withTeam?`vs ${p.opp} · ${p.pos}${p.starter?' · Starter':''}`:`${p.pos} · ${f1(p.minutes)} min${p.starter?' · Starter':''}`;
-  return `<button class="row ${p.playing?'':'off'}" data-do="player" data-t="${p.t}" data-i="${p.i}">
+  return `<div class="row prow ${p.playing?'':'off'}"><button class="rmain" data-do="player" data-t="${p.t}" data-i="${p.i}">
     ${withTeam?tile(p.t,'sm'):`<span class="rk num">${rank||''}</span>`}<span class="who"><b>${esc(p.name)}${pill}${ed}${bt}${gapPill(p)}</b><span class="num">${sub}</span></span>
-    <span class="proj num">${p.playing?f1(p.result):'–'}${a!=null?`<small>scored ${a}</small>`:''}</span></button>`;
+    <span class="proj num">${p.playing?f1(p.result):'–'}${a!=null?`<small>scored ${a}</small>`:''}</span></button>${
+    p.playing?`<button class="rbet" data-do="quickbet" data-t="${p.t}" data-i="${p.i}" aria-label="Add a bet on ${esc(p.name)}">${ICON.addbet}</button>`:'<span class="rbet"></span>'}</div>`;
 }
 function playerList(){
   const q=pq.trim().toLowerCase(), all=leaders(topPos).filter(p=>!q||p.name.toLowerCase().includes(q)||p.t.toLowerCase().includes(q)), list=q?all:all.slice(0,40);
@@ -169,11 +171,12 @@ function betHint(d){
 function betBody(){
   const d=sheet.draft, S=(k,opts,val)=>`<div class="seg" role="group">${opts.map(([v,l])=>`<button data-do="${k}" data-v="${v}" aria-pressed="${v===val}">${l}</button>`).join('')}</div>`;
   const F=(id,label,ph)=>`<label class="fld" for="bf-${id}"><span>${label}</span><input id="bf-${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}" value="${esc(d[id])}"></label>`;
+  const FS=(id,label,ph,what)=>`<div class="fld"><label for="bf-${id}">${label}</label><span class="stepper"><button data-do="bstep" data-f="${id}" data-d="-1" aria-label="Lower the ${what}">−</button><input id="bf-${id}" class="stin" inputmode="decimal" autocomplete="off" placeholder="${ph}" value="${esc(d[id])}"><button data-do="bstep" data-f="${id}" data-d="1" aria-label="Raise the ${what}">+</button></span></div>`;
   return `<div class="card result small"><span>${esc(d.player)}<br>${d.team} vs ${d.opp} · projected</span><b class="num">${f1(d.proj)}</b></div>
   ${S('bside',[['over','Over'],['under','Under']],d.side)}
-  <div class="card">${F('line','Line ('+d.stat+')','Optional')}${F('stake','Stake (€)','10')}${F('odds','Odds','1.85')}</div>
+  <div class="card">${FS('line','Line ('+d.stat+')','–','line')}${FS('odds','Odds','–','odds')}${F('stake','Stake (€)','10')}</div>
   <div class="sec">Result</div>
-  ${S('bstatus',[['open','Open'],['won','Won'],['lost','Lost'],['void','Void']],d.status)}${betHint(d)}
+  ${S('bstatus',[['open','Open'],['won','Won'],['lost','Lost'],['void','Void']],d.status)}<div id="bhint">${betHint(d)}</div>
   ${sheet.id?'<button class="btn2 danger" data-do="betdel">Delete bet</button>':''}`;
 }
 function backupBody(){

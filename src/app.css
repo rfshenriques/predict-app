@@ -151,6 +151,15 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 .sw::after{content:"";position:absolute;top:2px;left:2px;width:1.6875rem;height:1.6875rem;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
 .sw[aria-checked="true"]{background:var(--green)}.sw[aria-checked="true"]::after{transform:translateX(1.25rem)}
 
+/* player rows: main area opens the player, the icon adds a bet */
+.prow{padding-top:0;padding-bottom:0;padding-right:.5rem;gap:.25rem}
+.rmain{flex:1;min-width:0;align-self:stretch;display:flex;align-items:center;gap:.75rem;padding:.6rem 0;min-height:3.5rem}
+.rbet{flex:none;width:2.75rem;height:2.75rem;display:grid;place-items:center;color:var(--tint);border-radius:50%;transition:background .15s}
+button.rbet:active{background:var(--tint-bg)}
+.fld label{flex:1}
+.fld .stepper{flex:none}
+.fld .stin{width:4.25rem;text-align:center;font-weight:700}
+
 /* teams, odds, results */
 .abbr.sm{display:inline-grid;width:2.625rem;height:1.75rem;font-size:.6875rem;border-radius:.5rem;vertical-align:middle}
 .abbr.lg{width:4.25rem;height:2.875rem;font-size:1.0625rem;border-radius:.875rem}

@@ -113,6 +113,22 @@ function editBet(b,from){
   const s={kind:'bet',id:b.id,from,draft:{...b,line:b.line==null?'':String(b.line),stake:String(b.stake),odds:String(b.odds)}};
   if(sheet){ sheet=s; renderSheet(); } else openSheet(s);
 }
+function newDraft(p){ return {sport:SPORT.id,date:SLATE.date,when:gameOf(p.t).utc,team:p.t,opp:p.opp,player:p.name,stat:SPORT.stat,proj:+p.result.toFixed(1),side:'over',line:'',stake:'',odds:'',status:'open'}; }
+/* + and - on the bet form: the line moves by 0.5, the odds by 0.01. Hold to keep going. */
+function betStep(f,dir){
+  const e=$('#bf-'+f); if(!e||!sheet||sheet.kind!=='bet') return; let v=num(e.value);
+  if(f==='line'){ v=v==null?Math.round(sheet.draft.proj*2)/2:Math.max(0,Math.round((v+dir*.5)*2)/2); e.value=String(v); }
+  else { v=v==null?1.90:Math.max(1.01,Math.round((v+dir*.01)*100)/100); e.value=v.toFixed(2); }
+  sheet.draft[f]=e.value; const h=$('#bhint'); if(h) h.innerHTML=betHint(sheet.draft);
+}
+let holdT=0, holdI=0; const stopHold=()=>{ clearTimeout(holdT); clearInterval(holdI); };
+document.addEventListener('pointerdown',e=>{
+  const b=e.target.closest('[data-do="bstep"]'); if(!b) return;
+  stopHold(); betStep(b.dataset.f,+b.dataset.d);
+  holdT=setTimeout(()=>{ holdI=setInterval(()=>betStep(b.dataset.f,+b.dataset.d),70); },450);
+});
+['pointerup','pointercancel','contextmenu'].forEach(t=>document.addEventListener(t,stopHold));
+addEventListener('blur',stopHold);
 /* events */
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-do]'); if(!b) return; const d=b.dataset;
@@ -136,9 +152,10 @@ document.addEventListener('click',e=>{
     case 'resetall': { const old=JSON.parse(JSON.stringify(edits)); edits={min:{},play:{}}; DB.set('edits',edits); refresh();
       toast('Changes reset',()=>{edits=old;DB.set('edits',edits);refresh()}); break; }
     /* bets */
-    case 'addbet': { if(!sheet||sheet.kind!=='player') break; const p=player(sheet.t,sheet.i), g=gameOf(p.t);
-      sheet={kind:'bet',id:null,from:{t:sheet.t,i:sheet.i},draft:{sport:SPORT.id,date:SLATE.date,when:g.utc,team:p.t,opp:p.opp,player:p.name,stat:SPORT.stat,proj:+p.result.toFixed(1),side:'over',line:'',stake:'',odds:'',status:'open'}};
-      renderSheet(); break; }
+    case 'addbet': { if(!sheet||sheet.kind!=='player') break;
+      sheet={kind:'bet',id:null,from:{t:sheet.t,i:sheet.i},draft:newDraft(player(sheet.t,sheet.i))}; renderSheet(); break; }
+    case 'quickbet': openSheet({kind:'bet',id:null,from:null,draft:newDraft(player(d.t,+d.i))}); break;
+    case 'bstep': if(e.detail===0) betStep(d.f,+d.d); break;   // keyboard only: touch and mouse are handled on press, below
     case 'bet': { const x=bets.find(q=>q.id===d.id); if(x) editBet(x,sheet&&sheet.kind==='player'?{t:sheet.t,i:sheet.i}:null); break; }
     case 'bside': syncDraft(); sheet.draft.side=d.v; renderSheet(); break;
     case 'bstatus': syncDraft(); sheet.draft.status=d.v; renderSheet(); break;

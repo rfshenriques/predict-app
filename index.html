@@ -214,6 +214,15 @@ body.sheet-open #view,body.sheet-open #nav{transform:scale(var(--pscale,.95))}
 .sw::after{content:"";position:absolute;top:2px;left:2px;width:1.6875rem;height:1.6875rem;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
 .sw[aria-checked="true"]{background:var(--green)}.sw[aria-checked="true"]::after{transform:translateX(1.25rem)}
 
+/* player rows: main area opens the player, the icon adds a bet */
+.prow{padding-top:0;padding-bottom:0;padding-right:.5rem;gap:.25rem}
+.rmain{flex:1;min-width:0;align-self:stretch;display:flex;align-items:center;gap:.75rem;padding:.6rem 0;min-height:3.5rem}
+.rbet{flex:none;width:2.75rem;height:2.75rem;display:grid;place-items:center;color:var(--tint);border-radius:50%;transition:background .15s}
+button.rbet:active{background:var(--tint-bg)}
+.fld label{flex:1}
+.fld .stepper{flex:none}
+.fld .stin{width:4.25rem;text-align:center;font-weight:700}
+
 /* teams, odds, results */
 .abbr.sm{display:inline-grid;width:2.625rem;height:1.75rem;font-size:.6875rem;border-radius:.5rem;vertical-align:middle}
 .abbr.lg{width:4.25rem;height:2.875rem;font-size:1.0625rem;border-radius:.875rem}
@@ -809,6 +818,7 @@ const ICON={
   bets:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14.5 9.500v5"/></svg>',
   results:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.500l2.800 2.800L16 9.500"/></svg>',
   back:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  addbet:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
   info:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.500M12 7.600v.1"/></svg>'
 };
 const TABS=[['home','Home'],['players','Players'],['bets','Bets'],['results','Results']];
@@ -870,9 +880,10 @@ function rowHTML(p,rank,withTeam){
   const pill=!p.playing?`<span class="pill o">${p.status==='D'?'Doubtful':'Out'}</span>`:p.status==='Q'?'<span class="pill q">Questionable</span>':'';
   const ed=p.id in edits.min?'<span class="pill e">Edited</span>':'', bt=betsFor(p).length?'<span class="pill e">Bet</span>':'', a=actualOf(p);
   const sub=withTeam?`vs ${p.opp} · ${p.pos}${p.starter?' · Starter':''}`:`${p.pos} · ${f1(p.minutes)} min${p.starter?' · Starter':''}`;
-  return `<button class="row ${p.playing?'':'off'}" data-do="player" data-t="${p.t}" data-i="${p.i}">
+  return `<div class="row prow ${p.playing?'':'off'}"><button class="rmain" data-do="player" data-t="${p.t}" data-i="${p.i}">
     ${withTeam?tile(p.t,'sm'):`<span class="rk num">${rank||''}</span>`}<span class="who"><b>${esc(p.name)}${pill}${ed}${bt}${gapPill(p)}</b><span class="num">${sub}</span></span>
-    <span class="proj num">${p.playing?f1(p.result):'–'}${a!=null?`<small>scored ${a}</small>`:''}</span></button>`;
+    <span class="proj num">${p.playing?f1(p.result):'–'}${a!=null?`<small>scored ${a}</small>`:''}</span></button>${
+    p.playing?`<button class="rbet" data-do="quickbet" data-t="${p.t}" data-i="${p.i}" aria-label="Add a bet on ${esc(p.name)}">${ICON.addbet}</button>`:'<span class="rbet"></span>'}</div>`;
 }
 function playerList(){
   const q=pq.trim().toLowerCase(), all=leaders(topPos).filter(p=>!q||p.name.toLowerCase().includes(q)||p.t.toLowerCase().includes(q)), list=q?all:all.slice(0,40);
@@ -974,11 +985,12 @@ function betHint(d){
 function betBody(){
   const d=sheet.draft, S=(k,opts,val)=>`<div class="seg" role="group">${opts.map(([v,l])=>`<button data-do="${k}" data-v="${v}" aria-pressed="${v===val}">${l}</button>`).join('')}</div>`;
   const F=(id,label,ph)=>`<label class="fld" for="bf-${id}"><span>${label}</span><input id="bf-${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}" value="${esc(d[id])}"></label>`;
+  const FS=(id,label,ph,what)=>`<div class="fld"><label for="bf-${id}">${label}</label><span class="stepper"><button data-do="bstep" data-f="${id}" data-d="-1" aria-label="Lower the ${what}">−</button><input id="bf-${id}" class="stin" inputmode="decimal" autocomplete="off" placeholder="${ph}" value="${esc(d[id])}"><button data-do="bstep" data-f="${id}" data-d="1" aria-label="Raise the ${what}">+</button></span></div>`;
   return `<div class="card result small"><span>${esc(d.player)}<br>${d.team} vs ${d.opp} · projected</span><b class="num">${f1(d.proj)}</b></div>
   ${S('bside',[['over','Over'],['under','Under']],d.side)}
-  <div class="card">${F('line','Line ('+d.stat+')','Optional')}${F('stake','Stake (€)','10')}${F('odds','Odds','1.85')}</div>
+  <div class="card">${FS('line','Line ('+d.stat+')','–','line')}${FS('odds','Odds','–','odds')}${F('stake','Stake (€)','10')}</div>
   <div class="sec">Result</div>
-  ${S('bstatus',[['open','Open'],['won','Won'],['lost','Lost'],['void','Void']],d.status)}${betHint(d)}
+  ${S('bstatus',[['open','Open'],['won','Won'],['lost','Lost'],['void','Void']],d.status)}<div id="bhint">${betHint(d)}</div>
   ${sheet.id?'<button class="btn2 danger" data-do="betdel">Delete bet</button>':''}`;
 }
 function backupBody(){
@@ -1117,6 +1129,22 @@ function editBet(b,from){
   const s={kind:'bet',id:b.id,from,draft:{...b,line:b.line==null?'':String(b.line),stake:String(b.stake),odds:String(b.odds)}};
   if(sheet){ sheet=s; renderSheet(); } else openSheet(s);
 }
+function newDraft(p){ return {sport:SPORT.id,date:SLATE.date,when:gameOf(p.t).utc,team:p.t,opp:p.opp,player:p.name,stat:SPORT.stat,proj:+p.result.toFixed(1),side:'over',line:'',stake:'',odds:'',status:'open'}; }
+/* + and - on the bet form: the line moves by 0.5, the odds by 0.01. Hold to keep going. */
+function betStep(f,dir){
+  const e=$('#bf-'+f); if(!e||!sheet||sheet.kind!=='bet') return; let v=num(e.value);
+  if(f==='line'){ v=v==null?Math.round(sheet.draft.proj*2)/2:Math.max(0,Math.round((v+dir*.5)*2)/2); e.value=String(v); }
+  else { v=v==null?1.90:Math.max(1.01,Math.round((v+dir*.01)*100)/100); e.value=v.toFixed(2); }
+  sheet.draft[f]=e.value; const h=$('#bhint'); if(h) h.innerHTML=betHint(sheet.draft);
+}
+let holdT=0, holdI=0; const stopHold=()=>{ clearTimeout(holdT); clearInterval(holdI); };
+document.addEventListener('pointerdown',e=>{
+  const b=e.target.closest('[data-do="bstep"]'); if(!b) return;
+  stopHold(); betStep(b.dataset.f,+b.dataset.d);
+  holdT=setTimeout(()=>{ holdI=setInterval(()=>betStep(b.dataset.f,+b.dataset.d),70); },450);
+});
+['pointerup','pointercancel','contextmenu'].forEach(t=>document.addEventListener(t,stopHold));
+addEventListener('blur',stopHold);
 /* events */
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-do]'); if(!b) return; const d=b.dataset;
@@ -1140,9 +1168,10 @@ document.addEventListener('click',e=>{
     case 'resetall': { const old=JSON.parse(JSON.stringify(edits)); edits={min:{},play:{}}; DB.set('edits',edits); refresh();
       toast('Changes reset',()=>{edits=old;DB.set('edits',edits);refresh()}); break; }
     /* bets */
-    case 'addbet': { if(!sheet||sheet.kind!=='player') break; const p=player(sheet.t,sheet.i), g=gameOf(p.t);
-      sheet={kind:'bet',id:null,from:{t:sheet.t,i:sheet.i},draft:{sport:SPORT.id,date:SLATE.date,when:g.utc,team:p.t,opp:p.opp,player:p.name,stat:SPORT.stat,proj:+p.result.toFixed(1),side:'over',line:'',stake:'',odds:'',status:'open'}};
-      renderSheet(); break; }
+    case 'addbet': { if(!sheet||sheet.kind!=='player') break;
+      sheet={kind:'bet',id:null,from:{t:sheet.t,i:sheet.i},draft:newDraft(player(sheet.t,sheet.i))}; renderSheet(); break; }
+    case 'quickbet': openSheet({kind:'bet',id:null,from:null,draft:newDraft(player(d.t,+d.i))}); break;
+    case 'bstep': if(e.detail===0) betStep(d.f,+d.d); break;   // keyboard only: touch and mouse are handled on press, below
     case 'bet': { const x=bets.find(q=>q.id===d.id); if(x) editBet(x,sheet&&sheet.kind==='player'?{t:sheet.t,i:sheet.i}:null); break; }
     case 'bside': syncDraft(); sheet.draft.side=d.v; renderSheet(); break;
     case 'bstatus': syncDraft(); sheet.draft.status=d.v; renderSheet(); break;
