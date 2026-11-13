@@ -4,6 +4,7 @@ let ltObs=null, pgUntil=0;
 function renderAll(){
   const c=cur();
   view.innerHTML=c?viewGame(c):nav.tab==='home'?viewHome():nav.tab==='players'?viewPlayers():nav.tab==='bets'?viewBets():viewResults();
+  blockify(view); queueBlocks();
   navEl.innerHTML=`<div class="nav-bg"></div><div class="nav-row">${c?`<button class="glassbtn" data-do="back" aria-label="Back">${ICON.back}</button>`:'<span class="nb-sp"></span>'}<span class="nav-title" aria-hidden="true">${esc(pageTitle())}</span>${c?'<span class="nb-sp"></span>':`<button class="glassbtn" data-do="info" aria-label="How it works">${ICON.info}</button>`}</div>`;
   navEl.classList.remove('show-title');
   bar.style.setProperty('--i',TABS.findIndex(t=>t[0]===nav.tab));
@@ -164,8 +165,8 @@ document.addEventListener('click',e=>{
       if(!(stake>0)||!(odds>1)){ toast('Enter a stake, and odds above 1.00'); break; }
       if(hasLine&&line==null){ toast('The line must be a number'); break; }
       const rec={id:sheet.id||('b'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)),sport:q.sport,date:q.date,when:q.when,team:q.team,opp:q.opp,player:q.player,stat:q.stat,proj:q.proj,side:q.side,line,stake,odds,status:q.status,ts:q.ts||Date.now()};
-      const ix=bets.findIndex(x=>x.id===rec.id); if(ix>=0) bets[ix]=rec; else bets.push(rec); saveBets();
-      backFromBet(); toast(ix>=0?'Bet updated':'Bet saved'); break; }
+      const ix=bets.findIndex(x=>x.id===rec.id), was=ix>=0?bets[ix].status:null; if(ix>=0) bets[ix]=rec; else bets.push(rec); saveBets();
+      backFromBet(); if(rec.status!==was&&(rec.status==='won'||rec.status==='lost')) billyReact(rec.status,betPL(rec)); else toast(ix>=0?'Bet updated':'Bet saved'); break; }
     case 'betdel': { const old=bets.slice(); bets=bets.filter(x=>x.id!==sheet.id); saveBets(); backFromBet();
       toast('Bet deleted',()=>{bets=old;saveBets();refresh()}); break; }
     case 'backup': openSheet({kind:'backup'}); break;
@@ -204,5 +205,5 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('input',e=>{ if(e.target.id==='psearch'){ pq=e.target.value; const l=$('#plist'); if(l) l.innerHTML=playerList(); } });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&sheet) closeSheet(); if(e.key==='Enter'&&e.target.matches&&e.target.matches('input')) e.target.blur(); });
-SPORT.load().then(()=>{ renderAll(); scrollTo(0,0); });
+SPORT.load().then(()=>{ renderAll(); scrollTo(0,0); billyHello(); });
 if('serviceWorker' in navigator && location.protocol==='https:'){ try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){} }

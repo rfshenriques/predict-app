@@ -325,6 +325,64 @@ button.sum:active{background:var(--fill)}
 .result.small b{font-size:2rem}
 .sheet .note{padding:0 .25rem}
 
+/* weather-style blocks */
+.sblock{position:relative;display:flex;flex-direction:column;background:var(--card);border-radius:1.375rem;box-shadow:0 0 0 .5px var(--sep);will-change:clip-path,opacity}
+.sblock > .sb-h{position:relative;z-index:2;margin:0;padding:.8rem 1rem .45rem;background:var(--card);border-radius:1.375rem 1.375rem 0 0;will-change:transform}
+.sblock > .card{background:none;box-shadow:none;border-radius:0}
+.sblock > .card + .card{border-top:.5px solid var(--sep)}
+.sblock > .hs{margin:0;padding:.25rem 1rem 1rem}
+.sblock > .sum{border-top:.5px solid var(--sep)}
+.sblock .tot{border-top:.5px solid var(--sep)}
+details.sblock > summary.sb-h{border-radius:1.375rem;background:var(--card)}
+details.sblock[open] > summary.sb-h{border-radius:1.375rem 1.375rem 0 0}
+.sheet .sblock{box-shadow:none}
+
+/* billy */
+.billy{display:inline-block;line-height:0}
+.billy svg{width:100%;height:100%;overflow:visible}
+.billy .b-eyeR,.billy .b-sadeyes,.billy .b-sadbrows,.billy .b-frown{opacity:0}
+.billy .b-earL{transform-origin:96px 124px}.billy .b-earR{transform-origin:160px 124px}
+.billy .b-jaw,.billy .b-muz{transform-origin:128px 176px}
+.billy.sad .b-eyeL,.billy.sad .b-wink,.billy.sad .b-brows,.billy.sad .b-smile{opacity:0}
+.billy.sad .b-sadeyes,.billy.sad .b-sadbrows,.billy.sad .b-frown{opacity:1}
+.billy.sad .b-earL{transform:rotate(-26deg)}.billy.sad .b-earR{transform:rotate(26deg)}
+.billy.hello .b-wink{opacity:0;animation:bWinkOn 1.5s steps(1) both}
+.billy.hello .b-eyeR{opacity:1;animation:bWinkOff 1.5s steps(1) both}
+.billy.peek .b-wink{animation:bBlink 6s steps(1) infinite}
+.billy.peek .b-eyeR{animation:bBlinkR 6s steps(1) infinite}
+.billy.chew .b-jaw,.billy.chew .b-muz{animation:bChew .9s ease-in-out infinite}
+.billy.jump{animation:bJump .9s cubic-bezier(.3,1.4,.5,1) 2}
+.billy.sad{animation:bSigh 1.6s ease-in-out}
+@keyframes bWinkOn{0%{opacity:0}60%{opacity:1}}
+@keyframes bWinkOff{0%{opacity:1}60%{opacity:0}}
+@keyframes bBlink{0%{opacity:1}88%{opacity:0}94%{opacity:1}}
+@keyframes bBlinkR{0%{opacity:0}88%{opacity:1}94%{opacity:0}}
+@keyframes bChew{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(3px) rotate(-2deg)}}
+@keyframes bJump{0%,100%{transform:translateY(0) scale(1)}15%{transform:translateY(2px) scale(1.04,.94)}45%{transform:translateY(-22px) scale(.97,1.05)}75%{transform:translateY(0) scale(1.03,.97)}}
+@keyframes bSigh{0%,100%{transform:translateY(0)}40%{transform:translateY(4px) rotate(-3deg)}70%{transform:translateY(3px) rotate(2deg)}}
+#billy-hi{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;background-color:var(--bg);background-image:var(--glow);transition:opacity .4s ease}
+#billy-hi .billy{width:8.5rem;height:10.5rem;animation:bPop .7s cubic-bezier(.3,1.5,.5,1) both}
+#billy-hi b{font-size:1.25rem;font-weight:700;color:var(--tint);animation:fade .5s .35s both}
+#billy-hi.out{opacity:0;pointer-events:none}
+@keyframes bPop{0%{transform:translateY(24px) scale(.6);opacity:0}100%{transform:none;opacity:1}}
+.pc{position:relative;overflow:hidden}
+.pc .billy.peek{position:absolute;right:-.35rem;top:-.4rem;width:2.6rem;height:3.2rem;transform:rotate(14deg);animation:bPeek .8s .6s cubic-bezier(.3,1.4,.5,1) both;pointer-events:none}
+@keyframes bPeek{0%{transform:translate(1.5rem,-1.5rem) rotate(40deg)}100%{transform:rotate(14deg)}}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.35rem;padding:1.5rem 1rem;border-radius:1.375rem;background:var(--card);box-shadow:0 0 0 .5px var(--sep)}
+.empty .billy{width:5.5rem;height:6.75rem;margin-bottom:.25rem}
+.empty b{font-size:1.0625rem}.empty span{font-size:.875rem;color:var(--label2);max-width:18rem}
+#billy-react{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;padding:0 1rem calc(6.5rem + env(safe-area-inset-bottom));pointer-events:auto;animation:fade .25s both}
+#billy-react.out{opacity:0;transition:opacity .3s}
+.br-card{display:flex;align-items:center;gap:.9rem;padding:.75rem 1.25rem .75rem .75rem;border-radius:1.5rem;background:var(--lg-tint);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px var(--lg-edge2),0 10px 30px var(--lg-sh);animation:rise .45s cubic-bezier(.3,1.3,.5,1) both}
+.br-card .billy{width:3.75rem;height:4.6rem}
+.br-card span{display:flex;flex-direction:column;font-size:.875rem;color:var(--label2)}
+.br-card b{font-size:1.25rem;color:var(--label)}
+#billy-react.won .br-card b{color:var(--pos)}#billy-react.lost .br-card b{color:var(--red)}
+.conf{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.conf i{position:absolute;top:-1rem;left:var(--x);width:.5rem;height:.9rem;border-radius:2px;background:var(--c);transform:rotate(var(--r));animation:bFall 1.8s var(--d) cubic-bezier(.3,.6,.5,1) both}
+@keyframes bFall{0%{transform:translateY(0) rotate(var(--r));opacity:1}100%{transform:translateY(70vh) rotate(calc(var(--r) + 360deg));opacity:0}}
+@media (prefers-reduced-motion:reduce){.billy,.billy *,#billy-hi .billy,.br-card{animation:none!important}.billy.hello .b-eyeR{opacity:0}.billy.hello .b-wink{opacity:1}}
+
 /* toast */
 #toast{position:fixed;z-index:20;left:50%;bottom:calc(5.75rem);transform:translate(-50%,1rem);opacity:0;pointer-events:none;display:flex;align-items:center;gap:.75rem;
   padding:0 1.1rem;min-height:2.75rem;border-radius:999px;font-size:.9375rem;font-weight:600;color:var(--lg-ink);background:var(--lg-tint);
@@ -871,6 +929,63 @@ let SPORT=SPORTS[DB.get('sport','nba')]||SPORTS.nba, DAY=SPORT.slates.length-1, 
 function setDay(i){ if(!SPORT.slates[i]) return; DAY=i; SLATE=SPORT.slates[i]; }
 function setSport(id){ if(!SPORTS[id]) return; SPORT=SPORTS[id]; setDay(SPORT.slates.length-1); DB.set('sport',id); }
 
+/* BILLY, the GOAT. One drawing, many moods: the classes on the wrapper decide which eyes and mouth show. */
+const BILLY_DEFS='<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'+
+ '<linearGradient id="bhorn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFDC5C"/><stop offset=".55" stop-color="#FEC40B"/><stop offset="1" stop-color="#D99500"/></linearGradient>'+
+ '<linearGradient id="bface" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#FFF8EA"/><stop offset=".5" stop-color="#FDEFD6"/><stop offset="1" stop-color="#EFD3A4"/></linearGradient>'+
+ '<linearGradient id="bmuz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F5DDB5"/><stop offset="1" stop-color="#E3BF89"/></linearGradient>'+
+ '<linearGradient id="bbeard" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF6E6"/><stop offset="1" stop-color="#E6C796"/></linearGradient>'+
+ '<clipPath id="bhead"><path d="M128 76C162 76 176 100 172 130C168 162 152 200 128 208C104 200 88 162 84 130C80 100 94 76 128 76Z"/></clipPath>'+
+ '</defs></svg>';
+function billy(cls,label){
+  return `<span class="billy ${cls||''}" ${label?`role="img" aria-label="${label}"`:'aria-hidden="true"'}><svg viewBox="40 26 176 216">
+  <g class="b-horns"><path d="M108 86C98 50 74 36 56 50C48 57 50 68 58 70M148 86C158 50 182 36 200 50C208 57 206 68 198 70" fill="none" stroke="#B47A00" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+   <path d="M106 84C96 50 74 38 57 50C50 56 51 65 57 67M150 84C160 50 182 38 199 50C206 56 205 65 199 67" fill="none" stroke="url(#bhorn)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+   <path d="M94 62l9-4M84 50l6-7M70 44l1-8M168 58l-9-4M174 48l-6-7M188 44l-1-8" stroke="#C88A00" stroke-width="3.5" stroke-linecap="round"/></g>
+  <g class="b-earL"><ellipse cx="72" cy="128" rx="31" ry="13" transform="rotate(24 72 128)" fill="#E6C694"/><ellipse cx="72" cy="125" rx="30" ry="12" transform="rotate(24 72 125)" fill="#FDEFD6"/><ellipse cx="76" cy="127" rx="19" ry="5.5" transform="rotate(24 76 127)" fill="#E2B386"/></g>
+  <g class="b-earR"><ellipse cx="184" cy="128" rx="31" ry="13" transform="rotate(-24 184 128)" fill="#E0BD88"/><ellipse cx="184" cy="125" rx="30" ry="12" transform="rotate(-24 184 125)" fill="#F4E0BD"/><ellipse cx="180" cy="127" rx="19" ry="5.5" transform="rotate(-24 180 127)" fill="#D9A777"/></g>
+  <g class="b-jaw"><path d="M106 192Q112 226 128 240Q144 226 150 192Z" fill="url(#bbeard)"/><path d="M128 206Q130 222 128 232M118 204Q120 218 124 228M138 204Q137 218 133 228" fill="none" stroke="#D9B47E" stroke-width="2.5" stroke-linecap="round"/></g>
+  <path d="M128 76C162 76 176 100 172 130C168 162 152 200 128 208C104 200 88 162 84 130C80 100 94 76 128 76Z" fill="url(#bface)"/>
+  <g clip-path="url(#bhead)"><path d="M150 70C186 96 182 170 128 214L200 214L200 70Z" fill="#E7C796" opacity=".55"/><ellipse cx="110" cy="96" rx="22" ry="12" transform="rotate(-18 110 96)" fill="#FFFBF3" opacity=".9"/></g>
+  <path d="M112 84Q118 66 128 76Q134 62 144 82Q134 78 128 86Q120 78 112 84Z" fill="#FFF6E4"/>
+  <g class="b-brows"><path d="M92 116L118 122M164 115L139 122" stroke="#5C0D1F" stroke-width="6.5" stroke-linecap="round"/></g>
+  <g class="b-sadbrows"><path d="M94 124L118 116M162 124L138 116" stroke="#5C0D1F" stroke-width="6.5" stroke-linecap="round"/></g>
+  <g class="b-eyeL"><ellipse cx="106" cy="139" rx="14" ry="14" fill="#EBCF9F"/><circle cx="106" cy="138" r="11.5" fill="#3A0A14"/><circle cx="106" cy="141" r="6" fill="#5C0D1F"/><circle cx="110" cy="133.5" r="4" fill="#FFFBF3"/></g>
+  <g class="b-eyeR"><ellipse cx="151" cy="139" rx="14" ry="14" fill="#E3C391"/><circle cx="151" cy="138" r="11.5" fill="#3A0A14"/><circle cx="151" cy="141" r="6" fill="#5C0D1F"/><circle cx="155" cy="133.5" r="4" fill="#FFFBF3"/></g>
+  <g class="b-wink"><path d="M139 140Q151 129 163 140" fill="none" stroke="#3A0A14" stroke-width="7" stroke-linecap="round"/><path d="M163 140l5 3" stroke="#3A0A14" stroke-width="4" stroke-linecap="round"/></g>
+  <g class="b-sadeyes"><path d="M96 142Q106 136 116 142M141 142Q151 136 161 142" fill="none" stroke="#3A0A14" stroke-width="6" stroke-linecap="round"/></g>
+  <ellipse cx="98" cy="164" rx="10" ry="6" fill="#D4566F" opacity=".22"/><ellipse cx="158" cy="164" rx="10" ry="6" fill="#D4566F" opacity=".22"/>
+  <g class="b-muz"><ellipse cx="128" cy="187" rx="25" ry="19" fill="url(#bmuz)"/><ellipse cx="122" cy="179" rx="10" ry="5" fill="#FBEBCF" opacity=".9"/>
+   <path d="M119 180Q128 187 137 180" fill="none" stroke="#3A0A14" stroke-width="6" stroke-linecap="round"/>
+   <path class="b-smile" d="M117 195Q128 202 141 192" fill="none" stroke="#731328" stroke-width="4.5" stroke-linecap="round"/>
+   <path class="b-frown" d="M117 199Q128 191 139 199" fill="none" stroke="#731328" stroke-width="4.5" stroke-linecap="round"/></g>
+  </svg></span>`;
+}
+document.body.insertAdjacentHTML('afterbegin',BILLY_DEFS);
+const calm=()=>{try{return matchMedia('(prefers-reduced-motion:reduce)').matches}catch(e){return false}};
+/* launch: pops in, winks, then gets out of the way. Once per app session. */
+function billyHello(){
+  let seen=false; try{ seen=sessionStorage.getItem('billy-hi')==='1'; sessionStorage.setItem('billy-hi','1'); }catch(e){}
+  if(seen) return;
+  const el=document.createElement('div'); el.id='billy-hi'; el.setAttribute('aria-hidden','true');
+  el.innerHTML=billy('hello')+'<b>Billy\'s picks</b>';
+  document.body.appendChild(el);
+  setTimeout(()=>el.classList.add('out'),calm()?700:1500);
+  setTimeout(()=>el.remove(),calm()?900:1900);
+  el.addEventListener('click',()=>el.remove());
+}
+/* a bet just settled: Billy jumps for a win, droops for a loss */
+function billyReact(status,pl){
+  if(status!=='won'&&status!=='lost') return;
+  const old=document.getElementById('billy-react'); if(old) old.remove();
+  const el=document.createElement('div'); el.id='billy-react'; el.className=status; el.setAttribute('role','status');
+  const conf=status==='won'&&!calm()?Array.from({length:18},(_,i)=>`<i style="--x:${(i*37%100)}%;--d:${(i%6)*.07}s;--r:${(i*53)%360}deg;--c:${['#FEC40B','#731328','#FDEFD6'][i%3]}"></i>`).join(''):'';
+  el.innerHTML=`<div class="conf">${conf}</div><div class="br-card">${billy(status==='won'?'jump':'sad')}<span><b>${status==='won'?'Green!':'Red one.'}</b>${status==='won'?signed(pl)+' in the bag':'Billy\'s on the next pick'}</span></div>`;
+  document.body.appendChild(el);
+  const go=()=>{ el.classList.add('out'); setTimeout(()=>el.remove(),300); };
+  el.addEventListener('click',go); setTimeout(go,2400);
+}
+
 const ICON={
   home:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9"/></svg>',
   players:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.6 3.5-5.5 7-5.5s6.200 1.900 7 5.500"/></svg>',
@@ -936,7 +1051,7 @@ function viewHome(){
   return sportPicker()+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
   `<div class="sec">My bets</div>`+sumHTML(true)+
   `<div class="sec row-sec"><span>Top projections</span><button class="link" data-do="gotab" data-tab="players">All players</button></div>
-  <div class="hs">${top.map(p=>`<button class="pc" style="${tstyle(p.t)}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
+  <div class="hs">${top.map(p=>`<button class="pc" style="${tstyle(p.t)}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${p===top[0]?billy('peek'):''}${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
   <div class="sec">Games</div>`+SLATE.games.map(gameCard).join('')+
   `<p class="note">Each team shows its top projected scorer. Tap a game for every player and to set the odds.</p>`;
 }
@@ -1004,7 +1119,7 @@ function viewBets(){
   const open=bets.filter(b=>b.status==='open').sort((a,b)=>b.ts-a.ts), done=bets.filter(b=>b.status!=='open');
   const days=[...new Set(done.map(b=>b.date))].sort().reverse();
   return head('All sports','Bets',bets.length?`${bets.length} bet${bets.length===1?'':'s'} tracked`:'Nothing tracked yet')+sumHTML(false)+
-  (bets.length?'':`<div class="card"><div class="row plain"><span class="k">To add a bet: tap the plus next to any player.</span></div></div>`)+
+  (bets.length?'':`<div class="empty">${billy('chew','Billy the goat')}<b>No bets yet</b><span>Tap the plus next to any player to track a bet. Billy keeps the score.</span></div>`)+
   (open.length?`<div class="sec">Open · ${open.length}</div><div class="card glist">${totalsHTML(open,false)}${open.map(betRow).join('')}</div>`:'')+
   days.map(d=>{const l=done.filter(b=>b.date===d);
     return `<div class="sec">${day(l[0].when)} · ${l.length} settled</div><div class="card glist">${totalsHTML(l,true)}${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
@@ -1098,12 +1213,49 @@ function sheetParts(){
   return {title:'Back up bets',left:null,right:['Done','close'],body:backupBody()};
 }
 
+/* WEATHER-STYLE BLOCKS
+   A section title and the cards after it become one block. While you scroll, the title stays pinned under the
+   top bar, the block's content slides up underneath it and is cut off there, and when the block runs out the
+   title rides up with it and the block fades. Team blocks in Results (details) work the same way. */
+function blockify(root){
+  [...root.children].forEach(el=>{
+    if(!el.classList||!el.classList.contains('sec')||!el.parentNode) return;
+    const parts=[]; let n=el.nextElementSibling;
+    while(n&&n.matches('.card,.hs')){ parts.push(n); n=n.nextElementSibling; }
+    if(!parts.length) return;
+    const s=document.createElement('section'); s.className='sblock';
+    el.parentNode.insertBefore(s,el); el.classList.add('sb-h'); s.appendChild(el); parts.forEach(p=>s.appendChild(p));
+  });
+  root.querySelectorAll('details.tblock').forEach(d=>{ d.classList.add('sblock'); const sm=d.querySelector('summary'); if(sm) sm.classList.add('sb-h'); });
+}
+let blkRaf=0;
+function paintBlocks(){
+  blkRaf=0;
+  const row=navEl.querySelector('.nav-row'); if(!row) return;
+  const line=row.getBoundingClientRect().bottom+4;
+  view.querySelectorAll('.sblock').forEach(b=>{
+    const h=b.querySelector(':scope > .sb-h'); if(!h) return;
+    const r=b.getBoundingClientRect(), hh=h.offsetHeight, d=line-r.top;
+    if(d<=0||r.bottom<0){ if(b.dataset.on){ b.style.clipPath=''; b.style.opacity=''; h.style.transform=''; delete b.dataset.on; } return; }
+    const shift=Math.max(0,Math.min(d,r.height-hh)), left=r.bottom-line, fadeZone=hh*1.6;
+    b.dataset.on='1';
+    h.style.transform=`translateY(${shift}px)`;
+    b.style.clipPath=`inset(${Math.max(0,d)}px 0 0 0 round 1.375rem)`;
+    b.style.opacity=left<fadeZone?Math.max(0,left/fadeZone).toFixed(3):'';
+  });
+}
+const queueBlocks=()=>{ if(!blkRaf) blkRaf=requestAnimationFrame(paintBlocks); };
+addEventListener('scroll',queueBlocks,{passive:true});
+addEventListener('resize',queueBlocks);
+document.addEventListener('toggle',queueBlocks,true);
+
 const view=$('#view'), navEl=$('#nav'), bar=$('#tabbar'), root=$('#sheet-root'), toastEl=$('#toast');
 const REDUCE=()=>{try{return matchMedia('(prefers-reduced-motion:reduce)').matches}catch(e){return false}};
 let ltObs=null, pgUntil=0;
 function renderAll(){
   const c=cur();
   view.innerHTML=c?viewGame(c):nav.tab==='home'?viewHome():nav.tab==='players'?viewPlayers():nav.tab==='bets'?viewBets():viewResults();
+  blockify(view); queueBlocks();
   navEl.innerHTML=`<div class="nav-bg"></div><div class="nav-row">${c?`<button class="glassbtn" data-do="back" aria-label="Back">${ICON.back}</button>`:'<span class="nb-sp"></span>'}<span class="nav-title" aria-hidden="true">${esc(pageTitle())}</span>${c?'<span class="nb-sp"></span>':`<button class="glassbtn" data-do="info" aria-label="How it works">${ICON.info}</button>`}</div>`;
   navEl.classList.remove('show-title');
   bar.style.setProperty('--i',TABS.findIndex(t=>t[0]===nav.tab));
@@ -1264,8 +1416,8 @@ document.addEventListener('click',e=>{
       if(!(stake>0)||!(odds>1)){ toast('Enter a stake, and odds above 1.00'); break; }
       if(hasLine&&line==null){ toast('The line must be a number'); break; }
       const rec={id:sheet.id||('b'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)),sport:q.sport,date:q.date,when:q.when,team:q.team,opp:q.opp,player:q.player,stat:q.stat,proj:q.proj,side:q.side,line,stake,odds,status:q.status,ts:q.ts||Date.now()};
-      const ix=bets.findIndex(x=>x.id===rec.id); if(ix>=0) bets[ix]=rec; else bets.push(rec); saveBets();
-      backFromBet(); toast(ix>=0?'Bet updated':'Bet saved'); break; }
+      const ix=bets.findIndex(x=>x.id===rec.id), was=ix>=0?bets[ix].status:null; if(ix>=0) bets[ix]=rec; else bets.push(rec); saveBets();
+      backFromBet(); if(rec.status!==was&&(rec.status==='won'||rec.status==='lost')) billyReact(rec.status,betPL(rec)); else toast(ix>=0?'Bet updated':'Bet saved'); break; }
     case 'betdel': { const old=bets.slice(); bets=bets.filter(x=>x.id!==sheet.id); saveBets(); backFromBet();
       toast('Bet deleted',()=>{bets=old;saveBets();refresh()}); break; }
     case 'backup': openSheet({kind:'backup'}); break;
@@ -1304,7 +1456,7 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('input',e=>{ if(e.target.id==='psearch'){ pq=e.target.value; const l=$('#plist'); if(l) l.innerHTML=playerList(); } });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&sheet) closeSheet(); if(e.key==='Enter'&&e.target.matches&&e.target.matches('input')) e.target.blur(); });
-SPORT.load().then(()=>{ renderAll(); scrollTo(0,0); });
+SPORT.load().then(()=>{ renderAll(); scrollTo(0,0); billyHello(); });
 if('serviceWorker' in navigator && location.protocol==='https:'){ try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){} }
 
 </script>

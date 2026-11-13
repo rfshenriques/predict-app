@@ -1,16 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9C2040"/><stop offset=".55" stop-color="#731328"/><stop offset="1" stop-color="#4A0A18"/></linearGradient>
-    <linearGradient id="hi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A12446"/><stop offset=".55" stop-color="#731328"/><stop offset="1" stop-color="#420916"/></linearGradient>
+    <radialGradient id="glow" cx=".3" cy=".22" r=".7"><stop offset="0" stop-color="#C23A5E" stop-opacity=".55"/><stop offset="1" stop-color="#C23A5E" stop-opacity="0"/></radialGradient>
+    <linearGradient id="horn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFDC5C"/><stop offset=".55" stop-color="#FEC40B"/><stop offset="1" stop-color="#D99500"/></linearGradient>
+    <linearGradient id="face" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#FFF8EA"/><stop offset=".5" stop-color="#FDEFD6"/><stop offset="1" stop-color="#EFD3A4"/></linearGradient>
+    <linearGradient id="muz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F5DDB5"/><stop offset="1" stop-color="#E3BF89"/></linearGradient>
+    <linearGradient id="beard" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF6E6"/><stop offset="1" stop-color="#E6C796"/></linearGradient>
+    <clipPath id="head"><path d="M128 76C162 76 176 100 172 130C168 162 152 200 128 208C104 200 88 162 84 130C80 100 94 76 128 76Z"/></clipPath>
   </defs>
-  <rect width="1024" height="1024" fill="url(#bg)"/>
-  <rect width="1024" height="512" fill="url(#hi)"/>
-  <!-- the sportsbook line -->
-  <rect x="208" y="448" width="608" height="80" rx="40" fill="#FDEFD6"/>
-  <!-- the projection climbing toward it -->
-  <circle cx="296" cy="784" r="36" fill="#FDEFD6"/>
-  <circle cx="374" cy="690" r="42" fill="#FDEFD6"/>
-  <circle cx="452" cy="600" r="48" fill="#FDEFD6"/>
-  <!-- the pick: over the line -->
-  <circle cx="680" cy="296" r="128" fill="#FEC40B"/>
+  <rect width="256" height="256" fill="url(#bg)"/>
+  <rect width="256" height="256" fill="url(#glow)"/>
+  <!-- cast shadow on the tile -->
+  <ellipse cx="130" cy="232" rx="34" ry="6" fill="#2A0510" opacity=".35"/>
+  <!-- horns: dark base, lit top, ridges -->
+  <path d="M108 86C98 50 74 36 56 50C48 57 50 68 58 70M148 86C158 50 182 36 200 50C208 57 206 68 198 70" fill="none" stroke="#B47A00" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M106 84C96 50 74 38 57 50C50 56 51 65 57 67M150 84C160 50 182 38 199 50C206 56 205 65 199 67" fill="none" stroke="url(#horn)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M94 62l9-4M84 50l6-7M70 44l1-8M168 58l-9-4M174 48l-6-7M188 44l-1-8" stroke="#C88A00" stroke-width="3.500" stroke-linecap="round"/>
+  <path d="M101 74C94 56 82 48 70 48M155 74C162 56 174 48 186 48" fill="none" stroke="#FFE9A0" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+  <!-- ears: shell, inner shade, lit edge -->
+  <ellipse cx="72" cy="128" rx="31" ry="13" transform="rotate(24 72 128)" fill="#E6C694"/>
+  <ellipse cx="72" cy="125" rx="30" ry="12" transform="rotate(24 72 125)" fill="#FDEFD6"/>
+  <ellipse cx="76" cy="127" rx="19" ry="5.500" transform="rotate(24 76 127)" fill="#E2B386"/>
+  <ellipse cx="184" cy="128" rx="31" ry="13" transform="rotate(-24 184 128)" fill="#E0BD88"/>
+  <ellipse cx="184" cy="125" rx="30" ry="12" transform="rotate(-24 184 125)" fill="#F4E0BD"/>
+  <ellipse cx="180" cy="127" rx="19" ry="5.500" transform="rotate(-24 180 127)" fill="#D9A777"/>
+  <!-- beard -->
+  <path d="M106 192Q112 226 128 240Q144 226 150 192Z" fill="url(#beard)"/>
+  <path d="M128 206Q130 222 128 232M118 204Q120 218 124 228M138 204Q137 218 133 228" fill="none" stroke="#D9B47E" stroke-width="2.500" stroke-linecap="round"/>
+  <!-- head with shading -->
+  <path d="M128 76C162 76 176 100 172 130C168 162 152 200 128 208C104 200 88 162 84 130C80 100 94 76 128 76Z" fill="url(#face)"/>
+  <g clip-path="url(#head)">
+    <path d="M150 70C186 96 182 170 128 214L200 214L200 70Z" fill="#E7C796" opacity=".55"/>
+    <ellipse cx="110" cy="96" rx="22" ry="12" transform="rotate(-18 110 96)" fill="#FFFBF3" opacity=".9"/>
+  </g>
+  <!-- forehead tuft -->
+  <path d="M112 84Q118 66 128 76Q134 62 144 82Q134 78 128 86Q120 78 112 84Z" fill="#FFF6E4"/>
+  <path d="M128 86Q131 78 136 76" fill="none" stroke="#E2C08E" stroke-width="2.500" stroke-linecap="round"/>
+  <!-- brows -->
+  <path d="M92 116L118 122" stroke="#5C0D1F" stroke-width="6.500" stroke-linecap="round"/>
+  <path d="M164 115L139 122" stroke="#5C0D1F" stroke-width="6.500" stroke-linecap="round"/>
+  <!-- open eye: socket shade, iris, highlights -->
+  <ellipse cx="106" cy="139" rx="14" ry="14" fill="#EBCF9F"/>
+  <circle cx="106" cy="138" r="11.500" fill="#3A0A14"/>
+  <circle cx="106" cy="141" r="6" fill="#5C0D1F"/>
+  <circle cx="110" cy="133.500" r="4" fill="#FFFBF3"/><circle cx="102" cy="143" r="1.800" fill="#FFFBF3" opacity=".8"/>
+  <!-- wink with lash -->
+  <path d="M139 140Q151 129 163 140" fill="none" stroke="#3A0A14" stroke-width="7" stroke-linecap="round"/>
+  <path d="M163 140l5 3" stroke="#3A0A14" stroke-width="4" stroke-linecap="round"/>
+  <!-- cheeks -->
+  <ellipse cx="98" cy="164" rx="10" ry="6" fill="#D4566F" opacity=".22"/>
+  <ellipse cx="158" cy="164" rx="10" ry="6" fill="#D4566F" opacity=".22"/>
+  <!-- muzzle -->
+  <ellipse cx="128" cy="187" rx="25" ry="19" fill="url(#muz)"/>
+  <ellipse cx="122" cy="179" rx="10" ry="5" fill="#FBEBCF" opacity=".9"/>
+  <path d="M119 180Q128 187 137 180" fill="none" stroke="#3A0A14" stroke-width="6" stroke-linecap="round"/>
+  <path d="M117 195Q128 202 141 192" fill="none" stroke="#731328" stroke-width="4.500" stroke-linecap="round"/>
+  <path d="M141 192l3-3" stroke="#731328" stroke-width="3.500" stroke-linecap="round"/>
 </svg>

@@ -63,7 +63,7 @@ function viewHome(){
   return sportPicker()+head(`${SPORT.league} · ${SLATE.games.length} games`,slateDay(),isLatest()?'Latest slate · times in your time zone':'Past slate')+dayPicker()+
   `<div class="sec">My bets</div>`+sumHTML(true)+
   `<div class="sec row-sec"><span>Top projections</span><button class="link" data-do="gotab" data-tab="players">All players</button></div>
-  <div class="hs">${top.map(p=>`<button class="pc" style="${tstyle(p.t)}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
+  <div class="hs">${top.map(p=>`<button class="pc" style="${tstyle(p.t)}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${p===top[0]?billy('peek'):''}${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp}</span></button>`).join('')}</div>
   <div class="sec">Games</div>`+SLATE.games.map(gameCard).join('')+
   `<p class="note">Each team shows its top projected scorer. Tap a game for every player and to set the odds.</p>`;
 }
@@ -131,7 +131,7 @@ function viewBets(){
   const open=bets.filter(b=>b.status==='open').sort((a,b)=>b.ts-a.ts), done=bets.filter(b=>b.status!=='open');
   const days=[...new Set(done.map(b=>b.date))].sort().reverse();
   return head('All sports','Bets',bets.length?`${bets.length} bet${bets.length===1?'':'s'} tracked`:'Nothing tracked yet')+sumHTML(false)+
-  (bets.length?'':`<div class="card"><div class="row plain"><span class="k">To add a bet: tap the plus next to any player.</span></div></div>`)+
+  (bets.length?'':`<div class="empty">${billy('chew','Billy the goat')}<b>No bets yet</b><span>Tap the plus next to any player to track a bet. Billy keeps the score.</span></div>`)+
   (open.length?`<div class="sec">Open · ${open.length}</div><div class="card glist">${totalsHTML(open,false)}${open.map(betRow).join('')}</div>`:'')+
   days.map(d=>{const l=done.filter(b=>b.date===d);
     return `<div class="sec">${day(l[0].when)} · ${l.length} settled</div><div class="card glist">${totalsHTML(l,true)}${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
