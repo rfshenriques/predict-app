@@ -3,10 +3,10 @@
   date: "2026-11-12", sources: {stats:"ESPN", injuries:"ESPN", defense:"Hashtag Basketball"},
   checked: "12 Nov 2026",
   games: [
-    {id:"tor-phi", utc:"2026-11-13T00:00:00Z", away:"TOR", home:"PHI"},
-    {id:"det-was", utc:"2026-11-13T00:00:00Z", away:"DET", home:"WAS"},
-    {id:"dal-min", utc:"2026-11-13T01:00:00Z", away:"DAL", home:"MIN"},
-    {id:"cha-phx", utc:"2026-11-13T02:00:00Z", away:"CHA", home:"PHX"}
+    {id:"tor-phi", ml:{away:3.21,home:1.37,src:"DraftKings via ESPN"}, final:{away:112,home:123}, utc:"2026-11-13T00:00:00Z", away:"TOR", home:"PHI"},
+    {id:"det-was", ml:{away:1.23,home:4.41,src:"DraftKings via ESPN"}, final:{away:144,home:140}, utc:"2026-11-13T00:00:00Z", away:"DET", home:"WAS"},
+    {id:"dal-min", ml:{away:2.85,home:1.45,src:"DraftKings via ESPN"}, final:{away:94,home:133}, utc:"2026-11-13T01:00:00Z", away:"DAL", home:"MIN"},
+    {id:"cha-phx", ml:{away:2.9,home:1.44,src:"DraftKings via ESPN"}, final:{away:96,home:101}, utc:"2026-11-13T02:00:00Z", away:"CHA", home:"PHX"}
   ],
   // points per game each defense allows to PG, SG, SF, PF, C (2026-27 season) and the league average
   defense: {
@@ -14,6 +14,8 @@
     MIN:[28.0,19.9,14.7,25.0,19.3], DAL:[23.3,21.3,15.2,28.6,16.8], PHX:[28.7,20.2,17.3,25.2,26.4], CHA:[25.4,19.4,23.9,20.8,20.4]
   },
   leagueDefense: [26.1,21.8,20.8,22.3,20.8],
+  // points each player actually scored (box scores; players missing here were not in the feed)
+  actual: {"PHI":{"VJ Edgecombe":15,"Tacko Fall":0,"Justin Edwards":0,"Anfernee Simons":17,"Tyrese Maxey":27,"Labaron Philon Jr.":0,"Dean Wade":6,"Joel Embiid":20,"Kentavious Caldwell-Pope":11},"TOR":{"Kyle Anderson":0,"Allen Graves":0,"Ja'Kobe Walter":6,"RJ Barrett":31,"Collin Murray-Boyles":14,"Jamison Battle":13,"Alijah Martin":7,"Jamal Shead":5,"Immanuel Quickley":26,"Jaden Bradley":1},"WAS":{"Kyshawn George":14,"Tre Johnson":13,"Bilal Coulibaly":4,"Bub Carrington":2,"Will Riley":3,"Deandre Ayton":2,"AJ Dybantsa":5},"DET":{"Ausar Thompson":17,"Duncan Robinson":13,"Javonte Green":5,"John Collins":10,"Cade Cunningham":52,"Daniss Jenkins":21,"Kevin Huerter":11,"Ronald Holland II":2},"MIN":{"Joan Beringer":13,"Terrence Shannon Jr.":6,"Rudy Gobert":9,"Trey Lyles":2,"Bones Hyland":24,"Isaiah Evans":2,"Jaylen Clark":7,"Jaden McDaniels":16,"Jonathan Kuminga":14,"LaMelo Ball":22,"Cody Williams":0},"DAL":{"Tobi Lawal":0,"Morez Johnson Jr.":0,"Cooper Flagg":12,"Santi Aldama":3,"Moussa Cisse":0,"Zaccharie Risacher":22,"Marcus Sasser":3,"Daniel Gafford":3,"Caleb Martin":7,"P.J. Washington":10,"Naji Marshall":13,"Jett Howard":3,"Walter Clayton Jr.":5},"PHX":{"Jordan Goodwin":6,"Devin Booker":30,"Collin Gillespie":13,"Oso Ighodaro":2,"Dillon Brooks":15,"Ryan Dunn":0,"Jalen Green":12,"Luke Kennard":8,"Miles Bridges":11},"CHA":{"Royce O'Neale":7,"Ryan Kalkbrenner":2,"Tidjane Salaun":2,"Christian Anderson":13,"Moussa Diabate":7,"Naz Reid":16,"Coby White":21}},
   teams: {
     // player: [name, position, season minutes per game, season points per game, status]  status: ""=playing, "Q"=questionable, "O"=out
     PHI:{name:"76ers", players:[

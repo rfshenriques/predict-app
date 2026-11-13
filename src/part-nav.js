@@ -3,8 +3,8 @@ const REDUCE=()=>{try{return matchMedia('(prefers-reduced-motion:reduce)').match
 let ltObs=null, pgUntil=0;
 function renderAll(){
   const c=cur();
-  view.innerHTML=c?viewGame(c):nav.tab==='games'?viewGames():nav.tab==='top'?viewTop():nav.tab==='bets'?viewBets():viewFormula();
-  navEl.innerHTML=`<div class="nav-bg"></div><div class="nav-row">${c?`<button class="glassbtn" data-do="back" aria-label="Back">${ICON.back}</button>`:'<span class="nb-sp"></span>'}<span class="nav-title" aria-hidden="true">${esc(pageTitle())}</span><span class="nb-sp"></span></div>`;
+  view.innerHTML=c?viewGame(c):nav.tab==='home'?viewHome():nav.tab==='players'?viewPlayers():nav.tab==='bets'?viewBets():viewResults();
+  navEl.innerHTML=`<div class="nav-bg"></div><div class="nav-row">${c?`<button class="glassbtn" data-do="back" aria-label="Back">${ICON.back}</button>`:'<span class="nb-sp"></span>'}<span class="nav-title" aria-hidden="true">${esc(pageTitle())}</span>${c?'<span class="nb-sp"></span>':`<button class="glassbtn" data-do="info" aria-label="How it works">${ICON.info}</button>`}</div>`;
   navEl.classList.remove('show-title');
   bar.style.setProperty('--i',TABS.findIndex(t=>t[0]===nav.tab));
   bar.querySelectorAll('button').forEach(b=>b.dataset.tab===nav.tab?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
@@ -126,8 +126,10 @@ document.addEventListener('click',e=>{
     case 'back': pop(); break;
     case 'team': cur().team=d.t; refresh(); break;
     case 'pos': topPos=d.p; refresh(); break;
-    case 'day': setDay(+d.i); nav.stack=[]; refresh(); break;
-    case 'sport': setSport(d.s); topPos=''; goTab('games'); break;
+    case 'day': setDay(+d.i); nav.stack=[]; resGame=null; refresh(); break;
+    case 'sport': setSport(d.s); topPos=''; pq=''; resGame=null; goTab('home'); break;
+    case 'resgame': resGame=d.id; refresh(); break;
+    case 'info': openSheet({kind:'info'}); break;
     case 'player': openSheet({kind:'player',t:d.t,i:+d.i}); break;
     case 'close': closeSheet(); break;
     case 'undo': if(undo){undo();undo=null;toastEl.classList.remove('on')} break;
@@ -165,6 +167,24 @@ document.addEventListener('click',e=>{
     }
   }
 });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&sheet) closeSheet(); });
+/* typed values: real points, moneyline odds, player search. Only the affected bits are redrawn so the keyboard stays up. */
+function paintGap(p){ document.querySelectorAll(`[data-gap="${p.t}-${p.i}"]`).forEach(e=>e.innerHTML=gapPill(p)); const a=$('#acc'); if(a) a.innerHTML=accHTML(); }
+document.addEventListener('change',e=>{
+  const el=e.target, d=el.dataset; if(!d||!d.in) return;
+  if(d.in==='act'){
+    const p=player(d.t,+d.i), v=el.value.trim();
+    if(v==='') acts[p.id]=null; else { const x=num(v); if(x==null||x<0||x>200){ toast('Type the points as a number'); el.value=''; return; } acts[p.id]=x; }
+    DB.set('acts',acts);
+    if(sheet&&sheet.kind==='player'){ const y=scrollY; renderAll(); scrollTo(0,y); }
+    paintGap(player(d.t,+d.i));
+  }
+  if(d.in==='odds'){
+    const g=SLATE.games.find(x=>x.id===d.g), k=oddsKey(g), v=el.value.trim(), cur=oddsEd[k]||{};
+    if(v==='') cur[d.side]=null; else { const x=num(v); if(x==null||x<=1){ toast('Decimal odds must be above 1.00'); el.value=''; return; } cur[d.side]=x; el.value=x.toFixed(2); }
+    oddsEd[k]=cur; DB.set('odds',oddsEd); const im=$('#imp'); if(im) im.textContent=impliedText(g);
+  }
+});
+document.addEventListener('input',e=>{ if(e.target.id==='psearch'){ pq=e.target.value; const l=$('#plist'); if(l) l.innerHTML=playerList(); } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&sheet) closeSheet(); if(e.key==='Enter'&&e.target.matches&&e.target.matches('input')) e.target.blur(); });
 SPORT.load().then(()=>{ renderAll(); scrollTo(0,0); });
 if('serviceWorker' in navigator && location.protocol==='https:'){ try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){} }
