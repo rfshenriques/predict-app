@@ -545,6 +545,10 @@ html.pg-run{overflow-x:hidden}html.pg-run body{overflow-x:clip}
 .prof .who span{font-size:.8125rem;color:var(--label2)}
 .pcl{font-size:.6875rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--label2)}
 .row .sp-ic + .who{flex:1;min-width:0}
+.sgrid button.sg-c{min-height:2.75rem;transition:transform .12s}
+.sgrid button.sg-c:active{transform:scale(.92)}
+.lplus{flex:none;color:var(--tint);display:grid;place-items:center;margin-left:.5rem}
+.lplus .ic{width:1.25rem;height:1.25rem}
 
 </style>
 </head>
@@ -1507,11 +1511,11 @@ function fbCornerSteps(g,m,k){
   return stepRows([{t:`${k==='home'?'Home':'Away'} teams win on average`,v:c.base.toFixed(1)},{t:`${t} win`,sub:`${c.won.toFixed(1)} a game ${k==='home'?'at home':'away'}, blended with the whole season`,v:'×'+c.forS.toFixed(2)},
     {t:`${o} concede`,sub:c.conc!=null?`${c.conc.toFixed(1)} a game`:'Not published for this competition, so counted as average',v:'×'+c.agS.toFixed(2)},{t:'Expected corners',v:c.lam.toFixed(1)}]);
 }
-function fbGrid(m){
+function fbGrid(g,m){
   const N=6, max=m.scores[0].p;
-  let h=`<div class="sgrid" role="table" aria-label="Correct score chances"><span class="sg-c sg-h" role="columnheader"></span>${[...Array(N).keys()].map(j=>`<span class="sg-c sg-h" role="columnheader">${j}</span>`).join('')}`;
+  let h=`<div class="sgrid" aria-label="Correct score chances"><span class="sg-c sg-h" role="columnheader"></span>${[...Array(N).keys()].map(j=>`<span class="sg-c sg-h" role="columnheader">${j}</span>`).join('')}`;
   for(let i=0;i<N;i++){ h+=`<span class="sg-c sg-h" role="rowheader">${i}</span>`;
-    for(let j=0;j<N;j++){ const p=m.grid[i][j], a=Math.min(1,p/max); h+=`<span class="sg-c num${p===max?' top':''}${a>.55?' hi':''}" role="cell" style="--a:${(a*.85).toFixed(2)}" aria-label="${i}–${j}: ${(p*100).toFixed(1)}%">${(p*100).toFixed(p>=.1?0:1)}</span>`; } }
+    for(let j=0;j<N;j++){ const p=m.grid[i][j], a=Math.min(1,p/max); h+=`<button class="sg-c num${p===max?' top':''}${a>.55?' hi':''}" style="--a:${(a*.85).toFixed(2)}" data-do="fbscore" data-g="${g.id}" data-h="${i}" data-a="${j}" aria-label="Add a bet on ${g.home} ${i}, ${g.away} ${j}: ${(p*100).toFixed(1)}% chance">${(p*100).toFixed(p>=.1?0:1)}</button>`; } }
   return h+'</div>';
 }
 function fbNews(g,t){
@@ -1539,9 +1543,9 @@ function fbGame(c){
     <div class="sec">How ${g.home} get ${C.home.lam.toFixed(1)}</div><div class="card steps">${fbCornerSteps(g,m,'home')}</div>
     <div class="sec">How ${g.away} get ${C.away.lam.toFixed(1)}</div><div class="card steps">${fbCornerSteps(g,m,'away')}</div>
     <p class="note">Corners vary more than goals, so the chances allow for that. Missing players are not used for corners.</p>`; }
-  if(tab==='score') body=`<div class="sec">Correct score, % chance</div><div class="card sgw"><div class="sg-ax"><span>${dot(g.home)}${g.home} down</span><span>${dot(g.away)}${g.away} across</span></div>${fbGrid(m)}</div>
-    <div class="sec">Most likely scores</div><div class="card">${m.scores.slice(0,6).map((s,k)=>`<div class="row plain"><span class="k"><b class="num">${k+1}.</b> ${g.home} ${s.h} – ${s.a} ${g.away}</span><span class="v num">${(s.p*100).toFixed(1)}%</span></div>`).join('')}</div>
-    <p class="note">Each square is the chance of that exact final score, from both teams' expected goals.</p>`;
+  if(tab==='score') body=`<div class="sec">Correct score, % chance</div><div class="card sgw"><div class="sg-ax"><span>${dot(g.home)}${g.home} down</span><span>${dot(g.away)}${g.away} across</span></div>${fbGrid(g,m)}</div>
+    <div class="sec">Most likely scores</div><div class="card">${m.scores.slice(0,6).map((s,k)=>`<button class="row" data-do="fbscore" data-g="${g.id}" data-h="${s.h}" data-a="${s.a}"><span class="k"><b class="num">${k+1}.</b> ${g.home} ${s.h} – ${s.a} ${g.away}</span><span class="v num">${(s.p*100).toFixed(1)}%</span><span class="lplus" aria-hidden="true">${ICON.addbet}</span></button>`).join('')}</div>
+    <p class="note">Each square is the chance of that exact final score, from both teams' expected goals. Tap a square or a score to add a bet on it.</p>`;
   if(tab==='news') body=`<div class="sec">${dot(g.home)}${fbTeamName(SLATE,g.home)} missing</div><div class="card">${fbNews(g,g.home)}</div>
     <div class="sec">${dot(g.away)}${fbTeamName(SLATE,g.away)} missing</div><div class="card">${fbNews(g,g.away)}</div>
     <p class="note">Switch a player on if you know he plays, or off if he doesn't. Doubtful players count as half (shown on), players expected back count as 80%.</p>`;
@@ -1563,6 +1567,13 @@ function fbInfo(){
   <div class="sec">Where the numbers come from</div>
   <div class="card">${Object.entries(src).map(([k,v])=>R({table:'League table',results:'Results',injuries:'Injuries and bans',corners:'Corners',fixtures:'Fixtures'}[k]||k,v)).join('')}${R('Checked',SLATE.checked)}</div>`;
 }
+/* a bet draft on an exact final score */
+function fbScoreDraft(gid,h,a){
+  const g=SLATE.games.find(x=>x.id===gid), m=fbModel(SLATE,g);
+  return {sport:SPORT.id,date:SLATE.date,when:g.utc,gid,market:'score',team:g.home,opp:g.away,player:`${g.home} v ${g.away}`,stat:'score',sh:h,sa:a,proj:+(m.grid[h][a]).toFixed(4),side:'exact',line:'',stake:'',odds:'',status:'open'};
+}
+const isScore=b=>b&&b.market==='score';
+function scoreFinal(b){ const s=(SPORTS[b.sport]||SPORT).slates.find(x=>x.date===b.date), g=s&&s.games.find(x=>x.id===b.gid); return g&&g.final?g.final:null; }
 /* a bet draft on a football line */
 function fbDraft(gid,stat,mk,k,L,side){
   const g=SLATE.games.find(x=>x.id===gid), m=fbModel(SLATE,g), d=fbDist(m,stat,mk,k);
@@ -1599,6 +1610,8 @@ function nbaSpread(){
 function normCdf(x){ const t=1/(1+.2316419*Math.abs(x)), d=.3989423*Math.exp(-x*x/2), p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274)))); return x>0?1-p:p; }
 /* chance the bet wins, loses or is a push (line hit exactly) */
 function winChance(d){
+  if(isScore(d)){ const s=SPORTS[d.sport].slates.find(x=>x.date===d.date), g=s&&s.games.find(x=>x.id===d.gid); if(!g) return null;
+    const p=fbModel(s,g).grid[d.sh][d.sa]; return {p,push:0,q:1-p,how:'goal model, chance of this exact score'}; }
   const L=num(d.line); if(L==null) return null;
   if((SPORTS[d.sport]||{}).kind==='match'){
     const s=SPORTS[d.sport].slates.find(x=>x.date===d.date), g=s&&s.games.find(x=>x.id===d.gid); if(!g) return null;
@@ -1619,7 +1632,7 @@ function suggest(d){
   return r;
 }
 function calcHTML(d){
-  const r=suggest(d); if(!r) return '<p class="note">Set a line to see the chance this bet wins.</p>';
+  const r=suggest(d); if(!r) return isScore(d)?'':'<p class="note">Set a line to see the chance this bet wins.</p>';
   const o=num(d.odds), P=v=>Math.round(v*100)+'%';
   const T=(k,v,c)=>`<span><span class="tk">${k}</span><b class="num ${c||''}">${v}</b></span>`;
   let tail='';
@@ -1864,6 +1877,7 @@ function betLine(b){ return `${b.side==='under'?'Under':'Over'}${b.line!=null?' 
 /* what the player really scored in the game this bet is on: typed in Results, or loaded from the box score */
 function betActual(b){
   const s=(SPORTS[b.sport]||SPORT).slates.find(x=>x.date===b.date); if(!s) return null;
+  if(isScore(b)) return null;
   if((SPORTS[b.sport]||{}).kind==='match'){ const g=s.games.find(x=>x.id===b.gid), src=g&&(b.stat==='corners'?g.corners:g.final); if(!src) return null;
     return b.market==='total'?src.home+src.away:src[b.team===g.home?'home':'away']; }
   const id=b.sport+':'+b.date+':'+b.team+':'+b.player;
@@ -1871,6 +1885,8 @@ function betActual(b){
   return s.actual&&s.actual[b.team]&&b.player in s.actual[b.team]?s.actual[b.team][b.player]:null;
 }
 function betViz(b,a){
+  if(isScore(b)){ const f=scoreFinal(b), win=f?(f.home===b.sh&&f.away===b.sa):null, cls=win==null?'':win?'pos':'neg', K=(k,v,c)=>`<span class="bk ${c||''}">${k}<b class="num">${v}</b></span>`;
+    return `<span class="bviz"><span class="bv-keys">${K('Pick',b.sh+'–'+b.sa)}${b.proj!=null?K('Chance',Math.round(b.proj*1000)/10+'%','kp'):''}${K('Final',f?f.home+'–'+f.away:'–','ks '+cls)}</span></span>`; }
   const L=b.line, P=b.proj, vals=[L,P,a].filter(v=>v!=null);
   if(L==null) return '';
   const lo=Math.max(0,Math.floor(Math.min(...vals)-4)), hi=Math.ceil(Math.max(...vals)+4), x=v=>((v-lo)/(hi-lo)*100).toFixed(1)+'%';
@@ -1888,7 +1904,7 @@ function betRow(b){
   const pl=betPL(b), st=BSTAT[b.status], ret=b.stake*b.odds, a=betActual(b);
   return `<div class="betw"><button class="bet" data-do="bet" data-id="${b.id}">
     <span class="bt-top"><b>${esc(sn(b.player))}</b><span class="pill ${st[0]}">${st[1]}</span></span>
-    <span class="bt-mid">${tile(b.team,'sm',b.sport)}<span>${b.market==='total'?'Match':'vs '+b.opp} · ${b.side==='under'?'Under':'Over'} ${b.line!=null?b.line+' ':''}${b.stat}</span></span>
+    <span class="bt-mid">${tile(b.team,'sm',b.sport)}<span>${isScore(b)?`Correct score ${b.sh}–${b.sa}`:`${b.market==='total'?'Match':'vs '+b.opp} · ${b.side==='under'?'Under':'Over'} ${b.line!=null?b.line+' ':''}${b.stat}`}</span></span>
     ${betViz(b,a)}
     <span class="bt-row num"><span>${money(b.stake)} at ${b.odds.toFixed(2)}</span>
       <span class="${b.status==='open'?'':pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'Returns '+money(ret):signed(pl)}</span></span></button><button class="bshare" data-do="sharebet" data-id="${b.id}" aria-label="Share ${esc(b.player)} bet">${ICON.share}</button></div>`;
@@ -1960,6 +1976,7 @@ function playerBody(p){
   ${p.edited?'<button class="btn2" data-do="reset">Reset his minutes and status</button>':''}`;
 }
 function betHint(d){
+  if(isScore(d)){ const f=scoreFinal(d); return (d.status==='open'?calcHTML(d):'')+(f?`<p class="note">Final score ${f.home}–${f.away}, so this bet ${f.home===d.sh&&f.away===d.sa?'won':'lost'}.</p>`:''); }
   const a=d.line!==''&&num(d.line)!=null?betActual({...d,line:num(d.line)}):null; let res='';
   if(a!=null){ const L=num(d.line), over=d.side!=='under', what=d.stat==='points'?'He scored':'Final count:';
     res=`<p class="note">${what} ${a}, ${a===L?'the same as the line, which is usually void':((a>L)===over?'so this bet won':'so this bet lost')}.</p>`; }
@@ -1969,6 +1986,12 @@ function betBody(){
   const d=sheet.draft, S=(k,opts,val)=>`<div class="seg" role="group">${opts.map(([v,l])=>`<button data-do="${k}" data-v="${v}" aria-pressed="${v===val}">${l}</button>`).join('')}</div>`;
   const F=(id,label,ph)=>`<label class="fld" for="bf-${id}"><span>${label}</span><input id="bf-${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}" value="${esc(d[id])}"></label>`;
   const FS=(id,label,ph,what)=>`<div class="fld"><label for="bf-${id}">${label}</label><span class="stepper"><button data-do="bstep" data-f="${id}" data-d="-1" aria-label="Lower the ${what}">−</button><input id="bf-${id}" class="stin" inputmode="decimal" autocomplete="off" placeholder="${ph}" value="${esc(d[id])}"><button data-do="bstep" data-f="${id}" data-d="1" aria-label="Raise the ${what}">+</button></span></div>`;
+  if(isScore(d)) return `<div class="card result small"><span>${esc(d.player)}<br>Correct score ${d.sh}–${d.sa} · chance</span><b class="num">${Math.round(d.proj*1000)/10}%</b></div>
+  <div class="card"><div class="fld"><span>Your pick</span><b class="num">${d.team} ${d.sh} – ${d.sa} ${d.opp}</b></div>${FS('odds','Odds','–','odds')}${F('stake','Stake (€)','10')}</div>
+  <div id="bhint">${betHint(d)}</div>
+  <div class="sec">Result</div>
+  ${S('bstatus',[['open','Open'],['won','Won'],['lost','Lost'],['void','Void']],d.status)}
+  ${sheet.id?'<button class="btn2 danger" data-do="betdel">Delete bet</button>':''}`;
   const sub=d.market?`${d.market==='total'?'Match':d.team+' vs '+d.opp} · expected ${d.stat}`:`${d.team} vs ${d.opp} · projected`;
   return `<div class="card result small"><span>${esc(d.player)}<br>${sub}</span><b class="num">${d.market?(+d.proj).toFixed(2):f1(d.proj)}</b></div>
   ${S('bside',[['over','Over'],['under','Under']],d.side)}
@@ -2115,7 +2138,7 @@ async function makeShareImage(list,title,sub){
     const when=g.final?`Final ${g.fin}`:`${day(g.utc)} · ${clock(g.utc)}`;
     c.fillStyle='#6C6C70'; c.font=F(500,12.5); c.fillText(shFit(c,`${g.label} · ${when}`,w-74-pw-24),x+70,y+47);
     // three boxes: pick, odds, projection
-    const bx=[[`${b.side==='under'?'Under':'Over'} ${b.stat}`,b.line!=null?String(b.line):'–','#731328'],['Odds',b.odds.toFixed(2),'#1C1C1E'],['Projected',b.proj!=null?f1(b.proj):'–','#1C1C1E']];
+    const bx=isScore(b)?[['Score',`${b.sh}–${b.sa}`,'#731328'],['Odds',b.odds.toFixed(2),'#1C1C1E'],['Chance',Math.round(b.proj*100)+'%','#1C1C1E']]:[[`${b.side==='under'?'Under':'Over'} ${b.stat}`,b.line!=null?String(b.line):'–','#731328'],['Odds',b.odds.toFixed(2),'#1C1C1E'],['Projected',b.proj!=null?f1(b.proj):'–','#1C1C1E']];
     const gap=8, bw=(w-28-gap*2)/3;
     bx.forEach(([k,v,col],i)=>{ const X=x+14+i*(bw+gap), Y=y+62;
       c.fillStyle=i===0?'#F9EDEF':'#F2F2F7'; rr(X,c,Y,bw,54,12); c.fill();
@@ -2162,7 +2185,7 @@ function shareBets(ids,kind){
   const list=ids.map(id=>bets.find(b=>b.id===id)).filter(Boolean); if(!list.length) return;
   list.sort((a,b)=>(a.when||'').localeCompare(b.when||''));
   const d=day(list[0].when), n=list.length;
-  const title=n===1?`${list[0].side==='under'?'Under':'Over'} ${list[0].line} on ${list[0].player}`:`My ${kind==='open'?'picks':'bets'} · ${d}`;
+  const title=n===1?(isScore(list[0])?`Correct score ${list[0].sh}–${list[0].sa} in ${list[0].player}`:`${list[0].side==='under'?'Under':'Over'} ${list[0].line} on ${list[0].player}`):`My ${kind==='open'?'picks':'bets'} · ${d}`;
   const sub=n===1?`${(SPORTS[list[0].sport]||SPORT).league} · ${d}`:`${(SPORTS[list[0].sport]||SPORT).league} · ${n} bets`;
   openShare(list,title,sub,`propline-${list[0].date}${n===1?'-'+list[0].player.toLowerCase().replace(/[^a-z]+/g,'-'):''}.png`);
 }
@@ -2371,6 +2394,7 @@ document.addEventListener('click',e=>{
     case 'sportpick': openSheet({kind:'sports'}); break;
     case 'fbstat': fbStat=d.v; refresh(); break;
     case 'fbtab': cur().fb=d.v; refresh(); break;
+    case 'fbscore': openSheet({kind:'bet',id:null,from:null,draft:fbScoreDraft(d.g,+d.h,+d.a)}); break;
     case 'fbbet': openSheet({kind:'bet',id:null,from:null,draft:fbDraft(d.g,d.stat,d.mk,d.k,+d.l,d.side)}); break;
     case 'fbplay': edits.play[d.id]=!(+d.a>=.5); DB.set('edits',edits); refresh(); break;
     case 'usestake': { const e=$('#bf-stake'); if(e){ e.value=d.v; sheet.draft.stake=d.v; } toast('Stake set to '+money(+d.v)); break; }
@@ -2395,7 +2419,7 @@ document.addEventListener('click',e=>{
     case 'betsave': { syncDraft(); const q=sheet.draft, stake=num(q.stake), odds=num(q.odds), hasLine=String(q.line).trim()!=='', line=hasLine?num(q.line):null;
       if(!(stake>0)||!(odds>1)){ toast('Enter a stake, and odds above 1.00'); break; }
       if(hasLine&&line==null){ toast('The line must be a number'); break; }
-      const rec={id:sheet.id||('b'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)),sport:q.sport,date:q.date,when:q.when,team:q.team,opp:q.opp,player:q.player,stat:q.stat,proj:q.proj,gid:q.gid,market:q.market,side:q.side,line,stake,odds,status:q.status,ts:q.ts||Date.now()};
+      const rec={id:sheet.id||('b'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)),sport:q.sport,date:q.date,when:q.when,team:q.team,opp:q.opp,player:q.player,stat:q.stat,proj:q.proj,gid:q.gid,market:q.market,sh:q.sh,sa:q.sa,side:q.side,line,stake,odds,status:q.status,ts:q.ts||Date.now()};
       const ix=bets.findIndex(x=>x.id===rec.id), was=ix>=0?bets[ix].status:null; if(ix>=0) bets[ix]=rec; else bets.push(rec); saveBets();
       backFromBet(); if(rec.status!==was&&(rec.status==='won'||rec.status==='lost')) billyReact(rec.status,betPL(rec)); else toast(ix>=0?'Bet updated':'Bet saved'); break; }
     case 'betdel': { const old=bets.slice(); bets=bets.filter(x=>x.id!==sheet.id); saveBets(); backFromBet();
