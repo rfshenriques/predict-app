@@ -285,7 +285,7 @@ button.rbet:active{background:var(--tint-bg)}
 .glist{display:flex;flex-direction:column}
 .bet{display:flex;flex-direction:column;gap:.35rem;width:100%;padding:.75rem 1rem;position:relative;text-align:left;transition:background .15s}
 .bet:active{background:var(--fill)}
-.glist > * + .bet::before,.glist > .bet + .row::before{content:"";position:absolute;left:1rem;right:0;top:0;height:.5px;background:var(--sep)}
+.glist > * + .betw::before,.glist > .betw + .row::before{content:"";position:absolute;left:1rem;right:0;top:0;height:.5px;background:var(--sep)}
 .bt-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
 .bt-top b{font-weight:600;overflow-wrap:anywhere}
 .bt-top .pill{margin:0;flex:none}
@@ -471,6 +471,21 @@ html.pg-run{overflow-x:hidden}html.pg-run body{overflow-x:clip}
 @media (prefers-reduced-transparency:reduce){#tabbar,.glassbtn,#toast{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav-bg::before{display:none}.nav-bg{background:var(--bg)}}
 @media (prefers-contrast:more){:root{--sep:currentColor;--label2:var(--label)}.card,.sheet,#tabbar,.glassbtn{box-shadow:0 0 0 1.5px var(--label)}}
 @media (forced-colors:active){.card,.sheet,#tabbar,.glassbtn,.seg button[aria-pressed="true"]{border:1px solid CanvasText}.tb-ind{background:Highlight;opacity:.3}}
+
+/* share */
+.betw{position:relative}
+.betw .bt-top{padding-right:2.5rem}
+.bshare{position:absolute;top:.25rem;right:.25rem;width:2.75rem;height:2.75rem;display:grid;place-items:center;color:var(--tint);border-radius:50%;transition:background .15s}
+.bshare:active{background:var(--fill)}
+.bshare .ic{width:1.2rem;height:1.2rem}
+.betw .bt-top .pill{margin-right:.15rem}
+.sb-h .secbtn,.sec .secbtn{float:right;display:inline-flex;align-items:center;gap:.3rem;margin:-.7rem -.5rem -.6rem 0;min-height:2.75rem;padding:0 .5rem;color:var(--tint);text-transform:none;letter-spacing:0;font-size:.875rem;font-weight:600}
+.secbtn .ic{width:1.1rem;height:1.1rem}
+.secbtn:active{opacity:.55}
+.shimg{display:block;width:100%;height:auto;border-radius:1rem;box-shadow:0 0 0 .5px var(--sep)}
+.btn{display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:3rem;width:100%;border-radius:999px;background:var(--tint);color:var(--on-tint);font-weight:600;font-size:1.0625rem;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn .ic{width:1.25rem;height:1.25rem}
 
 </style>
 </head>
@@ -1227,6 +1242,7 @@ const ICON={
   addbet:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
   cal:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
   down:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg>',
+  share:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11M8 7.2l4-3.7 4 3.7"/><path d="M8.5 10.5H7a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6.5a2 2 0 0 0-2-2h-1.5"/></svg>',
   info:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.500M12 7.600v.1"/></svg>'
 };
 /* filled versions, shown on the selected tab */
@@ -1387,12 +1403,12 @@ function betViz(b,a){
 }
 function betRow(b){
   const pl=betPL(b), st=BSTAT[b.status], ret=b.stake*b.odds, a=betActual(b);
-  return `<button class="bet" data-do="bet" data-id="${b.id}">
+  return `<div class="betw"><button class="bet" data-do="bet" data-id="${b.id}">
     <span class="bt-top"><b>${esc(sn(b.player))}</b><span class="pill ${st[0]}">${st[1]}</span></span>
     <span class="bt-mid">${tile(b.team,'sm')}<span>vs ${b.opp} · ${b.side==='under'?'Under':'Over'} ${b.line!=null?b.line+' ':''}${b.stat}</span></span>
     ${betViz(b,a)}
     <span class="bt-row num"><span>${money(b.stake)} at ${b.odds.toFixed(2)}</span>
-      <span class="${b.status==='open'?'':pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'Returns '+money(ret):signed(pl)}</span></span></button>`;
+      <span class="${b.status==='open'?'':pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'Returns '+money(ret):signed(pl)}</span></span></button><button class="bshare" data-do="sharebet" data-id="${b.id}" aria-label="Share ${esc(b.player)} bet">${ICON.share}</button></div>`;
 }
 /* totals for a group of bets: stake, what it pays back if every bet wins, and the profit in that case */
 function totalsHTML(list,showPL){
@@ -1402,14 +1418,16 @@ function totalsHTML(list,showPL){
   return s.open===0&&showPL?`<div class="tot">${C('Staked',money(st))}${C('P/L',signed(s.pl),s.pl>0.004?'pos':s.pl<-0.004?'neg':'')}</div>`
     :`<div class="tot">${C('Staked',money(st))}${C('Return',money(ret))}${C('Profit',money(ret-st))}</div>`;
 }
+const secShare=(l,k)=>`<button class="secbtn" data-do="shareday" data-k="${k}" data-ids="${l.map(b=>b.id).join(',')}" aria-label="Share these ${l.length} bets">${ICON.share}<span>Share</span></button>`;
 function viewBets(){
   const open=bets.filter(b=>b.status==='open').sort((a,b)=>b.ts-a.ts), done=bets.filter(b=>b.status!=='open');
   const days=[...new Set(done.map(b=>b.date))].sort().reverse();
   return head('All sports','Bets',bets.length?`${bets.length} bet${bets.length===1?'':'s'} tracked`:'Nothing tracked yet')+sumHTML(false)+
   (bets.length?'':`<div class="empty">${billy('chew','Billy the goat')}<b>No bets yet</b><span>Tap the plus next to any player to track a bet. Billy keeps the score.</span></div>`)+
-  (open.length?`<div class="sec">Open · ${open.length}</div><div class="card glist">${totalsHTML(open,false)}${open.map(betRow).join('')}</div>`:'')+
+  [...new Set(open.map(b=>b.date))].sort().reverse().map(d=>{const l=open.filter(b=>b.date===d).sort((a,b)=>(a.when||'').localeCompare(b.when||''));
+    return `<div class="sec">${secShare(l,'open')}Open · ${day(l[0].when)} · ${l.length}</div><div class="card glist">${totalsHTML(l,false)}${l.map(betRow).join('')}</div>`}).join('')+
   days.map(d=>{const l=done.filter(b=>b.date===d);
-    return `<div class="sec">${day(l[0].when)} · ${l.length} settled</div><div class="card glist">${totalsHTML(l,true)}${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
+    return `<div class="sec">${secShare(l,'done')}${day(l[0].when)} · ${l.length} settled</div><div class="card glist">${totalsHTML(l,true)}${l.sort((a,b)=>b.ts-a.ts).map(betRow).join('')}</div>`}).join('')+
   `<button class="btn2" data-do="backup">Back up or restore bets</button>
   <p class="note">Bets are saved on this iPhone only. Amounts are in euros and odds are decimal. For open bets, Return is stake × odds if they win and Profit is that minus the stake.</p>`;
 }
@@ -1496,10 +1514,112 @@ function infoBody(){
 function sheetParts(){
   if(sheet.kind==='player'){ const p=player(sheet.t,sheet.i); return {title:p.name,left:null,right:['Done','close'],body:playerBody(p)}; }
   if(sheet.kind==='bet') return {title:sheet.id?'Edit bet':'New bet',left:['Cancel','betcancel'],right:['Save','betsave'],body:betBody()};
+  if(sheet.kind==='share') return {title:sheet.title,left:null,right:['Done','close'],body:shareBody()};
   if(sheet.kind==='cal') return {title:'Pick a day',left:null,right:['Done','close'],body:calBody()};
   if(sheet.kind==='games') return {title:'Games',left:null,right:['Done','close'],body:gamesBody()};
   if(sheet.kind==='info') return {title:'How it works',left:null,right:['Done','close'],body:infoBody()};
   return {title:'Back up bets',left:null,right:['Done','close'],body:backupBody()};
+}
+
+/* SHARE: draws bets as a PNG card for friends (no stakes, no money: just the picks). */
+let shareImg=null; // {url,file,title}
+const SH={W:390,PAD:16};
+function shGame(b){
+  const sp=SPORTS[b.sport]||SPORT, s=sp.slates.find(x=>x.date===b.date);
+  const g=s&&s.games.find(x=>x.away===b.team||x.home===b.team);
+  return g?{away:g.away,home:g.home,utc:g.utc,final:g.final}:{away:b.team,home:b.opp,utc:b.when};
+}
+function shColors(sport,t){ const c=((SPORTS[sport]||SPORT).colors||{})[t]||['#8E8E93','#8E8E93']; return [c[0],c[1]||c[0]]; }
+function rr(x,c,y,w,h,r){ c.beginPath(); c.roundRect?c.roundRect(x,y,w,h,r):c.rect(x,y,w,h); }
+function shTile(c,sport,t,x,y,w,h){
+  const [p,s]=shColors(sport,t), g=c.createLinearGradient(x,y,x+w,y+h);
+  g.addColorStop(.3,p); g.addColorStop(1,s); c.fillStyle=g; rr(x,c,y,w,h,h*.3); c.fill();
+  const light=Math.min(lum(p),lum(s))>.45;
+  c.fillStyle=light?'#000':'#fff'; c.font=`700 ${h*.42}px -apple-system,system-ui,sans-serif`; c.textAlign='center'; c.textBaseline='middle';
+  c.fillText(t,x+w/2,y+h/2+.5); c.textAlign='left'; c.textBaseline='alphabetic';
+}
+function shFit(c,txt,max){ if(c.measureText(txt).width<=max) return txt; while(txt.length>1&&c.measureText(txt+'…').width>max) txt=txt.slice(0,-1); return txt+'…'; }
+const SH_ST={open:['Open','#7A5A00','#FEF0B8'],won:['Won','#1A7F37','#D6F3DD'],lost:['Lost','#C5221F','#FBDAD8'],void:['Void','#636366','#E5E5EA']};
+function shCardH(b){ return betActual(b)!=null?150:132; }
+async function makeShareImage(list,title,sub){
+  const S=3, W=SH.W, P=SH.PAD, headH=104, foot=46;
+  const H=headH+list.reduce((h,b)=>h+shCardH(b)+12,0)+foot;
+  const cv=document.createElement('canvas'); cv.width=W*S; cv.height=H*S; const c=cv.getContext('2d'); c.scale(S,S);
+  const F=(w,s)=>`${w} ${s}px -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif`;
+  // page
+  let bg=c.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#FDEFD6'); bg.addColorStop(.35,'#F6F1EC'); bg.addColorStop(1,'#F2F2F7');
+  c.fillStyle=bg; c.fillRect(0,0,W,H);
+  // header band
+  const hb=c.createLinearGradient(0,0,W,headH); hb.addColorStop(0,'#731328'); hb.addColorStop(1,'#4A0C1A');
+  c.fillStyle=hb; c.fillRect(0,0,W,headH-14);
+  c.fillStyle='#FEC40B'; c.fillRect(0,headH-14,W,3);
+  try{ const im=new Image(); im.src='icon-192.png'; await im.decode(); c.save(); rr(P,c,18,52,52,13); c.clip(); c.drawImage(im,P,18,52,52); c.restore(); }catch(e){}
+  c.fillStyle='#fff'; c.font=F(800,22); c.fillText('Propline',P+64,42);
+  c.fillStyle='#FDEFD6'; c.font=F(600,13); c.fillText(shFit(c,title,W-P*2-64),P+64,62);
+  c.fillStyle='rgba(253,239,214,.7)'; c.font=F(500,11); c.fillText(sub,P+64,79);
+  // cards
+  let y=headH+4;
+  list.forEach(b=>{
+    const h=shCardH(b), x=P, w=W-P*2, a=betActual(b), g=shGame(b), st=SH_ST[b.status]||SH_ST.open;
+    c.save(); c.shadowColor='rgba(60,20,30,.12)'; c.shadowBlur=14; c.shadowOffsetY=4; c.fillStyle='#fff'; rr(x,c,y,w,h,18); c.fill(); c.restore();
+    shTile(c,b.sport,b.team,x+14,y+14,46,32);
+    // status pill
+    c.font=F(700,12); const pw=c.measureText(st[0]).width+18;
+    c.fillStyle=st[2]; rr(x+w-14-pw,c,y+16,pw,22,11); c.fill(); c.fillStyle=st[1]; c.fillText(st[0],x+w-14-pw+9,y+31);
+    c.fillStyle='#1C1C1E'; c.font=F(700,17); c.fillText(shFit(c,b.player,w-74-pw-24),x+70,y+30);
+    const when=g.final?`Final ${g.final.away}–${g.final.home}`:`${day(g.utc)} · ${clock(g.utc)}`;
+    c.fillStyle='#6C6C70'; c.font=F(500,12.5); c.fillText(shFit(c,`${g.away} at ${g.home} · ${when}`,w-74-pw-24),x+70,y+47);
+    // three boxes: pick, odds, projection
+    const bx=[[`${b.side==='under'?'Under':'Over'} ${b.stat}`,b.line!=null?String(b.line):'–','#731328'],['Odds',b.odds.toFixed(2),'#1C1C1E'],['Projected',b.proj!=null?f1(b.proj):'–','#1C1C1E']];
+    const gap=8, bw=(w-28-gap*2)/3;
+    bx.forEach(([k,v,col],i)=>{ const X=x+14+i*(bw+gap), Y=y+62;
+      c.fillStyle=i===0?'#F9EDEF':'#F2F2F7'; rr(X,c,Y,bw,54,12); c.fill();
+      c.fillStyle='#6C6C70'; c.font=F(600,10.5); c.fillText(shFit(c,k.toUpperCase(),bw-20),X+10,Y+19);
+      c.fillStyle=col; c.font=F(800,21); c.fillText(v,X+10,Y+44); });
+    if(a!=null){ const win=b.line==null||a===b.line?null:(a>b.line)===(b.side!=='under');
+      c.fillStyle=win==null?'#6C6C70':win?'#1A7F37':'#C5221F'; c.font=F(700,12.5);
+      const d=b.line==null?'':` · ${Math.abs(a-b.line)%1?Math.abs(a-b.line).toFixed(1):Math.abs(a-b.line)} ${a>=b.line?'over':'under'} the line`;
+      c.fillText(`Scored ${a}${d}`,x+14,y+136); }
+    y+=h+12;
+  });
+  c.fillStyle='#8E8E93'; c.font=F(500,10.5); c.textAlign='center';
+  c.fillText('Projections by Propline · for fun, not betting advice',W/2,H-20); c.textAlign='left';
+  const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+  return blob;
+}
+async function openShare(list,title,sub,name){
+  if(!list.length) return;
+  if(shareImg) URL.revokeObjectURL(shareImg.url);
+  shareImg=null; openSheet({kind:'share',title:list.length===1?'Share bet':'Share bets'});
+  try{
+    const blob=await makeShareImage(list,title,sub);
+    shareImg={url:URL.createObjectURL(blob),file:new File([blob],name,{type:'image/png'}),title};
+  }catch(e){ shareImg={err:true}; }
+  if(sheet&&sheet.kind==='share') renderSheet();
+}
+function shareBody(){
+  if(!shareImg) return '<p class="note" style="text-align:center;padding:2rem 0">Making the picture…</p>';
+  if(shareImg.err) return '<p class="note">Could not make the picture on this device.</p>';
+  return `<img class="shimg" src="${shareImg.url}" alt="Picture of the bets to share">
+  <button class="btn" data-do="sharego">${ICON.share}Share picture</button>
+  <p class="note">No stakes or money are shown, only the picks. You can also touch and hold the picture to save it.</p>`;
+}
+async function shareGo(){
+  if(!shareImg||!shareImg.file) return;
+  const data={files:[shareImg.file],title:'Propline bets'};
+  try{
+    if(navigator.canShare&&navigator.canShare(data)){ await navigator.share(data); return; }
+  }catch(e){ if(e&&e.name==='AbortError') return; }
+  const a=document.createElement('a'); a.href=shareImg.url; a.download=shareImg.file.name; document.body.appendChild(a); a.click(); a.remove();
+  toast('Picture saved');
+}
+function shareBets(ids,kind){
+  const list=ids.map(id=>bets.find(b=>b.id===id)).filter(Boolean); if(!list.length) return;
+  list.sort((a,b)=>(a.when||'').localeCompare(b.when||''));
+  const d=day(list[0].when), n=list.length;
+  const title=n===1?`${list[0].side==='under'?'Under':'Over'} ${list[0].line} on ${list[0].player}`:`My ${kind==='open'?'picks':'bets'} · ${d}`;
+  const sub=n===1?`${(SPORTS[list[0].sport]||SPORT).league} · ${d}`:`${(SPORTS[list[0].sport]||SPORT).league} · ${n} bets`;
+  openShare(list,title,sub,`propline-${list[0].date}${n===1?'-'+list[0].player.toLowerCase().replace(/[^a-z]+/g,'-'):''}.png`);
 }
 
 /* WEATHER-STYLE BLOCKS
@@ -1687,6 +1807,9 @@ document.addEventListener('click',e=>{
     case 'cal': { const t=new Date(SLATE.games[0].utc); openSheet({kind:'cal',y:t.getFullYear(),m:t.getMonth()}); break; }
     case 'calm': { const t=new Date(sheet.y,sheet.m+(+d.d),1); sheet.y=t.getFullYear(); sheet.m=t.getMonth(); renderSheet(); break; }
     case 'calday': setDay(+d.i); nav.stack=[]; resGame=null; closeSheet(); refresh(); break;
+    case 'sharebet': shareBets([d.id],'one'); break;
+    case 'shareday': shareBets(d.ids.split(','),d.k); break;
+    case 'sharego': shareGo(); break;
     case 'gamepick': openSheet({kind:'games'}); break;
     case 'gogame': { setDay(+d.i); const g=SLATE.games.find(x=>x.id===d.id); resGame=null; closeSheet();
       if(cur()) nav.stack[nav.stack.length-1]={v:'game',id:g.id,team:g.away}; renderAll(); scrollTo(0,0); break; }
