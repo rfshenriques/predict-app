@@ -1160,6 +1160,69 @@ const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').match
     ["Carson Cooper","C",3.0,1.0,""],
     ["Jahmai Mashack","G",2.7,0.7,""]]}}});
 
+/* UEFA NATIONS LEAGUE, Matchday 6. Every result so far feeds the model; teams are rated against their own group.
+   results: [group, home, away, home goals, away goals]
+   out: [name, pos, Nations League games known, goals, assists, 'I'/'S', reason, return ('' = doubtful, 'x' = out for this window)] */
+(window.UNL_SLATES=window.UNL_SLATES||[]).push({
+  date:"2026-11-15", label:"Matchday 6", checked:"14 Nov 2026",
+  sources:{results:"UEFA.com league phase fixtures and results (Matchdays 1–5, Saturday 14 Nov games not yet in)",corners:"Statz Nations League corners won per match, home and away, to 14 Nov",injuries:"Team news: Yahoo Sports and Al Jazeera (France, Italy), Khel Now (Spain). No confirmed absences found for other teams."},
+  results:[
+    ["A1","ITA","BEL",0,2],["A1","TUR","FRA",0,1],["A1","BEL","FRA",0,1],["A1","TUR","ITA",1,4],["A1","BEL","TUR",3,0],["A1","FRA","ITA",1,1],["A1","FRA","BEL",4,1],["A1","ITA","TUR",3,1],["A1","TUR","BEL",1,2],["A1","ITA","FRA",3,1],
+    ["A2","NED","GER",1,1],["A2","SRB","GRE",1,2],["A2","SRB","NED",1,2],["A2","GER","GRE",0,1],["A2","GER","SRB",2,0],["A2","GRE","NED",2,2],["A2","GRE","GER",0,0],["A2","NED","SRB",2,1],["A2","NED","GRE",7,0],["A2","SRB","GER",1,3],
+    ["A3","CZE","CRO",1,2],["A3","ENG","ESP",2,3],["A3","CZE","ENG",0,2],["A3","ESP","CRO",4,1],["A3","CRO","ENG",0,7],["A3","ESP","CZE",3,1],["A3","CRO","ESP",1,2],["A3","ENG","CZE",3,0],["A3","CZE","ESP",0,2],["A3","ENG","CRO",2,1],
+    ["A4","NOR","DEN",3,2],["A4","POR","WAL",1,0],["A4","DEN","WAL",2,0],["A4","NOR","POR",1,2],["A4","DEN","POR",2,4],["A4","WAL","NOR",2,1],["A4","POR","NOR",2,1],["A4","WAL","DEN",0,1],
+    ["B1","SVN","SCO",0,0],["B1","MKD","SUI",0,3],["B1","SCO","SUI",0,3],["B1","SVN","MKD",2,0],["B1","MKD","SCO",0,2],["B1","SUI","SVN",2,1],["B1","SCO","SVN",1,2],["B1","SUI","MKD",3,0],["B1","SCO","MKD",2,1],["B1","SVN","SUI",0,0],
+    ["B2","GEO","NIR",0,1],["B2","HUN","UKR",0,1],["B2","GEO","UKR",0,0],["B2","NIR","HUN",0,0],["B2","HUN","GEO",1,0],["B2","UKR","NIR",0,3],["B2","NIR","GEO",0,0],["B2","UKR","HUN",1,2],
+    ["B3","AUT","ISR",3,1],["B3","KOS","IRL",1,0],["B3","AUT","KOS",3,1],["B3","ISR","IRL",0,3],["B3","ISR","KOS",0,0],["B3","IRL","AUT",2,2],["B3","KOS","AUT",1,1],["B3","IRL","ISR",1,1],
+    ["B4","POL","BIH",0,0],["B4","SWE","ROU",2,1],["B4","ROU","BIH",2,4],["B4","SWE","POL",3,1],["B4","BIH","SWE",1,1],["B4","POL","ROU",6,0],["B4","BIH","POL",1,0],["B4","ROU","SWE",0,1],
+    ["C1","SMR","FIN",0,7],["C1","ALB","BLR",2,0],["C1","FIN","BLR",0,0],["C1","SMR","ALB",0,3],["C1","FIN","ALB",2,1],["C1","BLR","SMR",4,0],["C1","ALB","SMR",2,1],["C1","BLR","FIN",1,0],["C1","ALB","FIN",2,0],["C1","SMR","BLR",0,2],
+    ["C2","ARM","LVA",2,0],["C2","MNE","CYP",2,1],["C2","ARM","MNE",2,3],["C2","LVA","CYP",0,0],["C2","CYP","ARM",2,0],["C2","LVA","MNE",1,2],["C2","CYP","LVA",2,1],["C2","MNE","ARM",0,0],["C2","ARM","CYP",1,1],["C2","MNE","LVA",2,1],
+    ["C3","FRO","KAZ",1,1],["C3","SVK","MDA",2,0],["C3","MDA","FRO",1,1],["C3","SVK","KAZ",2,1],["C3","KAZ","MDA",1,2],["C3","FRO","SVK",1,1],["C3","KAZ","FRO",2,2],["C3","MDA","SVK",0,4],["C3","MDA","KAZ",2,1],["C3","SVK","FRO",2,2],
+    ["C4","BUL","LUX",1,2],["C4","ISL","EST",1,1],["C4","BUL","EST",0,0],["C4","LUX","ISL",0,3],["C4","EST","LUX",1,0],["C4","ISL","BUL",3,0],["C4","EST","ISL",0,0],["C4","LUX","BUL",0,2],["C4","BUL","ISL",0,5],["C4","LUX","EST",0,1],
+    ["D1","AND","MLT",1,2],["D1","GIB","AND",0,0],["D1","MLT","GIB",1,1],["D1","MLT","AND",1,0],["D1","AND","GIB",2,0],
+    ["D2","LIE","LTU",0,2],["D2","LTU","AZE",1,1],["D2","AZE","LIE",0,0],["D2","AZE","LTU",1,0],["D2","LIE","AZE",0,1]
+  ],
+  games:[
+    {id:"n1",group:"C2",utc:"2026-11-15T14:00:00Z",home:"CYP",away:"MNE"},{id:"n2",group:"C2",utc:"2026-11-15T14:00:00Z",home:"LVA",away:"ARM"},
+    {id:"n3",group:"C1",utc:"2026-11-15T17:00:00Z",home:"BLR",away:"ALB"},{id:"n4",group:"C1",utc:"2026-11-15T17:00:00Z",home:"FIN",away:"SMR"},
+    {id:"n5",group:"A1",utc:"2026-11-15T19:45:00Z",home:"BEL",away:"ITA"},{id:"n6",group:"A1",utc:"2026-11-15T19:45:00Z",home:"FRA",away:"TUR"},
+    {id:"n7",group:"A3",utc:"2026-11-15T19:45:00Z",home:"CRO",away:"CZE"},{id:"n8",group:"A3",utc:"2026-11-15T19:45:00Z",home:"ESP",away:"ENG"},
+    {id:"n9",group:"C3",utc:"2026-11-16T15:00:00Z",home:"FRO",away:"MDA"},{id:"n10",group:"C3",utc:"2026-11-16T15:00:00Z",home:"KAZ",away:"SVK"},
+    {id:"n11",group:"C4",utc:"2026-11-16T17:00:00Z",home:"EST",away:"BUL"},{id:"n12",group:"C4",utc:"2026-11-16T17:00:00Z",home:"ISL",away:"LUX"},
+    {id:"n13",group:"D2",utc:"2026-11-16T17:00:00Z",home:"LTU",away:"LIE"},
+    {id:"n14",group:"A2",utc:"2026-11-16T19:45:00Z",home:"GER",away:"NED"},{id:"n15",group:"A2",utc:"2026-11-16T19:45:00Z",home:"GRE",away:"SRB"},
+    {id:"n16",group:"B1",utc:"2026-11-16T19:45:00Z",home:"MKD",away:"SVN"},{id:"n17",group:"B1",utc:"2026-11-16T19:45:00Z",home:"SUI",away:"SCO"},
+    {id:"n18",group:"D1",utc:"2026-11-16T19:45:00Z",home:"GIB",away:"MLT"},
+    {id:"n19",group:"A4",utc:"2026-11-17T19:45:00Z",home:"DEN",away:"NOR"},{id:"n20",group:"A4",utc:"2026-11-17T19:45:00Z",home:"WAL",away:"POR"},
+    {id:"n21",group:"B2",utc:"2026-11-17T19:45:00Z",home:"HUN",away:"NIR"},{id:"n22",group:"B2",utc:"2026-11-17T19:45:00Z",home:"UKR",away:"GEO"},
+    {id:"n23",group:"B3",utc:"2026-11-17T19:45:00Z",home:"ISR",away:"AUT"},{id:"n24",group:"B3",utc:"2026-11-17T19:45:00Z",home:"IRL",away:"KOS"},
+    {id:"n25",group:"B4",utc:"2026-11-17T19:45:00Z",home:"BIH",away:"ROU"},{id:"n26",group:"B4",utc:"2026-11-17T19:45:00Z",home:"POL",away:"SWE"}
+  ],
+  /* corners won per match: h at home, a away, f overall. Conceded corners are not published for this competition. */
+  corners:{SVK:{h:8.0,a:6.5,f:7.4},ARM:{h:7.7,a:6.5,f:7.2},NED:{h:7.7,a:6.0,f:7.0},SUI:{h:6.0,a:7.3,f:6.8},ALB:{h:6.7,a:6.0,f:6.4},POR:{h:8.0,a:4.5,f:6.3},
+    ENG:{h:6.0,a:6.0,f:6.0},GER:{h:10.0,a:3.3,f:6.0},ESP:{h:5.5,a:6.3,f:6.0},MNE:{h:7.7,a:3.0,f:5.8},POL:{h:5.0,a:6.0,f:5.5},FRA:{h:7.5,a:4.0,f:5.4},
+    TUR:{h:4.3,a:7.0,f:5.4},MLT:{h:7.0,a:2.0,f:5.3},GEO:{h:6.5,a:4.0,f:5.3},ISL:{h:8.0,a:3.3,f:5.2},KAZ:{h:8.0,a:3.0,f:5.0},SCO:{h:4.0,a:6.5,f:5.0},
+    SVN:{h:6.0,a:3.5,f:5.0},AZE:{h:4.5,a:5.5,f:5.0},CYP:{h:4.0,a:5.3,f:4.8},FRO:{h:4.5,a:5.0,f:4.8},FIN:{h:7.5,a:3.0,f:4.8},MDA:{h:5.7,a:3.5,f:4.8},
+    AUT:{h:4.5,a:5.0,f:4.8},HUN:{h:6.0,a:3.0,f:4.5},NOR:{h:5.5,a:3.5,f:4.5},LTU:{h:0.0,a:6.5,f:4.3},EST:{h:5.0,a:3.7,f:4.2},BUL:{h:5.0,a:2.5,f:4.0},
+    GRE:{h:4.0,a:4.0,f:4.0},LVA:{h:4.5,a:3.7,f:4.0},CRO:{h:2.0,a:5.0,f:3.8},AND:{h:3.0,a:4.5,f:3.8},DEN:{h:2.5,a:5.0,f:3.8},UKR:{h:6.0,a:1.0,f:3.5},
+    BLR:{h:3.5,a:3.3,f:3.4},BEL:{h:2.0,a:4.3,f:3.4},ITA:{h:3.7,a:3.0,f:3.4},NIR:{h:5.5,a:1.0,f:3.3},LUX:{h:3.0,a:3.5,f:3.2},BIH:{h:3.0,a:3.0,f:3.0},
+    WAL:{h:3.0,a:3.0,f:3.0},ISR:{h:3.0,a:2.5,f:2.8},SWE:{h:3.5,a:2.0,f:2.8},KOS:{h:2.0,a:3.0,f:2.5},IRL:{h:3.0,a:2.0,f:2.5},ROU:{h:4.5,a:0.5,f:2.5},
+    MKD:{h:0.5,a:3.7,f:2.4},SMR:{h:2.3,a:2.5,f:2.4},GIB:{h:4.0,a:1.5,f:2.3},SRB:{h:1.7,a:2.5,f:2.0},CZE:{h:2.0,a:1.0,f:1.6},LIE:{h:0.5,a:0.0,f:0.3}},
+  cornersAvg:{home:4.8,away:3.8}, cornersN:5,
+  teams:{
+    FRA:{name:"France",out:[["Kylian Mbappé","F",1,1,0,"I","Hamstring",""],["Marcus Thuram","F",0,0,0,"I","Injury","x"],["Pierre Kalulu","D",0,0,0,"I","Injury","x"],["Aurélien Tchouaméni","M",0,0,0,"I","Foot","x"],["Manu Koné","M",0,0,0,"I","Injury","x"],["William Saliba","D",0,0,0,"I","Injury","x"],["Jules Koundé","D",0,0,0,"I","Injury","x"],["Maxence Lacroix","D",0,0,0,"I","Injury","x"],["Ousmane Dembélé","F",0,0,0,"I","Injury","x"],["Maghnes Akliouche","M",0,0,0,"I","Injury","x"],["Esteban Lepaul","F",0,0,0,"I","Injury","x"]]},
+    ITA:{name:"Italy",out:[["Gianluca Mancini","D",0,0,0,"I","Muscle","x"],["Giovanni Di Lorenzo","D",0,0,0,"I","Injury","x"],["Giacomo Raspadori","F",0,0,0,"I","Injury","x"],["Moise Kean","F",0,0,0,"I","Injury","x"]]},
+    ESP:{name:"Spain",out:[["Dani Olmo","M",0,0,3,"I","Adductor","x"],["Rodri","M",0,0,0,"I","Hamstring","x"],["Luis Milla","M",0,0,0,"I","Not in squad","x"],["Víctor Muñoz","F",0,0,0,"I","Not in squad","x"],["Eric García","D",0,0,0,"I","Knee","x"]]},
+    BEL:{name:"Belgium"},TUR:{name:"Türkiye"},CRO:{name:"Croatia"},CZE:{name:"Czechia"},ENG:{name:"England"},GER:{name:"Germany"},NED:{name:"Netherlands"},GRE:{name:"Greece"},SRB:{name:"Serbia"},
+    DEN:{name:"Denmark"},NOR:{name:"Norway"},WAL:{name:"Wales"},POR:{name:"Portugal"},SCO:{name:"Scotland"},SVN:{name:"Slovenia"},SUI:{name:"Switzerland"},MKD:{name:"North Macedonia"},
+    GEO:{name:"Georgia"},HUN:{name:"Hungary"},NIR:{name:"Northern Ireland"},UKR:{name:"Ukraine"},AUT:{name:"Austria"},ISR:{name:"Israel"},KOS:{name:"Kosovo"},IRL:{name:"Ireland"},
+    ROU:{name:"Romania"},POL:{name:"Poland"},SWE:{name:"Sweden"},BIH:{name:"Bosnia"},ALB:{name:"Albania"},FIN:{name:"Finland"},BLR:{name:"Belarus"},SMR:{name:"San Marino"},
+    ARM:{name:"Armenia"},CYP:{name:"Cyprus"},LVA:{name:"Latvia"},MNE:{name:"Montenegro"},KAZ:{name:"Kazakhstan"},MDA:{name:"Moldova"},SVK:{name:"Slovakia"},FRO:{name:"Faroe Islands"},
+    EST:{name:"Estonia"},ISL:{name:"Iceland"},LUX:{name:"Luxembourg"},BUL:{name:"Bulgaria"},AND:{name:"Andorra"},GIB:{name:"Gibraltar"},MLT:{name:"Malta"},LTU:{name:"Lithuania"},
+    AZE:{name:"Azerbaijan"},LIE:{name:"Liechtenstein"}
+  }
+});
+
 /* Shared helpers. Everything sport-specific lives in part-sports.js */
 function gameOf(t){return SLATE.games.find(x=>x.away===t||x.home===t)}
 function opponent(t){const g=gameOf(t);return g.away===t?g.home:g.away}
@@ -1301,14 +1364,38 @@ registerSport({
     MUN:["#DA291C","#1A1A1A"],NEW:["#241F20","#41B6E6"],NFO:["#E53233","#1A1A1A"],SUN:["#EB172B","#A68A0D"],TOT:["#132257","#4B5A8A"]},
   steps:['League average for home or away teams','Attack: how much this team scores compared with that average','Defence: how much the other team lets in','Missing players on both sides','Multiply them all: expected goals']
 });
+/* Nations League: same model, teams rated within their group. The table is built from the results. */
+function unlPrep(s){
+  const T={}, G={}; const row=t=>T[t]||(T[t]={h:[0,0,0],a:[0,0,0]});
+  // one blowout (7-0) says less than it seems, so goals in a match count up to 4 when rating teams
+  (s.results||[]).forEach(([g,h,a,hg,ag])=>{ G[h]=G[a]=g; hg=Math.min(hg,4); ag=Math.min(ag,4); const H=row(h),A=row(a); H.h[0]++;H.h[1]+=hg;H.h[2]+=ag; A.a[0]++;A.a[1]+=ag;A.a[2]+=hg; });
+  s.table=T; s.groupOf=G; Object.values(s.teams).forEach(x=>{ if(!x.out) x.out=[]; }); return s;
+}
+registerSport({
+  id:'unl', kind:'match', league:'Nations League', short:'UNL', sport:'Football', stat:'goals', unit:'goals', tab2:'Teams',
+  slates:(window.UNL_SLATES||[]).map(unlPrep).sort((a,b)=>a.date<b.date?-1:1),
+  async load(){ return this.slates; },
+  colors:{BEL:["#E30613","#111111"],ITA:["#0066B3","#00205B"],FRA:["#002395","#ED2939"],TUR:["#E30A17","#8B0000"],CRO:["#D52B1E","#171796"],CZE:["#D7141A","#11457E"],
+    ESP:["#C60B1E","#FFC400"],ENG:["#1A2B5F","#CE1124"],GER:["#111111","#DD0000"],NED:["#F36C21","#21468B"],GRE:["#0D5EAF","#0A3D7A"],SRB:["#C6363C","#0C4076"],
+    DEN:["#C8102E","#8B0A1F"],NOR:["#BA0C2F","#00205B"],WAL:["#C8102E","#00B140"],POR:["#006600","#C8102E"],SCO:["#0065BD","#002855"],SVN:["#005DA4","#ED1C24"],
+    SUI:["#D52B1E","#8B0000"],MKD:["#D20000","#FFE600"],GEO:["#DA291C","#7A0E12"],HUN:["#CE2939","#477050"],NIR:["#00A651","#00592A"],UKR:["#0057B7","#FFD700"],
+    AUT:["#ED2939","#7A0E12"],ISR:["#0038B8","#002277"],KOS:["#244AA5","#D0A650"],IRL:["#169B62","#FF883E"],ROU:["#FCD116","#002B7F"],POL:["#DC143C","#8B0A1F"],
+    SWE:["#006AA7","#FECC00"],BIH:["#002395","#FECB00"],ALB:["#E41E20","#111111"],FIN:["#002F6C","#0A1F44"],BLR:["#C8313E","#4AA657"],SMR:["#5EB6E4","#2A6E9B"],
+    ARM:["#D90012","#F2A800"],CYP:["#0047AB","#D57800"],LVA:["#9E3039","#5C1A20"],MNE:["#C40308","#D4AF37"],KAZ:["#00AFCA","#FEC50C"],MDA:["#0046AE","#FFD200"],
+    SVK:["#0B4EA2","#EE1C25"],FRO:["#005EB8","#EF3340"],EST:["#0072CE","#111111"],ISL:["#02529C","#DC1E35"],LUX:["#ED2939","#00A1DE"],BUL:["#00966E","#D62612"],
+    AND:["#10069F","#D50032"],GIB:["#DA000C","#8B0000"],MLT:["#CF142B","#7A0C19"],LTU:["#FDB913","#006A44"],AZE:["#0092BC","#E4002B"],LIE:["#002B7F","#CE1126"]},
+  steps:['Average goals for home or away teams in this group (half group, half whole competition)','Attack: how much this team scores compared with that average (goals in one match count up to 4)','Defence: how much the other team lets in','Missing players on both sides','Multiply them all: expected goals']
+});
+Object.entries(SPORTS).forEach(([id,sp])=>sp.slates.forEach(s=>s.sid=id));
 const FB={SHRINK:5, LOST:0.6, CORNER_R:20};
 const fbTeamName=(s,t)=>(s.teams[t]||{name:t}).name;
 const matchTitle=g=>g.home&&SPORT.kind==='match'?`${g.home} v ${g.away}`:`${g.away} at ${g.home}`;
 /* availability of a missing player: 1 plays, 0 out, in between = how likely */
 function fbStatus(s,g,t,r){
-  const [name,pos,m,goals,ast,type,info,ret]=r, id='epl:'+s.date+':'+t+':'+name, day=g.utc.slice(0,10);
+  const [name,pos,m,goals,ast,type,info,ret]=r, id=(s.sid||'epl')+':'+s.date+':'+t+':'+name, day=g.utc.slice(0,10);
   let a,label,cls;
-  if(type==='S'){ if(!ret||ret>=day){a=0;label='Suspended';cls='o'} else {a=1;label='Ban served';cls='v'} }
+  if(ret==='x'){a=0;label='Out';cls='o'}
+  else if(type==='S'){ if(!ret||ret>=day){a=0;label='Suspended';cls='o'} else {a=1;label='Ban served';cls='v'} }
   else if(!ret){a=.5;label='Doubtful';cls='q'}
   else if(ret>day){a=0;label=ret>new Date(Date.parse(day)+21*864e5).toISOString().slice(0,10)?'Out long term':'Out';cls='o'}
   else {a=.8;label='Expected back';cls='v'}
@@ -1326,27 +1413,30 @@ function fbInjury(s,g,t){
   const share=gf?lost/gf:0;
   return {att:Math.max(.7,1-FB.LOST*share),def:Math.min(1.25,1+def),share,lost,who,list};
 }
-function fbLeague(s){
-  let hp=0,hg=0,ap=0,ag=0; Object.values(s.table).forEach(x=>{hp+=x.h[0];hg+=x.h[1];ap+=x.a[0];ag+=x.a[1];});
-  return {home:hg/hp,away:ag/ap,team:(hg+ag)/(hp+ap)};
+function fbLeague(s,grp){
+  const avg=list=>{ let hp=0,hg=0,ap=0,ag=0; list.forEach(x=>{hp+=x.h[0];hg+=x.h[1];ap+=x.a[0];ag+=x.a[1];}); return {home:hg/hp,away:ag/ap,team:(hg+ag)/(hp+ap)}; };
+  const all=avg(Object.values(s.table)); if(!grp) return all;
+  const g=avg(Object.entries(s.table).filter(([t])=>s.groupOf[t]===grp).map(([,x])=>x));
+  return {home:(g.home+all.home)/2,away:(g.away+all.away)/2,team:(g.team+all.team)/2,group:grp};
 }
 const shrink=(raw,n)=>(n*raw+FB.SHRINK)/(n+FB.SHRINK);
 function fbStrength(s,t,venue,L){
-  const x=s.table[t], v=x[venue], n=x.h[0]+x.a[0], vAvg=venue==='h'?L.home:L.away, oAvg=venue==='h'?L.away:L.home;
+  const x=s.table[t], n=x.h[0]+x.a[0], v=x[venue][0]?x[venue]:[n,x.h[1]+x.a[1],x.h[2]+x.a[2]], vAvg=venue==='h'?L.home:L.away, oAvg=venue==='h'?L.away:L.home;
   const att=shrink(((v[1]/v[0])/vAvg+((x.h[1]+x.a[1])/n)/L.team)/2,n);
   const def=shrink(((v[2]/v[0])/oAvg+((x.h[2]+x.a[2])/n)/L.team)/2,n);
   return {att,def,gfv:v[1]/v[0],gav:v[2]/v[0]};
 }
 function fbCorners(s,g){
-  const C=s.corners||{}, A=s.cornersAvg||{home:5,away:4.5}, all=(A.home+A.away)/2, n=10;
+  const C=s.corners||{}, A=s.cornersAvg||{home:5,away:4.5}, all=(A.home+A.away)/2, n=s.cornersN||10;
   const one=(t,o,venue)=>{ const c=C[t]||{h:A.home,a:A.away,f:all,ag:all}, oc=C[o]||{ag:all}, vAvg=venue==='h'?A.home:A.away;
-    const forS=shrink(((venue==='h'?c.h:c.a)/vAvg+c.f/all)/2,n), agS=shrink(oc.ag/all,n);
+    const forS=shrink(((venue==='h'?c.h:c.a)/vAvg+c.f/all)/2,n), agS=oc.ag!=null?shrink(oc.ag/all,n):1;
     return {lam:vAvg*forS*agS,forS,agS,base:vAvg,won:venue==='h'?c.h:c.a,conc:oc.ag}; };
+  if(!C[g.home]&&!C[g.away]) return null;
   return {home:one(g.home,g.away,'h'),away:one(g.away,g.home,'a')};
 }
 const _fbc={};
 function fbModel(s,g){
-  const L=fbLeague(s), H=fbStrength(s,g.home,'h',L), A=fbStrength(s,g.away,'a',L), iH=fbInjury(s,g,g.home), iA=fbInjury(s,g,g.away);
+  const L=fbLeague(s,g.group), H=fbStrength(s,g.home,'h',L), A=fbStrength(s,g.away,'a',L), iH=fbInjury(s,g,g.home), iA=fbInjury(s,g,g.away);
   const lh=L.home*H.att*A.def*iH.att*iA.def, la=L.away*A.att*H.def*iA.att*iH.def;
   const ph=pois(lh,10), pa=pois(la,10), grid=ph.map(x=>pa.map(y=>x*y));
   let hw=0,dr=0,aw=0,btts=0; grid.forEach((r,i)=>r.forEach((v,j)=>{ if(i>j)hw+=v; else if(i===j)dr+=v; else aw+=v; if(i>0&&j>0)btts+=v; }));
@@ -1390,7 +1480,7 @@ function fbTeams(){
   return head(`${SPORT.league} · ${slateName(SLATE)}`,'Teams','Ranked by expected '+fbStat)+dayPicker()+
   `<div class="seg" role="group" aria-label="Stat">${[['goals','Goals'],['corners','Corners']].map(([k,l])=>`<button data-do="fbstat" data-v="${k}" aria-pressed="${k===fbStat}">${l}</button>`).join('')}</div>
   <div class="card">${rows.map((r,k)=>{ const d=fbDist(r.m,fbStat,'team',r.k), ou=overUnder(d.pmf,line), miss=(r.k==='home'?r.m.iH:r.m.iA);
-    return `<div class="row prow"><button class="rmain" data-do="open" data-id="${r.g.id}">${tile(r.t,'sm')}<span class="who"><b>${fbTeamName(SLATE,r.t)}${miss.who.length&&fbStat==='goals'?'<span class="pill o">Missing scorers</span>':''}</b><span class="num">${r.k==='home'?'vs':'at'} ${r.o} · over ${line} ${P0(ou.over)}</span></span>
+    return `<div class="row prow"><button class="rmain" data-do="open" data-id="${r.g.id}">${tile(r.t,'sm')}<span class="who"><b>${fbTeamName(SLATE,r.t)}</b><span class="num">${r.k==='home'?'vs':'at'} ${r.o} · over ${line} ${P0(ou.over)}</span></span>
       <span class="proj num">${r.v.toFixed(fbStat==='goals'?2:1)}</span></button><button class="rbet" data-do="fbbet" data-g="${r.g.id}" data-stat="${fbStat}" data-mk="team" data-k="${r.k}" data-l="${line}" data-side="over" aria-label="Add a bet on ${fbTeamName(SLATE,r.t)} ${fbStat}">${ICON.addbet}</button></div>`; }).join('')}</div>
   <p class="note">Tap a team for the full match. The plus adds a bet on that team's ${fbStat}, over ${line}.</p>`;
 }
@@ -1404,16 +1494,16 @@ function fbSteps(g,m,k){
   const t=k==='home'?g.home:g.away, o=k==='home'?g.away:g.home, S=k==='home'?m.H:m.A, Os=k==='home'?m.A:m.H, I=k==='home'?m.iH:m.iA, Io=k==='home'?m.iA:m.iH;
   const base=k==='home'?m.L.home:m.L.away, lam=k==='home'?m.lh:m.la, x=v=>'×'+v.toFixed(2);
   return stepRows([
-    {t:`${k==='home'?'Home':'Away'} teams score on average`,v:base.toFixed(2)},
+    {t:`${k==='home'?'Home':'Away'} teams score on average`,sub:m.L.group?`Group ${m.L.group}, blended with the whole competition`:'',v:base.toFixed(2)},
     {t:`${t} attack`,sub:`${S.gfv.toFixed(1)} goals a game ${k==='home'?'at home':'away'}, blended with the whole season`,v:x(S.att)},
     {t:`${o} defence`,sub:`${Os.gav.toFixed(1)} let in a game ${k==='home'?'away':'at home'}, blended with the whole season`,v:x(Os.def)},
-    {t:'Missing players',sub:(I.who.length?`${t} without ${I.who.join(', ')} (${Math.round(I.share*100)}% of their goals and assists). `:`${t}: no scorers missing. `)+(Io.def>1.001?`${o} defence missing regulars.`:`${o} defence at full strength.`),v:x(I.att*Io.def)},
+    {t:'Missing players',sub:'Injuries and bans on both teams',v:x(I.att*Io.def)},
     {t:'Expected goals',v:lam.toFixed(2)}]);
 }
 function fbCornerSteps(g,m,k){
   const t=k==='home'?g.home:g.away, o=k==='home'?g.away:g.home, c=m.corners[k];
   return stepRows([{t:`${k==='home'?'Home':'Away'} teams win on average`,v:c.base.toFixed(1)},{t:`${t} win`,sub:`${c.won.toFixed(1)} a game ${k==='home'?'at home':'away'}, blended with the whole season`,v:'×'+c.forS.toFixed(2)},
-    {t:`${o} concede`,sub:`${c.conc.toFixed(1)} a game`,v:'×'+c.agS.toFixed(2)},{t:'Expected corners',v:c.lam.toFixed(1)}]);
+    {t:`${o} concede`,sub:c.conc!=null?`${c.conc.toFixed(1)} a game`:'Not published for this competition, so counted as average',v:'×'+c.agS.toFixed(2)},{t:'Expected corners',v:c.lam.toFixed(1)}]);
 }
 function fbGrid(m){
   const N=6, max=m.scores[0].p;
@@ -1424,9 +1514,9 @@ function fbGrid(m){
 }
 function fbNews(g,t){
   const list=fbAbsent(SLATE,g,t);
-  if(!list.length) return `<div class="row plain"><span class="k">Nobody missing</span></div>`;
+  if(!list.length) return `<div class="row plain"><span class="k">No confirmed absences</span></div>`;
   return list.map(p=>`<div class="fld nws"><span class="who"><b>${esc(p.name)} <span class="pill ${p.cls}">${p.label}${p.a>0&&p.a<1?' · '+P0(p.a):''}</span>${p.edited?'<span class="pill e">Edited</span>':''}</b>
-    <span class="num">${{G:'Goalkeeper',D:'Defender',M:'Midfielder',F:'Forward'}[p.pos]||''} · ${p.m} games${p.goals?` · ${p.goals} goal${p.goals>1?'s':''}`:''}${p.ast?` · ${p.ast} assist${p.ast>1?'s':''}`:''} · ${esc(p.info)}</span></span>
+    <span class="num">${{G:'Goalkeeper',D:'Defender',M:'Midfielder',F:'Forward'}[p.pos]||''} · ${p.m?p.m+' games · ':''}${esc(p.info)}</span></span>
     <button class="sw" role="switch" aria-checked="${p.a>=.5}" aria-label="${esc(p.name)} plays" data-do="fbplay" data-id="${esc(p.id)}" data-a="${p.a}"></button></div>`).join('');
 }
 function fbGame(c){
@@ -1450,10 +1540,10 @@ function fbGame(c){
   if(tab==='score') body=`<div class="sec">Correct score, % chance</div><div class="card sgw"><div class="sg-ax"><span>${dot(g.home)}${g.home} down</span><span>${dot(g.away)}${g.away} across</span></div>${fbGrid(m)}</div>
     <div class="sec">Most likely scores</div><div class="card">${m.scores.slice(0,6).map((s,k)=>`<div class="row plain"><span class="k"><b class="num">${k+1}.</b> ${g.home} ${s.h} – ${s.a} ${g.away}</span><span class="v num">${(s.p*100).toFixed(1)}%</span></div>`).join('')}</div>
     <p class="note">Each square is the chance of that exact final score, from both teams' expected goals.</p>`;
-  if(tab==='news') body=`<div class="sec">${dot(g.home)}${fbTeamName(SLATE,g.home)} missing · attack ×${m.iH.att.toFixed(2)}</div><div class="card">${fbNews(g,g.home)}</div>
-    <div class="sec">${dot(g.away)}${fbTeamName(SLATE,g.away)} missing · attack ×${m.iA.att.toFixed(2)}</div><div class="card">${fbNews(g,g.away)}</div>
-    <p class="note">Switch a player on if you know he plays, or off if he doesn't. Doubtful players count as half (shown on), players expected back count as 80%. Goals and assists they miss lower their team's attack; missing regular keepers and defenders let the other team score more.</p>`;
-  return head(`${SPORT.league} · ${day(g.utc)} · ${f?'Final':clock(g.utc)}`,`${fbTeamName(SLATE,g.home)} v ${fbTeamName(SLATE,g.away)}`,'')+
+  if(tab==='news') body=`<div class="sec">${dot(g.home)}${fbTeamName(SLATE,g.home)} missing</div><div class="card">${fbNews(g,g.home)}</div>
+    <div class="sec">${dot(g.away)}${fbTeamName(SLATE,g.away)} missing</div><div class="card">${fbNews(g,g.away)}</div>
+    <p class="note">Switch a player on if you know he plays, or off if he doesn't. Doubtful players count as half (shown on), players expected back count as 80%.</p>`;
+  return head(`${SPORT.league} · ${g.group?g.group+' · ':''}${day(g.utc)} · ${f?'Final':clock(g.utc)}`,`${fbTeamName(SLATE,g.home)} v ${fbTeamName(SLATE,g.away)}`,'')+
   `<div class="card mu fbmu">${tm(g.home,'home')}<span class="at">${f?'final':'xG'}</span>${tm(g.away,'away')}</div>
   <div class="seg" role="group" aria-label="Section">${[['goals','Goals'],['corners','Corners'],['score','Score'],['news','Team news']].map(([k,l])=>`<button data-do="fbtab" data-v="${k}" aria-pressed="${k===tab}">${l}</button>`).join('')}</div>`+body;
 }
@@ -1469,7 +1559,7 @@ function fbInfo(){
   return `<div class="sec">Expected goals, ${SPORT.steps.length} steps</div><div class="card steps">${stepRows(SPORT.steps.map(t=>({t})))}</div>
   <p class="note">The chances for each line, the winner and the correct score come from those expected goals (a Poisson model). Corners use the same steps with corners won and conceded.</p>
   <div class="sec">Where the numbers come from</div>
-  <div class="card">${R('League table',src.table||'–')}${R('Injuries and bans',src.injuries||'–')}${R('Corners',src.corners||'–')}${R('Fixtures',src.fixtures||'–')}${R('Checked',SLATE.checked)}</div>`;
+  <div class="card">${Object.entries(src).map(([k,v])=>R({table:'League table',results:'Results',injuries:'Injuries and bans',corners:'Corners',fixtures:'Fixtures'}[k]||k,v)).join('')}${R('Checked',SLATE.checked)}</div>`;
 }
 /* a bet draft on a football line */
 function fbDraft(gid,stat,mk,k,L,side){
@@ -1505,8 +1595,8 @@ function normCdf(x){ const t=1/(1+.2316419*Math.abs(x)), d=.3989423*Math.exp(-x*
 /* chance the bet wins, loses or is a push (line hit exactly) */
 function winChance(d){
   const L=num(d.line); if(L==null) return null;
-  if(d.sport==='epl'){
-    const s=SPORTS.epl.slates.find(x=>x.date===d.date), g=s&&s.games.find(x=>x.id===d.gid); if(!g) return null;
+  if((SPORTS[d.sport]||{}).kind==='match'){
+    const s=SPORTS[d.sport].slates.find(x=>x.date===d.date), g=s&&s.games.find(x=>x.id===d.gid); if(!g) return null;
     const m=fbModel(s,g), k=d.market==='total'?'':(d.team===g.home?'home':'away'), dist=fbDist(m,d.stat,d.market,k), ou=overUnder(dist.pmf,L);
     const w=d.side==='under'?ou.under:ou.over; return {p:w,push:ou.push,q:1-w-ou.push,mu:dist.mu,how:d.stat==='corners'?'corner model':'goal model'};
   }
