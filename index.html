@@ -1357,7 +1357,7 @@ registerSport({
    Missing players change it: lost goals and assists lower the attack, missing regular defenders and keepers weaken the defence.
    Corners: the same idea with corners won and conceded. */
 registerSport({
-  id:'epl', kind:'match', league:'Premier League', short:'EPL', sport:'Football', stat:'goals', unit:'goals', tab2:'Teams',
+  id:'epl', kind:'match', league:'Premier League', short:'Premier League', sport:'Football', stat:'goals', unit:'goals', tab2:'Teams',
   slates:(window.EPL_SLATES||[]).sort((a,b)=>a.date<b.date?-1:1),
   async load(){ return this.slates; },
   colors:{ARS:["#EF0107","#063672"],AVL:["#670E36","#95BFE5"],BOU:["#DA291C","#111111"],BRE:["#E30613","#1A1A1A"],BRI:["#0057B8","#FFCD00"],
@@ -1374,7 +1374,7 @@ function unlPrep(s){
   s.table=T; s.groupOf=G; Object.values(s.teams).forEach(x=>{ if(!x.out) x.out=[]; }); return s;
 }
 registerSport({
-  id:'unl', kind:'match', league:'Nations League', short:'UNL', sport:'Football', stat:'goals', unit:'goals', tab2:'Teams',
+  id:'unl', kind:'match', league:'Nations League', short:'Nations League', sport:'Football', stat:'goals', unit:'goals', tab2:'Teams',
   slates:(window.UNL_SLATES||[]).map(unlPrep).sort((a,b)=>a.date<b.date?-1:1),
   async load(){ return this.slates; },
   colors:{BEL:["#E30613","#111111"],ITA:["#0066B3","#00205B"],FRA:["#002395","#ED2939"],TUR:["#E30A17","#8B0000"],CRO:["#D52B1E","#171796"],CZE:["#D7141A","#11457E"],
@@ -2011,23 +2011,30 @@ const SPORT_GROUPS=()=>{ const g={}; SPORT_ORDER.forEach(id=>{ const s=SPORTS[id
 function homeChips(){
   return `<div class="chips" role="group" aria-label="Show sport">${[['all','All'],...SPORT_ORDER.map(id=>[id,SPORTS[id].league])].map(([k,l])=>`<button class="chip" data-do="hf" data-v="${k}" aria-pressed="${k===hf}">${l}</button>`).join('')}</div>`;
 }
-/* top projection cards, as buttons that carry their sport and day */
+/* top projection cards, as buttons that carry their sport and day. Each item: {html, utc, score}. */
 function nbaTopCards(n,label){
-  return leaders().slice(0,n).map((p,k)=>`<button class="pc" style="${tstyle(p.t)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${label?`<span class="pcl">${SPORT.short}</span>`:''}${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">vs ${p.opp} · ${SPORT.stat}</span></button>`);
+  return leaders().slice(0,n).map(p=>({utc:gameOf(p.t).utc,html:`<button class="pc" style="${tstyle(p.t)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="player" data-t="${p.t}" data-i="${p.i}" aria-label="${esc(p.name)}, ${f1(p.result)} ${SPORT.stat}">${label?`<span class="pcl">${SPORT.league}</span>`:''}${tile(p.t,'sm')}<b>${esc(sn(p.name))}</b><span class="pcv num">${f1(p.result)}</span><span class="pcs">points · vs ${p.opp} · ${day(gameOf(p.t).utc).split(" ")[0]} ${clock(gameOf(p.t).utc)}</span></button>`}));
 }
-function fbPickCards(n,label){
-  return SLATE.games.filter(g=>!g.final).map(g=>{ const m=fbModel(SLATE,g), h=m.hw>=m.aw; return {g,t:h?g.home:g.away,o:h?g.away:g.home,p:h?m.hw:m.aw}; })
-    .sort((a,b)=>b.p-a.p).slice(0,n).map(x=>`<button class="pc fbpc" style="${tstyle(x.t)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${x.g.id}" aria-label="${fbTeamName(SLATE,x.t)} to win, ${P0(x.p)}">${label?`<span class="pcl">${SPORT.short}</span>`:''}${tile(x.t,'sm')}<b>${fbTeamName(SLATE,x.t)}</b><span class="pcv num">${P0(x.p)}</span><span class="pcs">to win v ${x.o} · ${day(x.g.utc).split(' ')[0]} ${clock(x.g.utc)}</span></button>`);
+/* football: the biggest goal and corner projections, ranked against the competition's usual numbers */
+function fbTopCards(n,label){
+  const gs=SLATE.games.filter(g=>!g.final), ms=gs.map(g=>({g,m:fbModel(SLATE,g)}));
+  if(!ms.length) return [];
+  const avg=f=>ms.reduce((q,x)=>q+f(x),0)/ms.length, G=x=>x.m.lh+x.m.la, C=x=>x.m.corners?x.m.corners.home.lam+x.m.corners.away.lam:0, ag=avg(G), ac=avg(C);
+  const items=ms.flatMap(x=>[{x,stat:'goals',v:G(x),score:G(x)/ag},...(C(x)?[{x,stat:'corners',v:C(x),score:C(x)/ac}]:[])]);
+  const used=new Set();
+  return items.sort((a,b)=>b.score-a.score).filter(i=>{ const k=i.x.g.id+i.stat; if(used.has(k)) return false; used.add(k); return true; }).slice(0,n).map(({x,stat,v,score})=>{ const g=x.g;
+    return {utc:g.utc,score,html:`<button class="pc fbpc" style="${tstyle(g.home)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" data-fb="${stat}" aria-label="${matchTitle(g)}, ${v.toFixed(1)} ${stat} expected">${label?`<span class="pcl">${SPORT.league}</span>`:''}<span class="pct">${tile(g.home,'sm')}${tile(g.away,'sm')}</span><b>${g.home} v ${g.away}</b><span class="pcv num">${v.toFixed(1)}</span><span class="pcs">${stat} expected · ${day(g.utc).split(' ')[0]} ${clock(g.utc)}</span></button>`}; });
 }
-const topList=(id,n,label)=>withSport(id,()=>SPORT.kind==='match'?fbPickCards(n,label):nbaTopCards(n,label));
-const topCards=(id,n,label)=>topList(id,n,label).join('');
+const byTime=(a,b)=>a.utc<b.utc?-1:a.utc>b.utc?1:0;
+const topList=(id,n,label)=>withSport(id,()=>SPORT.kind==='match'?fbTopCards(n,label):nbaTopCards(n,label));
+const topCards=(id,n,label)=>topList(id,n,label).sort(byTime).map(i=>i.html).join('');
 function homeAll(){
   const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
-  const lists=SPORT_ORDER.map(id=>topList(id,3,true)), mixed=[0,1,2].flatMap(k=>lists.map(l=>l[k]).filter(Boolean)).join('');
+  const mixed=SPORT_ORDER.flatMap(id=>topList(id,3,true)).sort(byTime).map(i=>i.html).join('');
   return head('All sports · '+today,'Predictions','Latest from every league')+homeChips()+
   `<div class="sec">My bets</div>`+sumHTML(true)+
   `<div class="sec">Top predictions</div><div class="hs">${mixed}</div>`+
-  SPORT_ORDER.map(id=>withSport(id,()=>{ const up=SLATE.games.filter(g=>!g.final).slice(0,3), list=up.length?up:SLATE.games.slice(0,3);
+  SPORT_ORDER.map(id=>({id,t:withSport(id,()=>{ const g=SLATE.games.find(x=>!x.final)||SLATE.games[0]; return g.utc; })})).sort((a,b)=>a.t<b.t?-1:1).map(({id})=>withSport(id,()=>{ const up=SLATE.games.filter(g=>!g.final).slice(0,3), list=up.length?up:SLATE.games.slice(0,3);
     return `<div class="sec row-sec"><span>${SPORT.league} · ${slateName(SLATE)}</span><button class="link" data-do="league" data-s="${id}">All ${SPORT.kind==='match'?'matches':'games'}</button></div>`+
       list.map(g=>SPORT.kind==='match'?fbCard(g):gameCard(g)).join(''); })).join('')+
   `<p class="note">Pick a sport above to see only that sport, or open Sports for every league.</p>`;
@@ -2342,7 +2349,7 @@ document.addEventListener('click',e=>{
       if(d.tab===nav.tab&&!cur()){ scrollTo({top:0,behavior:REDUCE()?'auto':'smooth'}); break; }
       goTab(d.tab); break;
     case 'gotab': goTab(d.tab); break;
-    case 'open': push({v:'game',s:SPORT.id,d:DAY,id:d.id,team:SLATE.games.find(g=>g.id===d.id).away}); break;
+    case 'open': push({v:'game',s:SPORT.id,d:DAY,id:d.id,team:SLATE.games.find(g=>g.id===d.id).away,fb:d.fb==='corners'?'corners':undefined}); break;
     case 'league': setSport(d.s); push({v:'league',s:d.s,d:DAY}); break;
     case 'resleague': setSport(d.s); push({v:'res',s:d.s,d:DAY}); break;
     case 'list': push({v:'list',s:SPORT.id,d:DAY}); break;
