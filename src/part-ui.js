@@ -111,12 +111,22 @@ function viewGame(c){
 /* bets */
 const BSTAT={open:['op','Open'],won:['w','Won'],lost:['l','Lost'],void:['v','Void']};
 function betLine(b){ return `${b.side==='under'?'Under':'Over'}${b.line!=null?' '+b.line:''} ${b.stat}`; }
+/* what the player really scored in the game this bet is on: typed in Results, or loaded from the box score */
+function betActual(b){
+  const s=(SPORTS[b.sport]||SPORT).slates.find(x=>x.date===b.date); if(!s) return null;
+  const id=b.sport+':'+b.date+':'+b.team+':'+b.player;
+  if(id in acts) return acts[id];
+  return s.actual&&s.actual[b.team]&&b.player in s.actual[b.team]?s.actual[b.team][b.player]:null;
+}
 function betRow(b){
-  const pl=betPL(b), st=BSTAT[b.status], ret=b.stake*b.odds;
+  const pl=betPL(b), st=BSTAT[b.status], ret=b.stake*b.odds, a=betActual(b);
+  const hit=a==null||b.line==null?'':(a===b.line?'':((a>b.line)===(b.side!=='under')?'pos':'neg'));
+  const C=(k,v,cls)=>`<span class="bs"><span class="tk">${k}</span><b class="num ${cls||''}">${v}</b></span>`;
   return `<button class="bet" data-do="bet" data-id="${b.id}">
     <span class="bt-top"><b>${esc(sn(b.player))}</b><span class="pill ${st[0]}">${st[1]}</span></span>
-    <span class="bt-mid">${tile(b.team,'sm')}<span>vs ${b.opp} · ${betLine(b)}</span></span>
-    <span class="bt-row num"><span>Projected <b>${b.proj!=null?f1(b.proj):'–'}</b></span><span>${money(b.stake)} at ${b.odds.toFixed(2)}</span>
+    <span class="bt-mid">${tile(b.team,'sm')}<span>vs ${b.opp} · ${b.side==='under'?'Under':'Over'} ${b.stat}</span></span>
+    <span class="bt-stats">${C('Line',b.line!=null?b.line:'–')}${C('Projected',b.proj!=null?f1(b.proj):'–','tintc')}${C('Scored',a!=null?a:'–',hit)}</span>
+    <span class="bt-row num"><span>${money(b.stake)} at ${b.odds.toFixed(2)}</span>
       <span class="${b.status==='open'?'':pl>0?'pos':pl<0?'neg':''}">${b.status==='open'?'Returns '+money(ret):signed(pl)}</span></span></button>`;
 }
 /* totals for a group of bets: stake, what it pays back if every bet wins, and the profit in that case */

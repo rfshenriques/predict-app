@@ -225,7 +225,9 @@ button.rbet:active{background:var(--tint-bg)}
 .bt-top .pill{margin:0;flex:none}
 .bt-mid{display:flex;align-items:center;gap:.5rem;font-size:.875rem;color:var(--label2)}
 .bt-row{display:flex;justify-content:space-between;gap:.75rem;font-size:.8125rem;color:var(--label2)}
-.bt-row b{color:var(--tint);font-weight:700}
+.bt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;padding:.5rem .75rem;border-radius:.75rem;background:var(--fill)}
+.bt-stats .bs{display:flex;flex-direction:column;gap:.05rem;min-width:0}
+.bt-stats b{font-size:1.0625rem;font-weight:700}
 .bt-row > span:last-child{font-weight:700;color:var(--label);text-align:right}
 .bt-row > span.pos{color:var(--pos)}.bt-row > span.neg{color:var(--red)}
 .tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(5.5rem,1fr));gap:.5rem;padding:.75rem 1rem;background:var(--fill)}
