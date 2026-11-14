@@ -1649,12 +1649,6 @@ function viewAccount(){
   const R=(doo,label,sub)=>`<button class="row" data-do="${doo}"><span class="who"><b>${label}</b>${sub?`<span>${sub}</span>`:''}</span><i class="chev"></i></button>`;
   return head('Propline','Account','Settings for this iPhone')+
   `<div class="card prof">${billy('','Billy the goat')}<span class="who"><b>Guest</b><span>Not signed in yet, so bets stay on this iPhone. Sign in is coming next.</span></span></div>
-  <div class="sec">Bank and stakes</div>
-  <div class="card"><label class="fld" for="ac-bank"><span>Bank (€)</span><input id="ac-bank" data-in="bank" inputmode="decimal" autocomplete="off" placeholder="e.g. 200" value="${acct.bank>0?acct.bank:''}"></label></div>
-  <p class="note">The money you set aside for betting. The calculator suggests a stake as a share of it.</p>
-  <div class="sec">How bold</div>${S('acfrac',[[.25,'Careful'],[.5,'Normal']],acct.frac)}
-  <p class="note">Careful bets a quarter of what the maths says, Normal half. Careful is safer because projections miss.</p>
-  <div class="sec">Most on one bet</div>${S('accap',[[.02,'2%'],[.05,'5%'],[.1,'10%']],acct.cap)}
   <div class="sec">More</div><div class="card">${R('info','How the projections work','Every sport')}${R('backup','Back up or restore bets',bets.length+' bets')}</div>
   ${STANDALONE?'':'<p class="note">To install: in Safari, tap Share, then Add to Home Screen.</p>'}`;
 }
@@ -1976,11 +1970,11 @@ function playerBody(p){
   ${p.edited?'<button class="btn2" data-do="reset">Reset his minutes and status</button>':''}`;
 }
 function betHint(d){
-  if(isScore(d)){ const f=scoreFinal(d); return (d.status==='open'?calcHTML(d):'')+(f?`<p class="note">Final score ${f.home}–${f.away}, so this bet ${f.home===d.sh&&f.away===d.sa?'won':'lost'}.</p>`:''); }
+  if(isScore(d)){ const f=scoreFinal(d); return (f?`<p class="note">Final score ${f.home}–${f.away}, so this bet ${f.home===d.sh&&f.away===d.sa?'won':'lost'}.</p>`:''); }
   const a=d.line!==''&&num(d.line)!=null?betActual({...d,line:num(d.line)}):null; let res='';
   if(a!=null){ const L=num(d.line), over=d.side!=='under', what=d.stat==='points'?'He scored':'Final count:';
     res=`<p class="note">${what} ${a}, ${a===L?'the same as the line, which is usually void':((a>L)===over?'so this bet won':'so this bet lost')}.</p>`; }
-  return (d.status==='open'?calcHTML(d):'')+res;
+  return res;
 }
 function betBody(){
   const d=sheet.draft, S=(k,opts,val)=>`<div class="seg" role="group">${opts.map(([v,l])=>`<button data-do="${k}" data-v="${v}" aria-pressed="${v===val}">${l}</button>`).join('')}</div>`;
