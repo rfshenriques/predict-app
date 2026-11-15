@@ -518,3 +518,7 @@ body.gated #nav,body.gated #view,body.gated #tabbar{display:none}
 .lockc .lk-ic svg{width:1.4rem;height:1.4rem}
 .lockc b{font-size:1.0625rem}
 .lockc > span:not(.lk-ic){color:var(--label2);font-size:.9375rem;margin-bottom:.5rem}
+.mu .xgs{font-size:.75rem;color:var(--label2);margin-top:-.2rem}
+.sumv{font-size:1.25rem;font-weight:700;color:var(--label)}
+.sumv .pill{font-size:.75rem}
+.seg button{padding:0 .25rem}

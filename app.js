@@ -262,7 +262,14 @@ function fbModel(s,g){
   const ph=pois(lh,10), pa=pois(la,10), grid=ph.map(x=>pa.map(y=>x*y));
   let hw=0,dr=0,aw=0,btts=0; grid.forEach((r,i)=>r.forEach((v,j)=>{ if(i>j)hw+=v; else if(i===j)dr+=v; else aw+=v; if(i>0&&j>0)btts+=v; }));
   const scores=[]; grid.forEach((r,i)=>r.forEach((v,j)=>scores.push({h:i,a:j,p:v}))); scores.sort((a,b)=>b.p-a.p);
-  return {L,H,A,iH,iA,lh,la,ph,pa,grid,hw,dr,aw,btts,scores,corners:fbCorners(s,g)};
+  // projected goals per team: the most goals the team is more likely than not to reach (median); the score must agree with BTTS
+  const med=pmf=>{ let c=0; for(let k=0;k<pmf.length;k++){ c+=pmf[k]; if(c>=.5) return k; } return 0; };
+  const ps={h:med(ph),a:med(pa)}, bttsYes=btts>=.5;
+  if(!bttsYes&&ps.h>0&&ps.a>0){ if(lh<la) ps.h=0; else ps.a=0; }
+  if(bttsYes){ ps.h=Math.max(1,ps.h); ps.a=Math.max(1,ps.a); }
+  ps.p=grid[ps.h]&&grid[ps.h][ps.a]||0;
+  const near=[]; for(let i=Math.max(0,ps.h-1);i<=ps.h+1;i++) for(let j=Math.max(0,ps.a-1);j<=ps.a+1;j++) if(grid[i]) near.push({h:i,a:j,p:grid[i][j]});
+  return {L,H,A,iH,iA,lh,la,ph,pa,grid,hw,dr,aw,btts,scores,corners:fbCorners(s,g),ps,near,bttsPick:bttsYes};
 }
 /* probability helpers */
 function pois(l,max){ const r=[]; let p=Math.exp(-l); for(let k=0;k<=max;k++){ r.push(p); p*=l/(k+1); } return r; }
@@ -327,10 +334,10 @@ function fbCornerSteps(g,m,k){
     {t:`${o} concede`,sub:c.conc!=null?`${c.conc.toFixed(1)} a game`:'Not published for this competition, so counted as average',v:'×'+c.agS.toFixed(2)},{t:'Expected corners',v:c.lam.toFixed(1)}]);
 }
 function fbGrid(g,m){
-  const N=6, max=m.scores[0].p;
+  const N=6, max=m.scores[0].p, P=m.ps;
   let h=`<div class="sgrid" aria-label="Correct score chances"><span class="sg-c sg-h" role="columnheader"></span>${[...Array(N).keys()].map(j=>`<span class="sg-c sg-h" role="columnheader">${j}</span>`).join('')}`;
   for(let i=0;i<N;i++){ h+=`<span class="sg-c sg-h" role="rowheader">${i}</span>`;
-    for(let j=0;j<N;j++){ const p=m.grid[i][j], a=Math.min(1,p/max); h+=`<button class="sg-c num${p===max?' top':''}${a>.55?' hi':''}" style="--a:${(a*.85).toFixed(2)}" data-do="fbscore" data-g="${g.id}" data-h="${i}" data-a="${j}" aria-label="Add a bet on ${g.home} ${i}, ${g.away} ${j}: ${(p*100).toFixed(1)}% chance">${(p*100).toFixed(p>=.1?0:1)}</button>`; } }
+    for(let j=0;j<N;j++){ const p=m.grid[i][j], a=Math.min(1,p/max); h+=`<button class="sg-c num${i===P.h&&j===P.a?' top':''}${a>.55?' hi':''}" style="--a:${(a*.85).toFixed(2)}" data-do="fbscore" data-g="${g.id}" data-h="${i}" data-a="${j}" aria-label="Add a bet on ${g.home} ${i}, ${g.away} ${j}: ${(p*100).toFixed(1)}% chance">${(p*100).toFixed(p>=.1?0:1)}</button>`; } }
   return h+'</div>';
 }
 function fbNews(g,t){
@@ -341,10 +348,20 @@ function fbNews(g,t){
     <button class="sw" role="switch" aria-checked="${p.a>=.5}" aria-label="${esc(p.name)} plays" data-do="fbplay" data-id="${esc(p.id)}" data-a="${p.a}"></button></div>`).join('');
 }
 function fbGame(c){
-  const g=SLATE.games.find(x=>x.id===c.id), m=fbModel(SLATE,g), f=g.final, tab=c.fb||'goals';
-  const tm=(t,k)=>`<span class="tm">${tile(t,'lg')}<b>${fbTeamName(SLATE,t)}</b><span class="sc num">${f?f[k]:(k==='home'?m.lh:m.la).toFixed(1)}</span></span>`;
+  const g=SLATE.games.find(x=>x.id===c.id), m=fbModel(SLATE,g), f=g.final, tab=c.fb||'sum';
+  const tm=(t,k)=>`<span class="tm">${tile(t,'lg')}<b>${fbTeamName(SLATE,t)}</b><span class="sc num">${f?f[k]:m.ps[k==='home'?'h':'a']}</span><small class="xgs num">${(k==='home'?m.lh:m.la).toFixed(2)} goals</small></span>`;
   const pr=g.prob, W=(k,l,v,src)=>`<span class="wp"><span class="tk">${l}</span><b class="num">${P0(v)}</b>${src!=null?`<small class="num">Sportradar ${src.toFixed(0)}%</small>`:''}</span>`;
   let body='';
+  if(tab==='sum'){ const C=m.corners, PRO=has('pro'), lk='<span class="pill e">Pro</span>', hn=fbTeamName(SLATE,g.home), an=fbTeamName(SLATE,g.away);
+    const win=m.ps.h>m.ps.a?hn+' win':m.ps.h<m.ps.a?an+' win':'Draw';
+    const S=(tabk,k,sub,v,lock)=>`<button class="row" data-do="fbtab" data-v="${tabk}"><span class="who"><b>${k}</b>${sub?`<span>${sub}</span>`:''}</span><span class="v num sumv">${lock?lk:v}</span><i class="chev"></i></button>`;
+    body=`<div class="sec">Projection</div><div class="card">
+      ${S('goals','Goals',`${hn} ${m.lh.toFixed(1)} · ${an} ${m.la.toFixed(1)}`,(m.lh+m.la).toFixed(1))}
+      ${C?S('corners','Corners',`${hn} ${C.home.lam.toFixed(1)} · ${an} ${C.away.lam.toFixed(1)}`,(C.home.lam+C.away.lam).toFixed(1),!PRO):''}
+      ${S('goals','Both teams score',(m.bttsPick?'Both teams projected to score':(m.ps.h===0?hn:an)+' projected not to score')+' · '+P0(m.bttsPick?m.btts:1-m.btts)+' chance',m.bttsPick?'Yes':'No')}
+      ${S('score','Correct score',win,`${m.ps.h} – ${m.ps.a}`,!PRO)}
+    </div>
+    <p class="note">Each team's score is the goals it's more likely than not to reach, kept in line with both teams to score. Tap a line for the chances behind it.</p>`; }
   if(tab==='goals') body=`<div class="sec">Who wins</div><div class="card wps">${W('home',fbTeamName(SLATE,g.home),m.hw,pr&&pr.home)}${W('draw','Draw',m.dr,pr&&pr.draw)}${W('away',fbTeamName(SLATE,g.away),m.aw,pr&&pr.away)}</div>
     <div class="sec">Match goals · ${(m.lh+m.la).toFixed(2)} expected</div><div class="card">${[1.5,2.5,3.5,4.5].map(L=>lineRow(g,m,'goals','total','',L)).join('')}<div class="row plain"><span class="k">Both teams score</span><span class="v num">${P0(m.btts)} yes · ${P0(1-m.btts)} no</span></div></div>
     <div class="sec">${dot(g.home)}${fbTeamName(SLATE,g.home)} goals · ${m.lh.toFixed(2)}</div><div class="card">${[0.5,1.5,2.5].map(L=>lineRow(g,m,'goals','team','home',L)).join('')}</div>
@@ -359,14 +376,15 @@ function fbGame(c){
     <div class="sec">How ${g.away} get ${C.away.lam.toFixed(1)}</div><div class="card steps">${fbCornerSteps(g,m,'away')}</div>
     <p class="note">Corners vary more than goals, so the chances allow for that. Missing players are not used for corners.</p>`; }
   if(tab==='score') body=`<div class="sec">Correct score, % chance</div><div class="card sgw"><div class="sg-ax"><span>${dot(g.home)}${g.home} down</span><span>${dot(g.away)}${g.away} across</span></div>${fbGrid(g,m)}</div>
-    <div class="sec">Most likely scores</div><div class="card">${m.scores.slice(0,6).map((s,k)=>`<button class="row" data-do="fbscore" data-g="${g.id}" data-h="${s.h}" data-a="${s.a}"><span class="k"><b class="num">${k+1}.</b> ${g.home} ${s.h} – ${s.a} ${g.away}</span><span class="v num">${(s.p*100).toFixed(1)}%</span><span class="lplus" aria-hidden="true">${ICON.addbet}</span></button>`).join('')}</div>
-    <p class="note">Each square is the chance of that exact final score, from both teams' expected goals. Tap a square or a score to add a bet on it.</p>`;
+    <div class="sec">Projected score</div><div class="card"><button class="row" data-do="fbscore" data-g="${g.id}" data-h="${m.ps.h}" data-a="${m.ps.a}"><span class="k"><b>${g.home} ${m.ps.h} – ${m.ps.a} ${g.away}</b></span><span class="v num">${(m.ps.p*100).toFixed(1)}%</span><span class="lplus" aria-hidden="true">${ICON.addbet}</span></button></div>
+    <div class="sec">Within one goal of it · ${P0(m.near.reduce((t,x)=>t+x.p,0))} together</div><div class="card">${m.near.filter(x=>!(x.h===m.ps.h&&x.a===m.ps.a)).sort((a,b)=>b.p-a.p).map(s=>`<button class="row" data-do="fbscore" data-g="${g.id}" data-h="${s.h}" data-a="${s.a}"><span class="k">${g.home} ${s.h} – ${s.a} ${g.away}</span><span class="v num">${(s.p*100).toFixed(1)}%</span><span class="lplus" aria-hidden="true">${ICON.addbet}</span></button>`).join('')}</div>
+    <p class="note">The highlighted square is the projected score. Any one exact score is unlikely, so the squares around it matter too. Tap a square to add a bet on it.</p>`;
   if(tab==='news') body=`<div class="sec">${dot(g.home)}${fbTeamName(SLATE,g.home)} missing</div><div class="card">${fbNews(g,g.home)}</div>
     <div class="sec">${dot(g.away)}${fbTeamName(SLATE,g.away)} missing</div><div class="card">${fbNews(g,g.away)}</div>
     <p class="note">Switch a player on if you know he plays, or off if he doesn't. Doubtful players count as half (shown on), players expected back count as 80%.</p>`;
   return head(`${SPORT.league} · ${g.group?g.group+' · ':''}${day(g.utc)} · ${f?'Final':clock(g.utc)}`,`${fbTeamName(SLATE,g.home)} v ${fbTeamName(SLATE,g.away)}`,'')+
-  `<div class="card mu fbmu">${tm(g.home,'home')}<span class="at">${f?'final':'xG'}</span>${tm(g.away,'away')}</div>
-  <div class="seg" role="group" aria-label="Section">${[['goals','Goals'],['corners','Corners'],['score','Score'],['news','Team news']].map(([k,l])=>`<button data-do="fbtab" data-v="${k}" aria-pressed="${k===tab}">${l}</button>`).join('')}</div>`+body;
+  `<div class="card mu fbmu">${tm(g.home,'home')}<span class="at">${f?'final':'projected'}</span>${tm(g.away,'away')}</div>
+  <div class="seg" role="group" aria-label="Section">${[['sum','Summary'],['goals','Goals'],['corners','Corners'],['score','Score'],['news','News']].map(([k,l])=>`<button data-do="fbtab" data-v="${k}" aria-pressed="${k===tab}">${l}</button>`).join('')}</div>`+body;
 }
 function fbResults(){
   const done=SLATE.games.filter(g=>g.final);
