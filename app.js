@@ -284,21 +284,20 @@ const P0=v=>Math.round(v*100)+'%';
 /* ---- screens ---- */
 function fbSlateName(s){ return s.label||day(s.games[0].utc); }
 function fbCard(g){
-  const m=fbModel(SLATE,g), f=g.final, o=overUnder(pois(m.lh+m.la,15),2.5).over;
-  const side=(t,lam,k)=>`<div class="side">${tile(t)}<span class="nm">${fbTeamName(SLATE,t)}<span class="topp">${k==='home'?'Home':'Away'} · ${P0(k==='home'?m.hw:m.aw)} to win</span></span>
-    ${f?`<b class="fin num">${f[k]}</b>`:''}<span class="xg num" aria-label="Expected goals">${lam.toFixed(2)}</span></div>`;
-  return `<button class="card game" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" aria-label="${matchTitle(g)}, open match">
-    <div class="ghead"><span>${f?'Final':day(g.utc)+' · '+clock(g.utc)}</span><span class="gh-r">Expected goals<i class="chev"></i></span></div>${side(g.home,m.lh,'home')}${side(g.away,m.la,'away')}
-    <div class="gfoot"><span>Over 2.5 · <b class="num">${P0(o)}</b></span><span>Both score · <b class="num">${P0(m.btts)}</b></span><span>Corners · <b class="num">${(m.corners.home.lam+m.corners.away.lam).toFixed(1)}</b></span></div></button>`;
+  const m=fbModel(SLATE,g), f=g.final, C=m.corners;
+  const side=(t,lam,k)=>`<div class="side">${tile(t)}<span class="nm">${fbTeamName(SLATE,t)}<span class="topp">${k==='home'?'Home':'Away'} · ${lam.toFixed(2)} goals</span></span>
+    ${f?`<b class="fin num">${f[k]}</b>`:''}<span class="xg num" aria-label="${f?'Projected':'Projected goals'}">${m.ps[k==='home'?'h':'a']}</span></div>`;
+  return `<button class="card game" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" aria-label="${matchTitle(g)}, projected ${m.ps.h} ${m.ps.a}, open match">
+    <div class="ghead"><span>${f?'Final':day(g.utc)+' · '+clock(g.utc)}</span><span class="gh-r">Projected score<i class="chev"></i></span></div>${side(g.home,m.lh,'home')}${side(g.away,m.la,'away')}
+    <div class="gfoot"><span>Goals · <b class="num">${(m.lh+m.la).toFixed(1)}</b></span>${C?`<span>Corners · <b class="num">${(C.home.lam+C.away.lam).toFixed(1)}</b></span>`:''}<span>Both score · <b>${m.bttsPick?'Yes':'No'}</b></span></div></button>`;
 }
 function fbHome(){
-  const ms=SLATE.games.map(g=>({g,m:fbModel(SLATE,g)})).sort((a,b)=>(b.m.lh+b.m.la)-(a.m.lh+a.m.la)).slice(0,6);
+  const top=fbTopCards(6,false).sort(byTime).map(i=>i.html).join('');
   return head(`${SPORT.league} · ${SLATE.games.length} matches`,slateName(SLATE),isLatest()?'Latest round · times in your time zone':'Past round')+(onHome()?homeChips():'')+dayPicker()+
   (onHome()?`<div class="sec">My bets</div>`+sumHTML(true):'')+
-  `<div class="sec row-sec"><span>Most goals expected</span><button class="link" data-do="list">All teams</button></div>
-  <div class="hs">${ms.map(({g,m},k)=>`<button class="pc fbpc" style="${tstyle(g.home)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" aria-label="${matchTitle(g)}, ${(m.lh+m.la).toFixed(1)} goals expected">${k===0?billy('peek'):''}<span class="pct">${tile(g.home,'sm')}${tile(g.away,'sm')}</span><b>${g.home} v ${g.away}</b><span class="pcv num">${(m.lh+m.la).toFixed(1)}</span><span class="pcs">Over 2.5 · ${P0(overUnder(pois(m.lh+m.la,15),2.5).over)}</span></button>`).join('')}</div>
+  (top?`<div class="sec row-sec"><span>Top projections</span><button class="link" data-do="list">All teams</button></div><div class="hs">${top}</div>`:'')+`
   <div class="sec">Matches</div>`+SLATE.games.map(fbCard).join('')+
-  `<p class="note">The big number is expected goals. Tap a match for goal and corner lines, the correct score grid and team news.</p>`;
+  `<p class="note">The big number is each team's projected goals. Tap a match for its summary, then goals, corners, the score grid and team news.</p>`;
 }
 let fbStat='goals';
 function fbTeams(){
@@ -871,10 +870,9 @@ function fbTopCards(n,label){
   const gs=SLATE.games.filter(g=>!g.final), ms=gs.map(g=>({g,m:fbModel(SLATE,g)}));
   if(!ms.length) return [];
   const avg=f=>ms.reduce((q,x)=>q+f(x),0)/ms.length, G=x=>x.m.lh+x.m.la, C=x=>x.m.corners?x.m.corners.home.lam+x.m.corners.away.lam:0, ag=avg(G), ac=avg(C);
-  const items=ms.flatMap(x=>[{x,stat:'goals',v:G(x),score:G(x)/ag},...(C(x)?[{x,stat:'corners',v:C(x),score:C(x)/ac}]:[])]);
-  const used=new Set();
-  return items.sort((a,b)=>b.score-a.score).filter(i=>{ const k=i.x.g.id+i.stat; if(used.has(k)) return false; used.add(k); return true; }).slice(0,n).map(({x,stat,v,score})=>{ const g=x.g;
-    return {utc:g.utc,score,html:`<button class="pc fbpc" style="${tstyle(g.home)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" data-fb="${stat}" aria-label="${matchTitle(g)}, ${v.toFixed(1)} ${stat} expected">${label?`<span class="pcl">${SPORT.league}</span>`:''}<span class="pct">${tile(g.home,'sm')}${tile(g.away,'sm')}</span><b>${g.home} v ${g.away}</b><span class="pcv num">${v.toFixed(1)}</span><span class="pcs">${stat} expected · ${day(g.utc).split(' ')[0]} ${clock(g.utc)}</span></button>`}; });
+  // one card per match, ranked by how far its goals or corners stand above the round's average
+  return ms.map(x=>({x,score:Math.max(G(x)/ag,C(x)?C(x)/ac:0)})).sort((a,b)=>b.score-a.score).slice(0,n).map(({x,score})=>{ const g=x.g, m=x.m;
+    return {utc:g.utc,score,html:`<button class="pc fbpc" style="${tstyle(g.home)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" aria-label="${matchTitle(g)}, projected ${m.ps.h} ${m.ps.a}">${label?`<span class="pcl">${SPORT.league}</span>`:''}<span class="pct">${tile(g.home,'sm')}${tile(g.away,'sm')}</span><b>${g.home} v ${g.away}</b><span class="pcv num">${m.ps.h}–${m.ps.a}</span><span class="pcs">${G(x).toFixed(1)} goals${C(x)?'<br>'+C(x).toFixed(1)+' corners':''}<br>BTTS ${m.bttsPick?'yes':'no'} · ${clock(g.utc)}</span></button>`}; });
 }
 const byTime=(a,b)=>a.utc<b.utc?-1:a.utc>b.utc?1:0;
 const topList=(id,n,label)=>withSport(id,()=>SPORT.kind==='match'?fbTopCards(n,label):nbaTopCards(n,label));

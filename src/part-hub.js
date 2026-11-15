@@ -13,10 +13,9 @@ function fbTopCards(n,label){
   const gs=SLATE.games.filter(g=>!g.final), ms=gs.map(g=>({g,m:fbModel(SLATE,g)}));
   if(!ms.length) return [];
   const avg=f=>ms.reduce((q,x)=>q+f(x),0)/ms.length, G=x=>x.m.lh+x.m.la, C=x=>x.m.corners?x.m.corners.home.lam+x.m.corners.away.lam:0, ag=avg(G), ac=avg(C);
-  const items=ms.flatMap(x=>[{x,stat:'goals',v:G(x),score:G(x)/ag},...(C(x)?[{x,stat:'corners',v:C(x),score:C(x)/ac}]:[])]);
-  const used=new Set();
-  return items.sort((a,b)=>b.score-a.score).filter(i=>{ const k=i.x.g.id+i.stat; if(used.has(k)) return false; used.add(k); return true; }).slice(0,n).map(({x,stat,v,score})=>{ const g=x.g;
-    return {utc:g.utc,score,html:`<button class="pc fbpc" style="${tstyle(g.home)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" data-fb="${stat}" aria-label="${matchTitle(g)}, ${v.toFixed(1)} ${stat} expected">${label?`<span class="pcl">${SPORT.league}</span>`:''}<span class="pct">${tile(g.home,'sm')}${tile(g.away,'sm')}</span><b>${g.home} v ${g.away}</b><span class="pcv num">${v.toFixed(1)}</span><span class="pcs">${stat} expected · ${day(g.utc).split(' ')[0]} ${clock(g.utc)}</span></button>`}; });
+  // one card per match, ranked by how far its goals or corners stand above the round's average
+  return ms.map(x=>({x,score:Math.max(G(x)/ag,C(x)?C(x)/ac:0)})).sort((a,b)=>b.score-a.score).slice(0,n).map(({x,score})=>{ const g=x.g, m=x.m;
+    return {utc:g.utc,score,html:`<button class="pc fbpc" style="${tstyle(g.home)}" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" aria-label="${matchTitle(g)}, projected ${m.ps.h} ${m.ps.a}">${label?`<span class="pcl">${SPORT.league}</span>`:''}<span class="pct">${tile(g.home,'sm')}${tile(g.away,'sm')}</span><b>${g.home} v ${g.away}</b><span class="pcv num">${m.ps.h}–${m.ps.a}</span><span class="pcs">${G(x).toFixed(1)} goals${C(x)?'<br>'+C(x).toFixed(1)+' corners':''}<br>BTTS ${m.bttsPick?'yes':'no'} · ${clock(g.utc)}</span></button>`}; });
 }
 const byTime=(a,b)=>a.utc<b.utc?-1:a.utc>b.utc?1:0;
 const topList=(id,n,label)=>withSport(id,()=>SPORT.kind==='match'?fbTopCards(n,label):nbaTopCards(n,label));
