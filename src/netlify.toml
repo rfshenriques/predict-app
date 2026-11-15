@@ -1,6 +1,13 @@
 [build]
   publish = "."
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
 [[headers]]
   for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+[[headers]]
+  for = "/app.js"
   [headers.values]
     Cache-Control = "no-cache"

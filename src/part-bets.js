@@ -1,6 +1,6 @@
 /* BETS. Saved on the device. One record per bet, for any sport. */
 let bets=DB.get('bets',[]); if(!Array.isArray(bets)) bets=[];
-const saveBets=()=>DB.set('bets',bets);
+const saveBets=()=>{ DB.set('bets',bets); if(typeof noteBets==='function') noteBets(); };
 // profit or loss of one bet: won = stake x (odds - 1), lost = -stake, open and void = 0
 function betPL(b){ return b.status==='won'?b.stake*(b.odds-1):b.status==='lost'?-b.stake:0; }
 function betStats(list){

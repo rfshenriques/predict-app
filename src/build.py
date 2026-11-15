@@ -2,11 +2,13 @@ import json,os,shutil,glob
 R=os.path.dirname(os.path.abspath(__file__)); rd=lambda f:open(os.path.join(R,f),encoding='utf-8').read()
 dark=rd('dark.css')
 css=rd('app.css').replace('/*DARK*/','@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){\n'+dark+'}}\n:root[data-theme="dark"]{\n'+dark+'}')
-js='\n'.join(rd(f) for f in ['part-standalone.js']+sorted(os.path.basename(f) for f in glob.glob(os.path.join(R,'part-data-*.js')))+['part-core.js','part-bets.js','part-sports.js','part-billy.js','part-ui.js','part-blocks.js','part-nav.js'])
+data='\n'.join(rd(os.path.basename(f)) for f in sorted(glob.glob(os.path.join(R,'part-data-*.js'))))
+js='\n'.join(rd(f) for f in ['part-standalone.js','part-core.js','part-bets.js','part-sports.js','part-football.js','part-select.js','part-calc.js','part-billy.js','part-ui.js','part-hub.js','part-share.js','part-auth.js','part-blocks.js','part-nav.js'])
 sp=os.path.join(R,'icons','splash','index.json'); splash=''
 if os.path.exists(sp):
     for s in json.load(open(sp)):
         splash+=f'<link rel="apple-touch-startup-image" href="{s["f"]}" media="(device-width:{s["w"]}px) and (device-height:{s["h"]}px) and (-webkit-device-pixel-ratio:{s["r"]}) and (orientation:portrait) and (prefers-color-scheme:{s["mode"]})">\n'
+gate=rd('gate.js')
 html=f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,14 +36,23 @@ html=f'''<!DOCTYPE html>
 <nav id="tabbar" aria-label="Sections"></nav>
 <div id="sheet-root"></div>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="gate" hidden></div>
 <script>
-{js}
+window.LOCAL_SCRIPTS=['data-local.js','app.js'];
+{gate}
 </script>
 </body>
 </html>
 '''
 site=os.path.join(R,'site'); shutil.rmtree(site,ignore_errors=True); os.makedirs(os.path.join(site,'splash'))
 open(os.path.join(site,'index.html'),'w',encoding='utf-8').write(html)
+open(os.path.join(site,'app.js'),'w',encoding='utf-8').write(js)
+fn=os.path.join(site,'netlify','functions'); os.makedirs(fn)
+shutil.copy(os.path.join(R,'server','api.mjs'),fn)
+open(os.path.join(fn,'slates.mjs'),'w',encoding='utf-8').write('export default '+json.dumps(data)+';\n')
+shutil.copy(os.path.join(R,'package.json'),site)
+dev=os.path.join(R,'dev'); shutil.rmtree(dev,ignore_errors=True); shutil.copytree(site,dev)
+open(os.path.join(dev,'data-local.js'),'w',encoding='utf-8').write(data)
 for f in ['sw.js','manifest.webmanifest','netlify.toml']: shutil.copy(os.path.join(R,f),site)
 ic=os.path.join(R,'icons')
 for f in os.listdir(ic):
