@@ -47,7 +47,7 @@ window.LOCAL_SCRIPTS=['data-local.js','app.js'];
 site=os.path.join(R,'site'); shutil.rmtree(site,ignore_errors=True); os.makedirs(os.path.join(site,'splash'))
 open(os.path.join(site,'index.html'),'w',encoding='utf-8').write(html)
 open(os.path.join(site,'app.js'),'w',encoding='utf-8').write(js)
-fn=os.path.join(site,'netlify','functions'); os.makedirs(fn)
+fn=os.path.join(site,'netlify','functions','api'); os.makedirs(fn)
 shutil.copy(os.path.join(R,'server','api.mjs'),fn)
 open(os.path.join(fn,'slates.mjs'),'w',encoding='utf-8').write('export default '+json.dumps(data)+';\n')
 shutil.copy(os.path.join(R,'package.json'),site)
