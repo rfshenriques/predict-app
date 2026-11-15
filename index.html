@@ -623,564 +623,35 @@ const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').match
 });
 
 /* NBA DATA. Today this is a saved snapshot. When the API is linked, load() in part-sports.js returns the same shape. */
-(window.NBA_SLATES=window.NBA_SLATES||[]).push({
-  date: "2026-11-12", sources: {stats:"ESPN", injuries:"ESPN", defense:"Hashtag Basketball"},
-  checked: "12 Nov 2026",
-  games: [
-    {id:"tor-phi", ml:{away:3.21,home:1.37,src:"DraftKings via ESPN"}, final:{away:112,home:123}, utc:"2026-11-13T00:00:00Z", away:"TOR", home:"PHI"},
-    {id:"det-was", ml:{away:1.23,home:4.41,src:"DraftKings via ESPN"}, final:{away:144,home:140}, utc:"2026-11-13T00:00:00Z", away:"DET", home:"WAS"},
-    {id:"dal-min", ml:{away:2.85,home:1.45,src:"DraftKings via ESPN"}, final:{away:94,home:133}, utc:"2026-11-13T01:00:00Z", away:"DAL", home:"MIN"},
-    {id:"cha-phx", ml:{away:2.9,home:1.44,src:"DraftKings via ESPN"}, final:{away:96,home:101}, utc:"2026-11-13T02:00:00Z", away:"CHA", home:"PHX"}
-  ],
-  // points per game each defense allows to PG, SG, SF, PF, C (2026-27 season) and the league average
-  defense: {
-    PHI:[22.6,20.1,22.7,24.3,16.7], TOR:[28.2,21.2,24.0,22.2,18.5], WAS:[22.5,22.1,25.9,22.4,18.5], DET:[23.7,18.8,22.2,18.0,22.1],
-    MIN:[28.0,19.9,14.7,25.0,19.3], DAL:[23.3,21.3,15.2,28.6,16.8], PHX:[28.7,20.2,17.3,25.2,26.4], CHA:[25.4,19.4,23.9,20.8,20.4]
-  },
-  leagueDefense: [26.1,21.8,20.8,22.3,20.8],
-  // points each player actually scored (box scores; players missing here were not in the feed)
-  actual: {"PHI":{"VJ Edgecombe":15,"Tacko Fall":0,"Justin Edwards":0,"Anfernee Simons":17,"Tyrese Maxey":27,"Labaron Philon Jr.":0,"Dean Wade":6,"Joel Embiid":20,"Kentavious Caldwell-Pope":11},"TOR":{"Kyle Anderson":0,"Allen Graves":0,"Ja'Kobe Walter":6,"RJ Barrett":31,"Collin Murray-Boyles":14,"Jamison Battle":13,"Alijah Martin":7,"Jamal Shead":5,"Immanuel Quickley":26,"Jaden Bradley":1},"WAS":{"Kyshawn George":14,"Tre Johnson":13,"Bilal Coulibaly":4,"Bub Carrington":2,"Will Riley":3,"Deandre Ayton":2,"AJ Dybantsa":5},"DET":{"Ausar Thompson":17,"Duncan Robinson":13,"Javonte Green":5,"John Collins":10,"Cade Cunningham":52,"Daniss Jenkins":21,"Kevin Huerter":11,"Ronald Holland II":2},"MIN":{"Joan Beringer":13,"Terrence Shannon Jr.":6,"Rudy Gobert":9,"Trey Lyles":2,"Bones Hyland":24,"Isaiah Evans":2,"Jaylen Clark":7,"Jaden McDaniels":16,"Jonathan Kuminga":14,"LaMelo Ball":22,"Cody Williams":0},"DAL":{"Tobi Lawal":0,"Morez Johnson Jr.":0,"Cooper Flagg":12,"Santi Aldama":3,"Moussa Cisse":0,"Zaccharie Risacher":22,"Marcus Sasser":3,"Daniel Gafford":3,"Caleb Martin":7,"P.J. Washington":10,"Naji Marshall":13,"Jett Howard":3,"Walter Clayton Jr.":5},"PHX":{"Jordan Goodwin":6,"Devin Booker":30,"Collin Gillespie":13,"Oso Ighodaro":2,"Dillon Brooks":15,"Ryan Dunn":0,"Jalen Green":12,"Luke Kennard":8,"Miles Bridges":11},"CHA":{"Royce O'Neale":7,"Ryan Kalkbrenner":2,"Tidjane Salaun":2,"Christian Anderson":13,"Moussa Diabate":7,"Naz Reid":16,"Coby White":21}},
-  teams: {
-    // player: [name, position, season minutes per game, season points per game, status]  status: ""=playing, "Q"=questionable, "O"=out
-    PHI:{name:"76ers", players:[
-      ["Tyrese Maxey","G",36.5,26.9,""],["Jaylen Brown","G",35.8,22.3,""],["Joel Embiid","C",31.9,17.9,"Q"],
-      ["LeBron James","F",32.9,15.6,"Q"],["VJ Edgecombe","G",33.5,13.2,""],["Anfernee Simons","G",21.9,9.0,""],
-      ["Kentavious Caldwell-Pope","G",21.9,5.7,""],["Jabari Walker","F",10.9,5.3,""],["Dean Wade","F",24.7,3.2,""],
-      ["Labaron Philon Jr.","G",6.3,2.5,""],["Adem Bona","C",14.2,2.1,"O"],["Rayan Rupert","G",2.0,2.0,""],
-      ["Justin Edwards","F",2.3,1.3,""],["Tacko Fall","C",3.0,0.0,""]]},
-    TOR:{name:"Raptors", players:[
-      ["RJ Barrett","F",31.3,22.0,""],["Scottie Barnes","F",30.5,19.8,"Q"],["Kawhi Leonard","F",26.0,19.5,"O"],
-      ["Immanuel Quickley","G",28.5,17.5,""],["Ja'Kobe Walter","G",26.5,13.3,""],["Collin Murray-Boyles","F",17.8,6.8,""],
-      ["Jamison Battle","F",14.0,6.0,""],["Jamal Shead","G",21.0,6.0,""],["Allen Graves","F",16.0,5.3,""],
-      ["Trayce Jackson-Davis","F",9.3,4.5,"Q"],["Jakob Poeltl","C",19.5,2.8,"Q"],["Alijah Martin","G",4.3,2.5,""],
-      ["Jaden Bradley","G",3.8,1.5,""],["Kyle Anderson","F",6.7,0.0,""]]},
-    WAS:{name:"Wizards", players:[
-      ["Anthony Davis","F",33.0,23.4,""],["Kyshawn George","F",33.0,18.5,""],["Trae Young","G",35.2,18.4,""],
-      ["AJ Dybantsa","F",31.5,16.0,""],["Alex Sarr","C",25.8,10.6,""],["Tre Johnson","G",21.7,9.6,""],
-      ["Justin Champagnie","F",18.3,7.3,"O"],["Bilal Coulibaly","G",25.8,7.2,""],["Bub Carrington","G",19.3,5.7,""],
-      ["Deandre Ayton","C",15.2,5.3,""],["Khris Middleton","F",13.8,2.4,""],["Will Riley","G",7.1,2.0,""],
-      ["Tre Mann","G",5.5,1.0,""],["Anthony Gill","F",5.0,0.5,""],["Felix Okpara","F",2.0,0.5,""],["Reece Beekman","G",1.0,0.0,"O"]]},
-    DET:{name:"Pistons", players:[
-      ["Cade Cunningham","G",32.4,23.7,""],["Duncan Robinson","F",30.0,17.9,""],["Paul Reed","F",26.9,13.4,""],
-      ["Jalen Duren","C",19.0,13.0,"O"],["Daniss Jenkins","G",24.4,9.9,""],["Ausar Thompson","G",26.5,9.7,""],
-      ["John Collins","F",25.6,8.4,""],["Isaiah Joe","G",14.0,7.3,"O"],["Javonte Green","G",18.9,6.7,""],
-      ["Kevin Huerter","G",20.6,6.3,""],["Ronald Holland II","F",16.3,6.1,""],["Chaz Lanier","G",3.7,4.3,""],
-      ["Taurean Prince","F",7.0,2.0,""],["Ebuka Okorie","G",3.5,1.5,""],["Tolu Smith","F",3.7,0.8,""],
-      ["Isaac Jones","C",3.7,0.7,""],["Elijah Harkless","G",3.0,0.0,""]]},
-    MIN:{name:"Timberwolves", players:[
-      ["Anthony Edwards","G",33.8,33.3,"O"],["LaMelo Ball","G",26.1,16.9,""],["Jaden McDaniels","F",32.8,16.8,""],
-      ["Ayo Dosunmu","G",30.1,15.8,""],["Jonathan Kuminga","F",30.8,12.3,""],["Terrence Shannon Jr.","G",22.0,12.0,"Q"],
-      ["Rudy Gobert","C",30.1,7.4,""],["Bones Hyland","G",12.0,7.1,""],["Joan Beringer","F",18.1,6.5,""],
-      ["Trey Lyles","F",16.8,6.4,""],["Jaylen Clark","G",11.0,3.7,""],["Zyon Pullin","G",3.0,2.0,""],
-      ["Cody Williams","F",3.8,0.0,""],["Isaiah Evans","F",2.5,0.0,""]]},
-    DAL:{name:"Mavericks", players:[
-      ["Cooper Flagg","F",33.6,24.0,""],["Kyrie Irving","G",29.5,21.4,"Q"],["P.J. Washington","F",33.5,14.8,""],
-      ["Naji Marshall","F",24.7,11.9,""],["Santi Aldama","F",14.0,10.0,"Q"],["Daniel Gafford","F",22.2,9.8,""],
-      ["Morez Johnson Jr.","F",17.0,7.6,"Q"],["Zaccharie Risacher","F",25.1,7.4,""],["Walter Clayton Jr.","G",15.4,7.3,""],
-      ["Max Christie","G",21.2,6.1,"Q"],["Marcus Sasser","G",16.4,5.9,""],["Sergio de Larrea","F",11.5,5.3,"O"],
-      ["Caleb Martin","F",18.3,4.2,""],["Jett Howard","G",2.4,2.4,""],["Moussa Cisse","C",3.0,1.7,""],["Tobi Lawal","F",2.5,1.5,""]]},
-    PHX:{name:"Suns", players:[
-      ["Devin Booker","G",35.0,25.3,""],["Miles Bridges","F",32.3,16.9,""],["Dillon Brooks","F",31.1,16.8,""],
-      ["Jalen Green","G",29.0,12.4,""],["Luke Kennard","G",16.1,8.3,""],["Jordan Goodwin","G",18.6,7.8,""],
-      ["Khaman Maluach","C",19.6,7.4,""],["Collin Gillespie","G",24.6,6.8,""],["Oso Ighodaro","F",21.7,6.5,""],
-      ["Ryan Dunn","F",16.0,5.6,""],["Duop Reath","C",5.4,3.4,""],["Jamaree Bouyea","G",3.5,2.0,""],
-      ["Koa Peat","F",3.5,1.5,""],["Pat Spencer","G",4.0,1.0,""],["Rasheer Fleming","F",7.5,0.5,""]]},
-    CHA:{name:"Hornets", players:[
-      ["Brandon Miller","F",32.9,22.0,"Q"],["Naz Reid","C",29.6,16.9,""],["Grayson Allen","G",26.4,15.7,""],
-      ["Dennis Schroder","G",29.9,10.2,"O"],["Moussa Diabate","F",28.8,8.9,"Q"],["Coby White","G",17.0,5.5,""],
-      ["Tidjane Salaun","F",13.8,5.3,""],["Sion James","G",25.2,5.2,""],["Ryan Kalkbrenner","C",16.8,4.6,""],
-      ["Royce O'Neale","F",18.0,4.4,""],["Kon Knueppel","G",6.0,3.0,"O"],["Hannes Steinbach","F",7.7,2.7,""],
-      ["Christian Anderson","G",10.3,2.6,""],["Liam McNeeley","G",7.0,1.8,""],["PJ Hall","C",5.5,0.0,""]]}
-  }
-});
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-12","sources":{"stats":"ESPN","injuries":"ESPN","defense":"Hashtag Basketball"},"checked":"15 Nov 2026","games":[{"id":"tor-phi","ml":{"away":3.21,"home":1.37,"src":"DraftKings via ESPN"},"final":{"away":112,"home":123},"utc":"2026-11-13T00:00:00Z","away":"TOR","home":"PHI"},{"id":"det-was","ml":{"away":1.23,"home":4.41,"src":"DraftKings via ESPN"},"final":{"away":144,"home":140},"utc":"2026-11-13T00:00:00Z","away":"DET","home":"WAS"},{"id":"dal-min","ml":{"away":2.85,"home":1.45,"src":"DraftKings via ESPN"},"final":{"away":94,"home":133},"utc":"2026-11-13T01:00:00Z","away":"DAL","home":"MIN"},{"id":"cha-phx","ml":{"away":2.9,"home":1.44,"src":"DraftKings via ESPN"},"final":{"away":96,"home":101},"utc":"2026-11-13T02:00:00Z","away":"CHA","home":"PHX"}],"defense":{"PHI":[22.6,20.1,22.7,24.3,16.7],"TOR":[28.2,21.2,24,22.2,18.5],"WAS":[22.5,22.1,25.9,22.4,18.5],"DET":[23.7,18.8,22.2,18,22.1],"MIN":[28,19.9,14.7,25,19.3],"DAL":[23.3,21.3,15.2,28.6,16.8],"PHX":[28.7,20.2,17.3,25.2,26.4],"CHA":[25.4,19.4,23.9,20.8,20.4]},"leagueDefense":[26.1,21.8,20.8,22.3,20.8],"actual":{"PHI":{"VJ Edgecombe":15,"Tacko Fall":0,"Justin Edwards":0,"Anfernee Simons":17,"Tyrese Maxey":27,"Labaron Philon Jr.":0,"Dean Wade":6,"Joel Embiid":20,"Kentavious Caldwell-Pope":11,"Jaylen Brown":18,"Jabari Walker":9},"TOR":{"Kyle Anderson":0,"Allen Graves":0,"Ja'Kobe Walter":6,"RJ Barrett":31,"Collin Murray-Boyles":14,"Jamison Battle":13,"Alijah Martin":7,"Jamal Shead":5,"Immanuel Quickley":26,"Jaden Bradley":0,"Jakob Poeltl":9},"WAS":{"Kyshawn George":14,"Tre Johnson":13,"Bilal Coulibaly":4,"Bub Carrington":2,"Will Riley":3,"Deandre Ayton":2,"AJ Dybantsa":5,"Trae Young":37,"Anthony Davis":30,"Alex Sarr":30},"DET":{"Ausar Thompson":17,"Duncan Robinson":13,"Javonte Green":5,"John Collins":10,"Cade Cunningham":52,"Daniss Jenkins":21,"Kevin Huerter":11,"Ronald Holland II":2,"Paul Reed":13},"MIN":{"Joan Beringer":13,"Terrence Shannon Jr.":6,"Rudy Gobert":9,"Trey Lyles":2,"Bones Hyland":24,"Isaiah Evans":2,"Jaylen Clark":7,"Jaden McDaniels":16,"Jonathan Kuminga":14,"LaMelo Ball":22,"Cody Williams":0,"Ayo Dosunmu":18},"DAL":{"Tobi Lawal":0,"Morez Johnson Jr.":0,"Cooper Flagg":12,"Santi Aldama":3,"Moussa Cisse":0,"Zaccharie Risacher":22,"Marcus Sasser":3,"Daniel Gafford":3,"Caleb Martin":7,"P.J. Washington":10,"Naji Marshall":13,"Jett Howard":3,"Walter Clayton Jr.":5,"Kyrie Irving":10,"Max Christie":3},"PHX":{"Jordan Goodwin":6,"Devin Booker":30,"Collin Gillespie":13,"Oso Ighodaro":2,"Dillon Brooks":15,"Ryan Dunn":0,"Jalen Green":12,"Luke Kennard":8,"Miles Bridges":11,"Khaman Maluach":4},"CHA":{"Royce O'Neale":7,"Ryan Kalkbrenner":2,"Tidjane Salaun":2,"Christian Anderson":13,"Moussa Diabate":7,"Naz Reid":16,"Coby White":21,"Grayson Allen":14,"Sion James":3}},"teams":{"PHI":{"name":"76ers","players":[["Tyrese Maxey","G",36.5,26.9,""],["Jaylen Brown","G",35.8,22.3,""],["Joel Embiid","C",31.9,17.9,"Q"],["LeBron James","F",32.9,15.6,"Q"],["VJ Edgecombe","G",33.5,13.2,""],["Anfernee Simons","G",21.9,9,""],["Kentavious Caldwell-Pope","G",21.9,5.7,""],["Jabari Walker","F",10.9,5.3,""],["Dean Wade","F",24.7,3.2,""],["Labaron Philon Jr.","G",6.3,2.5,""],["Adem Bona","C",14.2,2.1,"O"],["Rayan Rupert","G",2,2,""],["Justin Edwards","F",2.3,1.3,""],["Tacko Fall","C",3,0,""]]},"TOR":{"name":"Raptors","players":[["RJ Barrett","F",31.3,22,""],["Scottie Barnes","F",30.5,19.8,"Q"],["Kawhi Leonard","F",26,19.5,"O"],["Immanuel Quickley","G",28.5,17.5,""],["Ja'Kobe Walter","G",26.5,13.3,""],["Collin Murray-Boyles","F",17.8,6.8,""],["Jamison Battle","F",14,6,""],["Jamal Shead","G",21,6,""],["Allen Graves","F",16,5.3,""],["Trayce Jackson-Davis","F",9.3,4.5,"Q"],["Jakob Poeltl","C",19.5,2.8,"Q"],["Alijah Martin","G",4.3,2.5,""],["Jaden Bradley","G",3.8,1.5,""],["Kyle Anderson","F",6.7,0,""]]},"WAS":{"name":"Wizards","players":[["Anthony Davis","F",33,23.4,""],["Kyshawn George","F",33,18.5,""],["Trae Young","G",35.2,18.4,""],["AJ Dybantsa","F",31.5,16,""],["Alex Sarr","C",25.8,10.6,""],["Tre Johnson","G",21.7,9.6,""],["Justin Champagnie","F",18.3,7.3,"O"],["Bilal Coulibaly","G",25.8,7.2,""],["Bub Carrington","G",19.3,5.7,""],["Deandre Ayton","C",15.2,5.3,""],["Khris Middleton","F",13.8,2.4,""],["Will Riley","G",7.1,2,""],["Tre Mann","G",5.5,1,""],["Anthony Gill","F",5,0.5,""],["Felix Okpara","F",2,0.5,""],["Reece Beekman","G",1,0,"O"]]},"DET":{"name":"Pistons","players":[["Cade Cunningham","G",32.4,23.7,""],["Duncan Robinson","F",30,17.9,""],["Paul Reed","F",26.9,13.4,""],["Jalen Duren","C",19,13,"O"],["Daniss Jenkins","G",24.4,9.9,""],["Ausar Thompson","G",26.5,9.7,""],["John Collins","F",25.6,8.4,""],["Isaiah Joe","G",14,7.3,"O"],["Javonte Green","G",18.9,6.7,""],["Kevin Huerter","G",20.6,6.3,""],["Ronald Holland II","F",16.3,6.1,""],["Chaz Lanier","G",3.7,4.3,""],["Taurean Prince","F",7,2,""],["Ebuka Okorie","G",3.5,1.5,""],["Tolu Smith","F",3.7,0.8,""],["Isaac Jones","C",3.7,0.7,""],["Elijah Harkless","G",3,0,""]]},"MIN":{"name":"Timberwolves","players":[["Anthony Edwards","G",33.8,33.3,"O"],["LaMelo Ball","G",26.1,16.9,""],["Jaden McDaniels","F",32.8,16.8,""],["Ayo Dosunmu","G",30.1,15.8,""],["Jonathan Kuminga","F",30.8,12.3,""],["Terrence Shannon Jr.","G",22,12,"Q"],["Rudy Gobert","C",30.1,7.4,""],["Bones Hyland","G",12,7.1,""],["Joan Beringer","F",18.1,6.5,""],["Trey Lyles","F",16.8,6.4,""],["Jaylen Clark","G",11,3.7,""],["Zyon Pullin","G",3,2,""],["Cody Williams","F",3.8,0,""],["Isaiah Evans","F",2.5,0,""]]},"DAL":{"name":"Mavericks","players":[["Cooper Flagg","F",33.6,24,""],["Kyrie Irving","G",29.5,21.4,"Q"],["P.J. Washington","F",33.5,14.8,""],["Naji Marshall","F",24.7,11.9,""],["Santi Aldama","F",14,10,"Q"],["Daniel Gafford","F",22.2,9.8,""],["Morez Johnson Jr.","F",17,7.6,"Q"],["Zaccharie Risacher","F",25.1,7.4,""],["Walter Clayton Jr.","G",15.4,7.3,""],["Max Christie","G",21.2,6.1,"Q"],["Marcus Sasser","G",16.4,5.9,""],["Sergio de Larrea","F",11.5,5.3,"O"],["Caleb Martin","F",18.3,4.2,""],["Jett Howard","G",2.4,2.4,""],["Moussa Cisse","C",3,1.7,""],["Tobi Lawal","F",2.5,1.5,""]]},"PHX":{"name":"Suns","players":[["Devin Booker","G",35,25.3,""],["Miles Bridges","F",32.3,16.9,""],["Dillon Brooks","F",31.1,16.8,""],["Jalen Green","G",29,12.4,""],["Luke Kennard","G",16.1,8.3,""],["Jordan Goodwin","G",18.6,7.8,""],["Khaman Maluach","C",19.6,7.4,""],["Collin Gillespie","G",24.6,6.8,""],["Oso Ighodaro","F",21.7,6.5,""],["Ryan Dunn","F",16,5.6,""],["Duop Reath","C",5.4,3.4,""],["Jamaree Bouyea","G",3.5,2,""],["Koa Peat","F",3.5,1.5,""],["Pat Spencer","G",4,1,""],["Rasheer Fleming","F",7.5,0.5,""]]},"CHA":{"name":"Hornets","players":[["Brandon Miller","F",32.9,22,"Q"],["Naz Reid","C",29.6,16.9,""],["Grayson Allen","G",26.4,15.7,""],["Dennis Schroder","G",29.9,10.2,"O"],["Moussa Diabate","F",28.8,8.9,"Q"],["Coby White","G",17,5.5,""],["Tidjane Salaun","F",13.8,5.3,""],["Sion James","G",25.2,5.2,""],["Ryan Kalkbrenner","C",16.8,4.6,""],["Royce O'Neale","F",18,4.4,""],["Kon Knueppel","G",6,3,"O"],["Hannes Steinbach","F",7.7,2.7,""],["Christian Anderson","G",10.3,2.6,""],["Liam McNeeley","G",7,1.8,""],["PJ Hall","C",5.5,0,""]]}},"dnp":{"TOR":["Scottie Barnes","Kawhi Leonard","Trayce Jackson-Davis"],"PHI":["Rayan Rupert","LeBron James","Adem Bona"],"DET":["Taurean Prince","Isaac Jones","Ebuka Okorie","Tolu Smith","Elijah Harkless","Chaz Lanier","Jalen Duren","Isaiah Joe"],"WAS":["Anthony Gill","Khris Middleton","Felix Okpara","Tre Mann","Justin Champagnie","Reece Beekman"],"DAL":["Sergio de Larrea"],"MIN":["Zyon Pullin","Anthony Edwards"],"CHA":["Liam McNeeley","PJ Hall","Hannes Steinbach","Brandon Miller","Dennis Schroder","Kon Knueppel"],"PHX":["Duop Reath","Koa Peat","Jamaree Bouyea","Rasheer Fleming","Pat Spencer"]}});
 
 /* NBA slate for Fri 13 Nov 2026 (US date). player: [name, position, minutes per game, points per game, status, starter]
    status: O out, D doubtful, Q questionable, P probable */
-(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-13","checked":"13 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball"},"games":[{"id":"mil-orl","ml":{"away":3.9,"home":1.26,"src":"Bovada"},"utc":"2026-11-14T00:00:00Z","away":"MIL","home":"ORL","final":{"away":99,"home":107}},{"id":"nyk-ind","ml":{"away":1.38,"home":3.15,"src":"Bovada"},"utc":"2026-11-14T00:00:00Z","away":"NYK","home":"IND","final":{"away":104,"home":106}},{"id":"mem-nop","ml":{"away":1.62,"home":2.35,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"MEM","home":"NOP","final":{"away":142,"home":111}},{"id":"atl-chi","ml":{"away":1.38,"home":3.15,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"ATL","home":"CHI","final":{"away":117,"home":125}},{"id":"cle-mia","ml":{"away":2.2,"home":1.71,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"CLE","home":"MIA","final":{"away":121,"home":133}},{"id":"uta-hou","ml":{"away":9.0,"home":1.07,"src":"BetMGM"},"utc":"2026-11-14T01:30:00Z","away":"UTA","home":"HOU","final":{"away":118,"home":125}},{"id":"gsw-sas","ml":{"away":6.25,"home":1.15,"src":"BetMGM and RotoWire"},"utc":"2026-11-14T02:30:00Z","away":"GSW","home":"SAS","final":{"away":85,"home":123}},{"id":"por-sac","ml":{"away":1.2,"home":null,"src":"BetMGM"},"utc":"2026-11-14T03:00:00Z","away":"POR","home":"SAC","final":{"away":120,"home":107}},{"id":"okc-lac","ml":{"away":1.36,"home":3.26,"src":"YouWager"},"utc":"2026-11-14T03:30:00Z","away":"OKC","home":"LAC","final":{"away":112,"home":113}}],"defense":{"NYK":[25.4,21.4,23.1,17.3,14.7],"IND":[22.5,23.8,18.9,23.4,25.5],"MIL":[27.6,23.5,21.7,23.6,25.2],"ORL":[24.0,23.0,24.8,21.3,17.6],"MEM":[29.0,21.4,18.9,21.0,19.5],"NOP":[32.3,23.7,17.6,22.8,24.1],"ATL":[22.7,20.6,23.8,23.2,26.3],"CHI":[32.5,23.5,24.7,24.8,23.8],"CLE":[26.3,23.4,20.0,21.9,20.2],"MIA":[30.5,25.7,21.5,20.4,19.3],"UTA":[30.4,19.5,20.0,26.8,16.3],"HOU":[26.3,21.3,18.1,20.7,18.5],"GSW":[24.3,21.7,22.9,20.8,20.6],"SAS":[25.4,21.8,17.0,21.7,21.9],"POR":[29.0,22.3,15.3,21.7,24.8],"SAC":[28.0,22.6,21.0,27.0,22.2],"OKC":[22.4,20.8,22.1,22.7,18.1],"LAC":[28.7,25.0,17.1,21.9,21.3]},"leagueDefense":[26.1,21.9,20.8,22.5,20.7],"teams":{"NYK":
-  {"name":"Knicks","players":[
-    ["Jalen Brunson","G",33.6,26.0,"",1],
-    ["Karl-Anthony Towns","C",31.4,20.9,"",1],
-    ["OG Anunoby","F",32.7,16.5,"",1],
-    ["Landry Shamet","G",25.9,9.6,""],
-    ["Josh Hart","G",30.9,8.3,"",1],
-    ["Miles McBride","G",18.9,7.9,""],
-    ["Jordan Clarkson","G",10.6,6.0,""],
-    ["Mikal Bridges","G",24.4,5.9,"",1],
-    ["Dalton Knecht","F",9.7,4.3,""],
-    ["Andre Drummond","C",13.5,4.3,""],
-    ["Pacome Dadiet","F",5.3,4.0,""],
-    ["Tyler Kolek","G",12.8,3.4,""],
-    ["Mohamed Diawara","F",12.0,2.8,""],
-    ["Jose Alvarado","G",10.4,2.0,""],
-    ["James Wiseman","C",5.2,1.6,""],
-    ["Jaden Akins","G",1.0,0.0,""]]},"IND":
-  {"name":"Pacers","players":[
-    ["Pascal Siakam","F",32.2,22.2,"",1],
-    ["Tyrese Haliburton","G",33.0,21.8,"O"],
-    ["Andrew Nembhard","G",33.2,17.1,"",1],
-    ["Obi Toppin","F",21.9,13.4,""],
-    ["Aaron Nesmith","G",25.6,12.8,"Q",1],
-    ["Quenton Jackson","G",21.6,10.0,""],
-    ["Kelly Oubre Jr.","G",22.3,9.1,"",1],
-    ["Ivica Zubac","C",21.7,9.0,"",1],
-    ["Jarace Walker","F",22.2,7.4,""],
-    ["Jay Huff","C",18.2,7.1,""],
-    ["Kobe Brown","G",13.7,4.7,""],
-    ["Larry Nance Jr.","F",15.6,4.6,""],
-    ["T.J. McConnell","G",8.5,4.0,"P"],
-    ["Jalen Slawson","F",14.9,3.8,""],
-    ["Braden Smith","G",13.3,3.8,""],
-    ["Ben Sheppard","G",12.0,3.0,"O"]]},"MIL":
-  {"name":"Bucks","players":[
-    ["Tyler Herro","G",30.7,21.4,"",1],
-    ["Jaime Jaquez Jr.","F",27.8,15.2,"",1],
-    ["Kyle Kuzma","F",27.4,11.6,"",1],
-    ["Ryan Rollins","G",23.3,10.7,""],
-    ["Brayden Burries","G",21.0,10.5,"",1],
-    ["Kel'el Ware","C",17.3,8.6,""],
-    ["Nate Ament","F",16.0,7.8,""],
-    ["AJ Green","G",20.2,7.5,""],
-    ["Myles Turner","C",27.1,7.1,"",1],
-    ["Kasparas Jakucionis","G",18.6,6.4,""],
-    ["Ousmane Dieng","F",10.7,3.1,""],
-    ["Gary Trent Jr.","G",6.5,3.0,""],
-    ["Bogoljub Markovic","F",5.0,2.0,""],
-    ["Jericho Sims","C",7.7,0.3,""]]},"ORL":
-  {"name":"Magic","players":[
-    ["Paolo Banchero","F",34.0,24.5,"O"],
-    ["Franz Wagner","F",36.4,20.8,"",1],
-    ["Desmond Bane","G",34.5,17.5,"",1],
-    ["Anthony Black","G",30.0,15.7,"",1],
-    ["Tristan da Silva","F",30.6,15.1,"Q"],
-    ["Wendell Carter Jr.","C",33.6,14.8,"",1],
-    ["Jalen Suggs","G",33.3,8.0,"Q",1],
-    ["Jamal Cain","F",19.6,7.2,"Q"],
-    ["Jase Richardson","G",22.7,5.9,""],
-    ["Jevon Carter","G",14.2,4.0,""],
-    ["Goga Bitadze","C",8.9,3.7,""],
-    ["Colin Castleton","C",4.0,3.0,""],
-    ["Nikola Vucevic","C",8.6,2.4,""],
-    ["Alex Morales","G",9.0,0.8,""]]},"MEM":
-  {"name":"Grizzlies","players":[
-    ["Ty Jerome","G",30.6,26.7,"",1],
-    ["Cameron Boozer","F",32.2,16.2,"",1],
-    ["Cedric Coward","F",28.4,12.6,"",1],
-    ["Isaiah Stewart","C",18.3,11.9,"",1],
-    ["Jaylen Wells","F",27.0,11.0,"",1],
-    ["Jerami Grant","F",23.9,10.4,""],
-    ["Cam Spencer","G",19.3,8.7,""],
-    ["Javon Small","G",21.3,8.7,""],
-    ["Zach Edey","C",20.8,8.2,"O"],
-    ["GG Jackson","F",15.8,6.8,""],
-    ["Scotty Pippen Jr.","G",16.0,6.4,"O"],
-    ["Quinten Post","C",13.0,5.0,"O"],
-    ["Taylor Hendricks","F",6.6,3.8,""],
-    ["Olivier-Maxence Prosper","F",5.2,2.4,""],
-    ["Karim Lopez","F",3.7,1.3,""],
-    ["Kris Murray","F",12.1,1.3,""],
-    ["Carson Cooper","C",3.0,1.0,""],
-    ["Jahmai Mashack","G",2.7,0.7,""]]},"NOP":
-  {"name":"Pelicans","players":[
-    ["Zion Williamson","F",32.7,21.7,"",1],
-    ["Trey Murphy III","F",32.8,15.6,"D"],
-    ["Saddiq Bey","F",26.9,15.4,""],
-    ["Jeremiah Fears","G",28.8,15.3,"",1],
-    ["Dejounte Murray","G",31.3,13.4,"",1],
-    ["Derik Queen","C",21.6,12.2,""],
-    ["Yves Missi","C",19.5,9.5,"D"],
-    ["Karlo Matkovic","F",18.6,8.5,"",1],
-    ["Jordan Poole","G",19.8,7.5,""],
-    ["Trendon Watford","F",17.7,7.2,"O"],
-    ["Bennedict Mathurin","G",15.8,6.0,"D"],
-    ["Herbert Jones","F",22.8,5.7,"",1],
-    ["DeAndre Jordan","C",14.7,4.0,""],
-    ["Jaron Pierre Jr.","G",7.0,4.0,""],
-    ["Bryce McGowens","G",10.6,3.7,"D"],
-    ["Julian Reese","F",5.5,1.5,""],
-    ["AJ Johnson","G",6.3,1.5,""]]},"ATL":
-  {"name":"Hawks","players":[
-    ["Nickeil Alexander-Walker","G",30.3,21.1,"",1],
-    ["Jalen Johnson","F",32.6,18.1,"",1],
-    ["CJ McCollum","G",26.8,14.3,""],
-    ["Aaron Wiggins","G",25.4,13.8,""],
-    ["Onyeka Okongwu","F",28.9,12.0,"",1],
-    ["Dyson Daniels","G",29.1,9.8,"",1],
-    ["Luguentz Dort","G",24.6,9.3,""],
-    ["Corey Kispert","F",8.5,7.5,""],
-    ["Kingston Flemings","G",20.3,7.1,"Q",1],
-    ["Jock Landale","C",15.3,6.3,""],
-    ["RayJ Dennis","G",8.0,4.0,""],
-    ["Asa Newell","F",11.3,4.0,"O"],
-    ["Zuby Ejiofor","F",8.0,2.0,""],
-    ["Dorian Finney-Smith","F",4.3,1.0,""]]},"CHI":
-  {"name":"Bulls","players":[
-    ["Caleb Wilson","F",32.4,19.3,"O"],
-    ["Norman Powell","G",28.8,19.3,"Q",1],
-    ["Matas Buzelis","F",25.8,13.6,"",1],
-    ["Jalen Smith","F",23.3,11.7,"",1],
-    ["Tre Jones","G",17.8,10.3,""],
-    ["Josh Giddey","G",27.8,10.3,"",1],
-    ["Leonard Miller","F",17.6,7.1,""],
-    ["Isaac Okoro","F",18.7,5.8,"",1],
-    ["Buddy Hield","G",13.0,5.6,""],
-    ["Patrick Williams","F",22.0,5.5,""],
-    ["Noa Essengue","F",14.1,5.3,""],
-    ["Jaylin Sellers","G",9.2,4.6,""],
-    ["Nic Claxton","C",18.0,4.0,""],
-    ["Jordan Hawkins","G",7.8,3.4,""],
-    ["Dailyn Swain","G",9.5,2.5,"Q"],
-    ["Tobe Awaka","F",10.3,2.0,"O"],
-    ["Zach Collins","F",8.7,1.5,""]]},"CLE":
-  {"name":"Cavaliers","players":[
-    ["Donovan Mitchell","G",33.1,22.8,"",1],
-    ["Evan Mobley","C",32.0,16.9,"O"],
-    ["James Harden","G",32.7,16.7,"",1],
-    ["Meleek Thomas","G",23.0,13.1,""],
-    ["Jarrett Allen","C",25.4,12.9,"",1],
-    ["Peyton Watson","G",28.0,11.0,"",1],
-    ["Thomas Bryant","C",12.5,8.7,""],
-    ["Mario Hezonja","F",18.9,7.8,""],
-    ["Sam Merrill","G",23.1,7.7,"O"],
-    ["Jaylon Tyson","G",21.2,7.0,"",1],
-    ["Tyrese Proctor","G",17.1,6.8,""],
-    ["Riley Minix","F",11.0,3.3,""],
-    ["Tristan Enaruna","F",10.0,2.3,""],
-    ["Craig Porter Jr.","G",10.0,1.6,""],
-    ["Norchad Omier","C",7.5,0.0,""]]},"MIA":
-  {"name":"Heat","players":[
-    ["Giannis Antetokounmpo","F",32.6,27.7,"P",1],
-    ["Bam Adebayo","C",33.2,17.8,"",1],
-    ["Davion Mitchell","G",35.8,16.5,"",1],
-    ["Klay Thompson","G",24.8,14.4,"Q",1],
-    ["Pelle Larsson","G",29.5,11.4,"Q",1],
-    ["Andrew Wiggins","F",25.7,8.7,""],
-    ["Bobby Portis","F",20.4,6.8,""],
-    ["Tim Hardaway Jr.","G",14.7,4.6,""],
-    ["Ryan Conwell","G",12.4,4.2,""],
-    ["Dru Smith","G",8.3,2.5,""],
-    ["Nikola Jovic","F",12.1,2.4,""],
-    ["Nick Richards","C",2.0,1.4,""],
-    ["Myron Gardner","F",3.3,1.3,""],
-    ["Simone Fontecchio","F",4.0,1.2,""]]},"UTA":
-  {"name":"Jazz","players":[
-    ["Keyonte George","G",32.1,21.1,"",1],
-    ["Lauri Markkanen","F",30.9,18.0,"O"],
-    ["Jaren Jackson Jr.","F",26.0,16.3,"O"],
-    ["Darryn Peterson","G",30.7,14.8,"",1],
-    ["Ace Bailey","G",30.6,11.9,"",1],
-    ["Jaxson Hayes","C",25.4,8.6,"",1],
-    ["Mo Bamba","C",17.5,7.7,""],
-    ["Brice Sensabaugh","F",14.2,7.3,""],
-    ["Isaiah Collier","G",15.6,6.2,""],
-    ["Josh Green","G",18.0,3.9,"",1],
-    ["Josh Okogie","G",18.4,3.4,""],
-    ["Svi Mykhailiuk","G",15.2,3.3,""],
-    ["Kyle Filipowski","F",7.9,2.6,""],
-    ["Tony Bradley","C",3.8,1.0,""]]},"HOU":
-  {"name":"Rockets","players":[
-    ["Alperen Sengun","C",34.7,21.3,"",1],
-    ["Kevin Durant","F",34.3,21.0,"",1],
-    ["Jabari Smith Jr.","F",35.3,17.0,"",1],
-    ["Amen Thompson","G",33.5,14.9,"",1],
-    ["Fred VanVleet","G",30.0,13.2,"",1],
-    ["Reed Sheppard","G",20.1,9.8,""],
-    ["Tari Eason","F",23.7,9.6,""],
-    ["Marcus Smart","G",22.0,8.6,"O"],
-    ["Bogdan Bogdanovic","G",11.4,5.3,""],
-    ["Steven Adams","C",8.0,4.0,"O"],
-    ["Clint Capela","C",14.2,3.2,"O"],
-    ["Oscar Tshiebwe","C",7.0,2.8,""],
-    ["Isaiah Crawford","F",4.4,2.0,""],
-    ["Bruce Thornton","G",2.7,1.7,""],
-    ["Jae'Sean Tate","F",2.7,0.0,""]]},"GSW":
-  {"name":"Warriors","players":[
-    ["Stephen Curry","G",26.3,27.8,"O"],
-    ["Yaxel Lendeborg","F",32.3,21.7,"",1],
-    ["Brandin Podziemski","G",33.4,17.3,"",1],
-    ["Brandon Williams","G",16.1,10.4,"O"],
-    ["De'Anthony Melton","G",22.4,10.1,"",1],
-    ["Georges Niang","F",20.3,8.0,""],
-    ["Charles Bassey","C",12.5,7.6,"P"],
-    ["Will Richard","G",17.4,5.5,""],
-    ["Gui Santos","F",18.3,5.4,"",1],
-    ["Gary Payton II","G",13.4,5.0,""],
-    ["Graham Ike","F",9.2,4.8,""],
-    ["Al Horford","C",17.9,4.7,""],
-    ["LJ Cryer","G",7.6,4.6,""],
-    ["Draymond Green","F",26.8,3.2,"",1],
-    ["Malevy Leons","F",4.7,0.3,""]]},"SAS":
-  {"name":"Spurs","players":[
-    ["Victor Wembanyama","F",30.0,30.3,"",1],
-    ["Dylan Harper","G",31.8,18.0,"",1],
-    ["De'Aaron Fox","G",29.5,14.2,"Q",1],
-    ["Stephon Castle","G",29.2,14.0,"",1],
-    ["Devin Vassell","G",30.0,11.9,"Q",1],
-    ["Julian Champagnie","F",26.6,10.3,""],
-    ["Keldon Johnson","F",24.1,8.0,""],
-    ["Harrison Barnes","F",13.7,5.5,""],
-    ["Carter Bryant","F",10.9,3.7,""],
-    ["Luke Kornet","C",14.9,3.4,""],
-    ["Ja'Kobi Gillespie","G",2.0,2.5,""],
-    ["Tarris Reed Jr.","C",5.4,2.0,""],
-    ["Jordan McLaughlin","G",7.4,1.9,""],
-    ["David Jones Garcia","F",3.5,1.0,""],
-    ["Maliq Brown","F",1.0,0.0,""]]},"POR":
-  {"name":"Trail Blazers","players":[
-    ["Deni Avdija","F",32.5,23.0,"",1],
-    ["Damian Lillard","G",29.1,19.8,"",1],
-    ["Ja Morant","G",25.8,15.8,"O"],
-    ["Jrue Holiday","G",26.2,13.4,""],
-    ["Toumani Camara","F",28.5,13.1,"",1],
-    ["Donovan Clingan","C",25.3,10.8,"",1],
-    ["Scoot Henderson","G",22.0,8.4,""],
-    ["Sidy Cissoko","G",23.1,8.3,"",1],
-    ["Robert Williams III","C",16.4,7.6,""],
-    ["Chris Youngblood","G",13.3,6.0,"O"],
-    ["John Tonje","F",5.0,5.0,""],
-    ["Yang Hansen","C",9.3,4.0,""],
-    ["Micah Potter","C",7.5,3.0,""],
-    ["Vit Krejci","G",10.3,2.7,"O"],
-    ["Jayson Kent","G",9.5,2.0,""],
-    ["Branden Carlson","C",8.2,1.7,""]]},"SAC":
-  {"name":"Kings","players":[
-    ["Darius Acuff Jr.","G",37.1,25.9,"",1],
-    ["Zach LaVine","G",32.7,21.4,"",1],
-    ["Domantas Sabonis","F",35.6,15.3,"",1],
-    ["De'Andre Hunter","F",31.2,13.1,"",1],
-    ["Precious Achiuwa","F",27.5,10.4,"Q",1],
-    ["Malik Monk","G",16.9,8.6,""],
-    ["Keegan Murray","F",25.7,8.0,""],
-    ["Leaky Black","F",19.2,5.8,""],
-    ["Dylan Cardwell","C",15.7,5.7,""],
-    ["Emanuel Sharp","G",18.1,4.9,""],
-    ["Daeqwon Plowden","G",12.3,3.0,""],
-    ["Jonathan Mogbo","F",14.4,3.0,""],
-    ["Nique Clifford","G",6.3,1.6,""],
-    ["Alex Karaban","F",9.8,1.4,""]]},"OKC":
-  {"name":"Thunder","players":[
-    ["Shai Gilgeous-Alexander","G",32.8,29.9,"",1],
-    ["Ajay Mitchell","G",27.3,18.9,"Q",1],
-    ["Jalen Williams","G",31.7,13.7,"O"],
-    ["Jared McCain","G",25.2,12.1,""],
-    ["Chet Holmgren","C",30.0,12.0,"O"],
-    ["Aday Mara","C",19.7,8.1,"",1],
-    ["Bennett Stirtz","G",18.0,7.6,""],
-    ["Alex Caruso","G",18.4,7.0,"",1],
-    ["Isaiah Hartenstein","C",24.1,6.9,"",1],
-    ["Kenrich Williams","G",18.4,6.8,""],
-    ["Cason Wallace","G",16.3,6.3,"O"],
-    ["Micah Peavy","G",17.0,4.3,""],
-    ["Jaylin Williams","F",18.4,2.9,"O"],
-    ["Josh Dix","G",14.7,2.3,""],
-    ["Brooks Barnhizer","F",5.4,1.4,""],
-    ["Dalen Terry","G",5.5,1.0,""]]},"LAC":
-  {"name":"Clippers","players":[
-    ["Darius Garland","G",33.8,20.9,"",1],
-    ["Rui Hachimura","F",31.2,14.7,"",1],
-    ["Brook Lopez","C",23.5,13.5,"",1],
-    ["Keaton Wagler","G",23.8,12.0,""],
-    ["Derrick Jones Jr.","F",29.9,11.6,"",1],
-    ["Kobe Sanders","G",24.4,10.1,""],
-    ["Max Strus","G",23.0,10.0,""],
-    ["Isaiah Jackson","F",21.0,8.6,""],
-    ["Kris Dunn","G",30.4,8.5,"",1],
-    ["Gradey Dick","G",14.8,6.0,""],
-    ["Nick Martinelli","F",5.0,3.8,""],
-    ["Jalen Pickett","G",5.3,2.3,""],
-    ["Baba Miller","F",8.4,2.3,""],
-    ["Cam Christie","G",6.8,1.8,""],
-    ["Blake Wesley","G",4.5,1.0,""]]}},"actual":{"ORL":{"Anthony Black":5,"Goga Bitadze":12,"Desmond Bane":21,"Franz Wagner":35,"Jalen Suggs":3,"Nikola Vucevic":2,"Wendell Carter Jr.":12,"Jevon Carter":5,"Tristan da Silva":12},"MIL":{"Myles Turner":14,"Jaime Jaquez Jr.":22,"Kyle Kuzma":14,"AJ Green":0,"Gary Trent Jr.":1,"Tyler Herro":18,"Ousmane Dieng":0,"Brayden Burries":3},"IND":{"Andrew Nembhard":12,"Jay Huff":8,"Ivica Zubac":12,"Pascal Siakam":19,"Kelly Oubre Jr.":16,"Quenton Jackson":3,"Aaron Nesmith":18,"Larry Nance Jr.":2,"T.J. McConnell":6},"NYK":{"Jordan Clarkson":0,"Miles McBride":9,"Andre Drummond":0,"Landry Shamet":5,"Tyler Kolek":5,"Mikal Bridges":18,"Jalen Brunson":33,"OG Anunoby":11,"Karl-Anthony Towns":23},"NOP":{"DeAndre Jordan":6,"Jeremiah Fears":18,"Jordan Poole":13,"Bennedict Mathurin":0,"Julian Reese":0,"Zion Williamson":22,"Herbert Jones":8,"Derik Queen":10,"Jaron Pierre Jr.":0},"MEM":{"Ty Jerome":17,"GG Jackson":14,"Olivier-Maxence Prosper":6,"Jerami Grant":22,"Isaiah Stewart":12,"Cam Spencer":14,"Cedric Coward":14,"Cameron Boozer":12,"Kris Murray":0,"Javon Small":10},"CHI":{"Nic Claxton":2,"Tre Jones":4,"Noa Essengue":5,"Josh Giddey":15,"Patrick Williams":13,"Jalen Smith":15,"Buddy Hield":12,"Isaac Okoro":15,"Norman Powell":33},"ATL":{"Jock Landale":12,"Kingston Flemings":0,"Dyson Daniels":6,"Luguentz Dort":10,"Onyeka Okongwu":17,"CJ McCollum":20,"Jalen Johnson":27},"MIA":{"Bam Adebayo":37,"Tim Hardaway Jr.":4,"Davion Mitchell":22,"Bobby Portis":5,"Giannis Antetokounmpo":37,"Andrew Wiggins":8,"Myron Gardner":0,"Dru Smith":0},"CLE":{"Thomas Bryant":9,"Tyrese Proctor":22,"Mario Hezonja":4,"Craig Porter Jr.":0,"Jaylon Tyson":16,"Jarrett Allen":9,"James Harden":20,"Peyton Watson":4,"Donovan Mitchell":25,"Meleek Thomas":12},"HOU":{"Jabari Smith Jr.":6,"Fred VanVleet":17,"Alperen Sengun":43,"Kevin Durant":22,"Oscar Tshiebwe":0,"Reed Sheppard":0,"Bogdan Bogdanovic":11,"Amen Thompson":12},"UTA":{"Isaiah Collier":3,"Josh Okogie":7,"Keyonte George":27,"Jaxson Hayes":12,"Tony Bradley":0,"Kyle Filipowski":2,"Darryn Peterson":28,"Svi Mykhailiuk":0,"Mo Bamba":9,"Josh Green":2},"SAS":{"Keldon Johnson":18,"Tarris Reed Jr.":2,"Carter Bryant":8,"Victor Wembanyama":12,"Dylan Harper":9,"Jordan McLaughlin":4,"Harrison Barnes":11,"De'Aaron Fox":7,"Stephon Castle":32,"Julian Champagnie":7},"GSW":{"Brandin Podziemski":8,"De'Anthony Melton":8,"Draymond Green":4,"Yaxel Lendeborg":3,"Malevy Leons":5,"Gary Payton II":2,"Graham Ike":5,"Will Richard":7,"LJ Cryer":20,"Al Horford":0},"SAC":{"Domantas Sabonis":21,"Malik Monk":7,"Dylan Cardwell":6,"Keegan Murray":16,"De'Andre Hunter":24,"Leaky Black":0,"Daeqwon Plowden":0,"Emanuel Sharp":4,"Zach LaVine":12},"POR":{"Toumani Camara":14,"Jayson Kent":3,"Deni Avdija":34,"Damian Lillard":29,"Jrue Holiday":6,"Sidy Cissoko":3,"Scoot Henderson":11,"Branden Carlson":5,"Robert Williams III":2,"Donovan Clingan":13},"LAC":{"Isaiah Jackson":5,"Keaton Wagler":14,"Kobe Sanders":5,"Derrick Jones Jr.":14,"Kris Dunn":2,"Gradey Dick":13,"Rui Hachimura":7,"Darius Garland":24,"Brook Lopez":26},"OKC":{"Aday Mara":10,"Jared McCain":23,"Isaiah Hartenstein":21,"Bennett Stirtz":5,"Alex Caruso":5,"Kenrich Williams":8,"Josh Dix":0}}});
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-13","checked":"15 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball"},"games":[{"id":"mil-orl","ml":{"away":3.9,"home":1.26,"src":"Bovada"},"utc":"2026-11-14T00:00:00Z","away":"MIL","home":"ORL","final":{"away":99,"home":107}},{"id":"nyk-ind","ml":{"away":1.38,"home":3.15,"src":"Bovada"},"utc":"2026-11-14T00:00:00Z","away":"NYK","home":"IND","final":{"away":104,"home":106}},{"id":"mem-nop","ml":{"away":1.62,"home":2.35,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"MEM","home":"NOP","final":{"away":142,"home":111}},{"id":"atl-chi","ml":{"away":1.38,"home":3.15,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"ATL","home":"CHI","final":{"away":117,"home":125}},{"id":"cle-mia","ml":{"away":2.2,"home":1.71,"src":"Bovada"},"utc":"2026-11-14T01:00:00Z","away":"CLE","home":"MIA","final":{"away":121,"home":133}},{"id":"uta-hou","ml":{"away":9.0,"home":1.07,"src":"BetMGM"},"utc":"2026-11-14T01:30:00Z","away":"UTA","home":"HOU","final":{"away":118,"home":125}},{"id":"gsw-sas","ml":{"away":6.25,"home":1.15,"src":"BetMGM and RotoWire"},"utc":"2026-11-14T02:30:00Z","away":"GSW","home":"SAS","final":{"away":85,"home":123}},{"id":"por-sac","ml":{"away":1.2,"home":null,"src":"BetMGM"},"utc":"2026-11-14T03:00:00Z","away":"POR","home":"SAC","final":{"away":120,"home":107}},{"id":"okc-lac","ml":{"away":1.36,"home":3.26,"src":"YouWager"},"utc":"2026-11-14T03:30:00Z","away":"OKC","home":"LAC","final":{"away":112,"home":113}}],"defense":{"NYK":[25.4,21.4,23.1,17.3,14.7],"IND":[22.5,23.8,18.9,23.4,25.5],"MIL":[27.6,23.5,21.7,23.6,25.2],"ORL":[24.0,23.0,24.8,21.3,17.6],"MEM":[29.0,21.4,18.9,21.0,19.5],"NOP":[32.3,23.7,17.6,22.8,24.1],"ATL":[22.7,20.6,23.8,23.2,26.3],"CHI":[32.5,23.5,24.7,24.8,23.8],"CLE":[26.3,23.4,20.0,21.9,20.2],"MIA":[30.5,25.7,21.5,20.4,19.3],"UTA":[30.4,19.5,20.0,26.8,16.3],"HOU":[26.3,21.3,18.1,20.7,18.5],"GSW":[24.3,21.7,22.9,20.8,20.6],"SAS":[25.4,21.8,17.0,21.7,21.9],"POR":[29.0,22.3,15.3,21.7,24.8],"SAC":[28.0,22.6,21.0,27.0,22.2],"OKC":[22.4,20.8,22.1,22.7,18.1],"LAC":[28.7,25.0,17.1,21.9,21.3]},"leagueDefense":[26.1,21.9,20.8,22.5,20.7],"teams":{"NYK":{"name":"Knicks","players":[["Jalen Brunson","G",33.6,26.0,"",1],["Karl-Anthony Towns","C",31.4,20.9,"",1],["OG Anunoby","F",32.7,16.5,"",1],["Landry Shamet","G",25.9,9.6,""],["Josh Hart","G",30.9,8.3,"",1],["Miles McBride","G",18.9,7.9,""],["Jordan Clarkson","G",10.6,6.0,""],["Mikal Bridges","G",24.4,5.9,"",1],["Dalton Knecht","F",9.7,4.3,""],["Andre Drummond","C",13.5,4.3,""],["Pacome Dadiet","F",5.3,4.0,""],["Tyler Kolek","G",12.8,3.4,""],["Mohamed Diawara","F",12.0,2.8,""],["Jose Alvarado","G",10.4,2.0,""],["James Wiseman","C",5.2,1.6,""],["Jaden Akins","G",1.0,0.0,""]]},"IND":{"name":"Pacers","players":[["Pascal Siakam","F",32.2,22.2,"",1],["Tyrese Haliburton","G",33.0,21.8,"O"],["Andrew Nembhard","G",33.2,17.1,"",1],["Obi Toppin","F",21.9,13.4,""],["Aaron Nesmith","G",25.6,12.8,"Q",1],["Quenton Jackson","G",21.6,10.0,""],["Kelly Oubre Jr.","G",22.3,9.1,"",1],["Ivica Zubac","C",21.7,9.0,"",1],["Jarace Walker","F",22.2,7.4,""],["Jay Huff","C",18.2,7.1,""],["Kobe Brown","G",13.7,4.7,""],["Larry Nance Jr.","F",15.6,4.6,""],["T.J. McConnell","G",8.5,4.0,"P"],["Jalen Slawson","F",14.9,3.8,""],["Braden Smith","G",13.3,3.8,""],["Ben Sheppard","G",12.0,3.0,"O"]]},"MIL":{"name":"Bucks","players":[["Tyler Herro","G",30.7,21.4,"",1],["Jaime Jaquez Jr.","F",27.8,15.2,"",1],["Kyle Kuzma","F",27.4,11.6,"",1],["Ryan Rollins","G",23.3,10.7,""],["Brayden Burries","G",21.0,10.5,"",1],["Kel'el Ware","C",17.3,8.6,""],["Nate Ament","F",16.0,7.8,""],["AJ Green","G",20.2,7.5,""],["Myles Turner","C",27.1,7.1,"",1],["Kasparas Jakucionis","G",18.6,6.4,""],["Ousmane Dieng","F",10.7,3.1,""],["Gary Trent Jr.","G",6.5,3.0,""],["Bogoljub Markovic","F",5.0,2.0,""],["Jericho Sims","C",7.7,0.3,""]]},"ORL":{"name":"Magic","players":[["Paolo Banchero","F",34.0,24.5,"O"],["Franz Wagner","F",36.4,20.8,"",1],["Desmond Bane","G",34.5,17.5,"",1],["Anthony Black","G",30.0,15.7,"",1],["Tristan da Silva","F",30.6,15.1,"Q"],["Wendell Carter Jr.","C",33.6,14.8,"",1],["Jalen Suggs","G",33.3,8.0,"Q",1],["Jamal Cain","F",19.6,7.2,"Q"],["Jase Richardson","G",22.7,5.9,""],["Jevon Carter","G",14.2,4.0,""],["Goga Bitadze","C",8.9,3.7,""],["Colin Castleton","C",4.0,3.0,""],["Nikola Vucevic","C",8.6,2.4,""],["Alex Morales","G",9.0,0.8,""]]},"MEM":{"name":"Grizzlies","players":[["Ty Jerome","G",30.6,26.7,"",1],["Cameron Boozer","F",32.2,16.2,"",1],["Cedric Coward","F",28.4,12.6,"",1],["Isaiah Stewart","C",18.3,11.9,"",1],["Jaylen Wells","F",27.0,11.0,"",1],["Jerami Grant","F",23.9,10.4,""],["Cam Spencer","G",19.3,8.7,""],["Javon Small","G",21.3,8.7,""],["Zach Edey","C",20.8,8.2,"O"],["GG Jackson","F",15.8,6.8,""],["Scotty Pippen Jr.","G",16.0,6.4,"O"],["Quinten Post","C",13.0,5.0,"O"],["Taylor Hendricks","F",6.6,3.8,""],["Olivier-Maxence Prosper","F",5.2,2.4,""],["Karim Lopez","F",3.7,1.3,""],["Kris Murray","F",12.1,1.3,""],["Carson Cooper","C",3.0,1.0,""],["Jahmai Mashack","G",2.7,0.7,""]]},"NOP":{"name":"Pelicans","players":[["Zion Williamson","F",32.7,21.7,"",1],["Trey Murphy III","F",32.8,15.6,"D"],["Saddiq Bey","F",26.9,15.4,""],["Jeremiah Fears","G",28.8,15.3,"",1],["Dejounte Murray","G",31.3,13.4,"",1],["Derik Queen","C",21.6,12.2,""],["Yves Missi","C",19.5,9.5,"D"],["Karlo Matkovic","F",18.6,8.5,"",1],["Jordan Poole","G",19.8,7.5,""],["Trendon Watford","F",17.7,7.2,"O"],["Bennedict Mathurin","G",15.8,6.0,"D"],["Herbert Jones","F",22.8,5.7,"",1],["DeAndre Jordan","C",14.7,4.0,""],["Jaron Pierre Jr.","G",7.0,4.0,""],["Bryce McGowens","G",10.6,3.7,"D"],["Julian Reese","F",5.5,1.5,""],["AJ Johnson","G",6.3,1.5,""]]},"ATL":{"name":"Hawks","players":[["Nickeil Alexander-Walker","G",30.3,21.1,"",1],["Jalen Johnson","F",32.6,18.1,"",1],["CJ McCollum","G",26.8,14.3,""],["Aaron Wiggins","G",25.4,13.8,""],["Onyeka Okongwu","F",28.9,12.0,"",1],["Dyson Daniels","G",29.1,9.8,"",1],["Luguentz Dort","G",24.6,9.3,""],["Corey Kispert","F",8.5,7.5,""],["Kingston Flemings","G",20.3,7.1,"Q",1],["Jock Landale","C",15.3,6.3,""],["RayJ Dennis","G",8.0,4.0,""],["Asa Newell","F",11.3,4.0,"O"],["Zuby Ejiofor","F",8.0,2.0,""],["Dorian Finney-Smith","F",4.3,1.0,""]]},"CHI":{"name":"Bulls","players":[["Caleb Wilson","F",32.4,19.3,"O"],["Norman Powell","G",28.8,19.3,"Q",1],["Matas Buzelis","F",25.8,13.6,"",1],["Jalen Smith","F",23.3,11.7,"",1],["Tre Jones","G",17.8,10.3,""],["Josh Giddey","G",27.8,10.3,"",1],["Leonard Miller","F",17.6,7.1,""],["Isaac Okoro","F",18.7,5.8,"",1],["Buddy Hield","G",13.0,5.6,""],["Patrick Williams","F",22.0,5.5,""],["Noa Essengue","F",14.1,5.3,""],["Jaylin Sellers","G",9.2,4.6,""],["Nic Claxton","C",18.0,4.0,""],["Jordan Hawkins","G",7.8,3.4,""],["Dailyn Swain","G",9.5,2.5,"Q"],["Tobe Awaka","F",10.3,2.0,"O"],["Zach Collins","F",8.7,1.5,""]]},"CLE":{"name":"Cavaliers","players":[["Donovan Mitchell","G",33.1,22.8,"",1],["Evan Mobley","C",32.0,16.9,"O"],["James Harden","G",32.7,16.7,"",1],["Meleek Thomas","G",23.0,13.1,""],["Jarrett Allen","C",25.4,12.9,"",1],["Peyton Watson","G",28.0,11.0,"",1],["Thomas Bryant","C",12.5,8.7,""],["Mario Hezonja","F",18.9,7.8,""],["Sam Merrill","G",23.1,7.7,"O"],["Jaylon Tyson","G",21.2,7.0,"",1],["Tyrese Proctor","G",17.1,6.8,""],["Riley Minix","F",11.0,3.3,""],["Tristan Enaruna","F",10.0,2.3,""],["Craig Porter Jr.","G",10.0,1.6,""],["Norchad Omier","C",7.5,0.0,""]]},"MIA":{"name":"Heat","players":[["Giannis Antetokounmpo","F",32.6,27.7,"P",1],["Bam Adebayo","C",33.2,17.8,"",1],["Davion Mitchell","G",35.8,16.5,"",1],["Klay Thompson","G",24.8,14.4,"Q",1],["Pelle Larsson","G",29.5,11.4,"Q",1],["Andrew Wiggins","F",25.7,8.7,""],["Bobby Portis","F",20.4,6.8,""],["Tim Hardaway Jr.","G",14.7,4.6,""],["Ryan Conwell","G",12.4,4.2,""],["Dru Smith","G",8.3,2.5,""],["Nikola Jovic","F",12.1,2.4,""],["Nick Richards","C",2.0,1.4,""],["Myron Gardner","F",3.3,1.3,""],["Simone Fontecchio","F",4.0,1.2,""]]},"UTA":{"name":"Jazz","players":[["Keyonte George","G",32.1,21.1,"",1],["Lauri Markkanen","F",30.9,18.0,"O"],["Jaren Jackson Jr.","F",26.0,16.3,"O"],["Darryn Peterson","G",30.7,14.8,"",1],["Ace Bailey","G",30.6,11.9,"",1],["Jaxson Hayes","C",25.4,8.6,"",1],["Mo Bamba","C",17.5,7.7,""],["Brice Sensabaugh","F",14.2,7.3,""],["Isaiah Collier","G",15.6,6.2,""],["Josh Green","G",18.0,3.9,"",1],["Josh Okogie","G",18.4,3.4,""],["Svi Mykhailiuk","G",15.2,3.3,""],["Kyle Filipowski","F",7.9,2.6,""],["Tony Bradley","C",3.8,1.0,""]]},"HOU":{"name":"Rockets","players":[["Alperen Sengun","C",34.7,21.3,"",1],["Kevin Durant","F",34.3,21.0,"",1],["Jabari Smith Jr.","F",35.3,17.0,"",1],["Amen Thompson","G",33.5,14.9,"",1],["Fred VanVleet","G",30.0,13.2,"",1],["Reed Sheppard","G",20.1,9.8,""],["Tari Eason","F",23.7,9.6,""],["Marcus Smart","G",22.0,8.6,"O"],["Bogdan Bogdanovic","G",11.4,5.3,""],["Steven Adams","C",8.0,4.0,"O"],["Clint Capela","C",14.2,3.2,"O"],["Oscar Tshiebwe","C",7.0,2.8,""],["Isaiah Crawford","F",4.4,2.0,""],["Bruce Thornton","G",2.7,1.7,""],["Jae'Sean Tate","F",2.7,0.0,""]]},"GSW":{"name":"Warriors","players":[["Stephen Curry","G",26.3,27.8,"O"],["Yaxel Lendeborg","F",32.3,21.7,"",1],["Brandin Podziemski","G",33.4,17.3,"",1],["Brandon Williams","G",16.1,10.4,"O"],["De'Anthony Melton","G",22.4,10.1,"",1],["Georges Niang","F",20.3,8.0,""],["Charles Bassey","C",12.5,7.6,"P"],["Will Richard","G",17.4,5.5,""],["Gui Santos","F",18.3,5.4,"",1],["Gary Payton II","G",13.4,5.0,""],["Graham Ike","F",9.2,4.8,""],["Al Horford","C",17.9,4.7,""],["LJ Cryer","G",7.6,4.6,""],["Draymond Green","F",26.8,3.2,"",1],["Malevy Leons","F",4.7,0.3,""]]},"SAS":{"name":"Spurs","players":[["Victor Wembanyama","F",30.0,30.3,"",1],["Dylan Harper","G",31.8,18.0,"",1],["De'Aaron Fox","G",29.5,14.2,"Q",1],["Stephon Castle","G",29.2,14.0,"",1],["Devin Vassell","G",30.0,11.9,"Q",1],["Julian Champagnie","F",26.6,10.3,""],["Keldon Johnson","F",24.1,8.0,""],["Harrison Barnes","F",13.7,5.5,""],["Carter Bryant","F",10.9,3.7,""],["Luke Kornet","C",14.9,3.4,""],["Ja'Kobi Gillespie","G",2.0,2.5,""],["Tarris Reed Jr.","C",5.4,2.0,""],["Jordan McLaughlin","G",7.4,1.9,""],["David Jones Garcia","F",3.5,1.0,""],["Maliq Brown","F",1.0,0.0,""]]},"POR":{"name":"Trail Blazers","players":[["Deni Avdija","F",32.5,23.0,"",1],["Damian Lillard","G",29.1,19.8,"",1],["Ja Morant","G",25.8,15.8,"O"],["Jrue Holiday","G",26.2,13.4,""],["Toumani Camara","F",28.5,13.1,"",1],["Donovan Clingan","C",25.3,10.8,"",1],["Scoot Henderson","G",22.0,8.4,""],["Sidy Cissoko","G",23.1,8.3,"",1],["Robert Williams III","C",16.4,7.6,""],["Chris Youngblood","G",13.3,6.0,"O"],["John Tonje","F",5.0,5.0,""],["Yang Hansen","C",9.3,4.0,""],["Micah Potter","C",7.5,3.0,""],["Vit Krejci","G",10.3,2.7,"O"],["Jayson Kent","G",9.5,2.0,""],["Branden Carlson","C",8.2,1.7,""]]},"SAC":{"name":"Kings","players":[["Darius Acuff Jr.","G",37.1,25.9,"",1],["Zach LaVine","G",32.7,21.4,"",1],["Domantas Sabonis","F",35.6,15.3,"",1],["De'Andre Hunter","F",31.2,13.1,"",1],["Precious Achiuwa","F",27.5,10.4,"Q",1],["Malik Monk","G",16.9,8.6,""],["Keegan Murray","F",25.7,8.0,""],["Leaky Black","F",19.2,5.8,""],["Dylan Cardwell","C",15.7,5.7,""],["Emanuel Sharp","G",18.1,4.9,""],["Daeqwon Plowden","G",12.3,3.0,""],["Jonathan Mogbo","F",14.4,3.0,""],["Nique Clifford","G",6.3,1.6,""],["Alex Karaban","F",9.8,1.4,""]]},"OKC":{"name":"Thunder","players":[["Shai Gilgeous-Alexander","G",32.8,29.9,"",1],["Ajay Mitchell","G",27.3,18.9,"Q",1],["Jalen Williams","G",31.7,13.7,"O"],["Jared McCain","G",25.2,12.1,""],["Chet Holmgren","C",30.0,12.0,"O"],["Aday Mara","C",19.7,8.1,"",1],["Bennett Stirtz","G",18.0,7.6,""],["Alex Caruso","G",18.4,7.0,"",1],["Isaiah Hartenstein","C",24.1,6.9,"",1],["Kenrich Williams","G",18.4,6.8,""],["Cason Wallace","G",16.3,6.3,"O"],["Micah Peavy","G",17.0,4.3,""],["Jaylin Williams","F",18.4,2.9,"O"],["Josh Dix","G",14.7,2.3,""],["Brooks Barnhizer","F",5.4,1.4,""],["Dalen Terry","G",5.5,1.0,""]]},"LAC":{"name":"Clippers","players":[["Darius Garland","G",33.8,20.9,"",1],["Rui Hachimura","F",31.2,14.7,"",1],["Brook Lopez","C",23.5,13.5,"",1],["Keaton Wagler","G",23.8,12.0,""],["Derrick Jones Jr.","F",29.9,11.6,"",1],["Kobe Sanders","G",24.4,10.1,""],["Max Strus","G",23.0,10.0,""],["Isaiah Jackson","F",21.0,8.6,""],["Kris Dunn","G",30.4,8.5,"",1],["Gradey Dick","G",14.8,6.0,""],["Nick Martinelli","F",5.0,3.8,""],["Jalen Pickett","G",5.3,2.3,""],["Baba Miller","F",8.4,2.3,""],["Cam Christie","G",6.8,1.8,""],["Blake Wesley","G",4.5,1.0,""]]}},"actual":{"ORL":{"Anthony Black":5,"Goga Bitadze":12,"Desmond Bane":21,"Franz Wagner":35,"Jalen Suggs":3,"Nikola Vucevic":2,"Wendell Carter Jr.":12,"Jevon Carter":5,"Tristan da Silva":12,"Jamal Cain":0},"MIL":{"Myles Turner":14,"Jaime Jaquez Jr.":22,"Kyle Kuzma":14,"AJ Green":0,"Gary Trent Jr.":1,"Tyler Herro":18,"Ousmane Dieng":0,"Brayden Burries":3,"Kel'el Ware":10,"Nate Ament":9,"Ryan Rollins":8},"IND":{"Andrew Nembhard":12,"Jay Huff":8,"Ivica Zubac":12,"Pascal Siakam":19,"Kelly Oubre Jr.":16,"Quenton Jackson":3,"Aaron Nesmith":18,"Larry Nance Jr.":2,"T.J. McConnell":6,"Obi Toppin":9,"Jalen Slawson":1},"NYK":{"Jordan Clarkson":0,"Miles McBride":9,"Andre Drummond":0,"Landry Shamet":5,"Tyler Kolek":5,"Mikal Bridges":18,"Jalen Brunson":33,"OG Anunoby":11,"Karl-Anthony Towns":23,"Josh Hart":0,"Pacome Dadiet":0},"NOP":{"DeAndre Jordan":6,"Jeremiah Fears":18,"Jordan Poole":13,"Bennedict Mathurin":0,"Julian Reese":0,"Zion Williamson":22,"Herbert Jones":8,"Derik Queen":10,"Jaron Pierre Jr.":0,"Saddiq Bey":30,"Karlo Matkovic":1,"AJ Johnson":1},"MEM":{"Ty Jerome":17,"GG Jackson":14,"Olivier-Maxence Prosper":6,"Jerami Grant":22,"Isaiah Stewart":12,"Cam Spencer":14,"Cedric Coward":14,"Cameron Boozer":12,"Kris Murray":0,"Javon Small":10,"Jaylen Wells":11,"Taylor Hendricks":10},"CHI":{"Nic Claxton":2,"Tre Jones":4,"Noa Essengue":5,"Josh Giddey":15,"Patrick Williams":13,"Jalen Smith":15,"Buddy Hield":12,"Isaac Okoro":15,"Norman Powell":33,"Matas Buzelis":11},"ATL":{"Jock Landale":12,"Kingston Flemings":0,"Dyson Daniels":6,"Luguentz Dort":10,"Onyeka Okongwu":17,"CJ McCollum":20,"Jalen Johnson":27,"Nickeil Alexander-Walker":16,"Aaron Wiggins":9},"MIA":{"Bam Adebayo":37,"Tim Hardaway Jr.":4,"Davion Mitchell":22,"Bobby Portis":5,"Giannis Antetokounmpo":37,"Andrew Wiggins":8,"Myron Gardner":0,"Dru Smith":0,"Ryan Conwell":20,"Simone Fontecchio":0},"CLE":{"Thomas Bryant":9,"Tyrese Proctor":22,"Mario Hezonja":4,"Craig Porter Jr.":0,"Jaylon Tyson":16,"Jarrett Allen":9,"James Harden":20,"Peyton Watson":4,"Donovan Mitchell":25,"Meleek Thomas":12},"HOU":{"Jabari Smith Jr.":6,"Fred VanVleet":17,"Alperen Sengun":43,"Kevin Durant":22,"Oscar Tshiebwe":0,"Reed Sheppard":0,"Bogdan Bogdanovic":11,"Amen Thompson":12,"Tari Eason":14},"UTA":{"Isaiah Collier":3,"Josh Okogie":7,"Keyonte George":27,"Jaxson Hayes":12,"Tony Bradley":0,"Kyle Filipowski":2,"Darryn Peterson":28,"Svi Mykhailiuk":0,"Mo Bamba":9,"Josh Green":2,"Ace Bailey":21,"Brice Sensabaugh":7},"SAS":{"Keldon Johnson":18,"Tarris Reed Jr.":2,"Carter Bryant":8,"Victor Wembanyama":12,"Dylan Harper":9,"Jordan McLaughlin":4,"Harrison Barnes":11,"De'Aaron Fox":7,"Stephon Castle":32,"Julian Champagnie":7},"GSW":{"Brandin Podziemski":8,"De'Anthony Melton":8,"Draymond Green":4,"Yaxel Lendeborg":3,"Malevy Leons":5,"Gary Payton II":2,"Graham Ike":5,"Will Richard":7,"LJ Cryer":20,"Al Horford":0},"SAC":{"Domantas Sabonis":21,"Malik Monk":7,"Dylan Cardwell":6,"Keegan Murray":16,"De'Andre Hunter":24,"Leaky Black":0,"Daeqwon Plowden":0,"Emanuel Sharp":4,"Zach LaVine":12,"Darius Acuff Jr.":17},"POR":{"Toumani Camara":14,"Jayson Kent":3,"Deni Avdija":34,"Damian Lillard":29,"Jrue Holiday":6,"Sidy Cissoko":3,"Scoot Henderson":11,"Branden Carlson":5,"Robert Williams III":2,"Donovan Clingan":13},"LAC":{"Isaiah Jackson":5,"Keaton Wagler":14,"Kobe Sanders":5,"Derrick Jones Jr.":14,"Kris Dunn":2,"Gradey Dick":13,"Rui Hachimura":7,"Darius Garland":24,"Brook Lopez":26,"Max Strus":3},"OKC":{"Aday Mara":10,"Jared McCain":23,"Isaiah Hartenstein":21,"Bennett Stirtz":5,"Alex Caruso":5,"Kenrich Williams":8,"Josh Dix":0,"Shai Gilgeous-Alexander":40}},"dnp":{"OKC":["Brooks Barnhizer","Micah Peavy","Ajay Mitchell","Jalen Williams","Chet Holmgren","Cason Wallace","Jaylin Williams","Dalen Terry"],"LAC":["Nick Martinelli","Baba Miller","Cam Christie","Jalen Pickett","Blake Wesley"],"POR":["Micah Potter","Yang Hansen","John Tonje","Ja Morant","Chris Youngblood","Vit Krejci"],"SAC":["Alex Karaban","Jonathan Mogbo","Precious Achiuwa","Nique Clifford"],"NYK":["Dalton Knecht","Jaden Akins","Jose Alvarado","Mohamed Diawara","James Wiseman"],"IND":["Jarace Walker","Braden Smith","Kobe Brown","Tyrese Haliburton","Ben Sheppard"],"CLE":["Riley Minix","Norchad Omier","Evan Mobley","Sam Merrill","Tristan Enaruna"],"MIA":["Nikola Jovic","Nick Richards","Klay Thompson","Pelle Larsson"],"UTA":["Lauri Markkanen","Jaren Jackson Jr."],"HOU":["Jae'Sean Tate","Bruce Thornton","Isaiah Crawford","Marcus Smart","Steven Adams","Clint Capela"],"MEM":["Jahmai Mashack","Karim Lopez","Zach Edey","Scotty Pippen Jr.","Quinten Post","Carson Cooper"],"NOP":["Trey Murphy III","Dejounte Murray","Yves Missi","Trendon Watford","Bryce McGowens"],"MIL":["Jericho Sims","Kasparas Jakucionis","Bogoljub Markovic"],"ORL":["Jase Richardson","Colin Castleton","Alex Morales","Paolo Banchero"],"ATL":["Dorian Finney-Smith","Corey Kispert","Zuby Ejiofor","RayJ Dennis","Asa Newell"],"CHI":["Zach Collins","Jaylin Sellers","Jordan Hawkins","Leonard Miller","Tobe Awaka","Caleb Wilson","Dailyn Swain"]}});
 
 /* NBA slate for Sat 14 Nov 2026 (US date). player: [name, position, minutes per game, points per game, status, starter]
    status: O out, D doubtful, Q questionable, P probable */
-(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-14","checked":"14 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball"},"games":[{"id":"den-nop","ml":{"away":1.15,"home":null,"src":"RotoWire composite"},"utc":"2026-11-15T00:00:00Z","away":"DEN","home":"NOP"},{"id":"dal-cle","ml":{"away":1.71,"home":null,"src":"RotoWire composite"},"utc":"2026-11-15T00:30:00Z","away":"DAL","home":"CLE"},{"id":"det-mia","ml":{"away":1.49,"home":null,"src":"RotoWire composite"},"utc":"2026-11-15T01:00:00Z","away":"DET","home":"MIA"},{"id":"chi-min","ml":{"away":null,"home":1.1,"src":"RotoWire composite"},"utc":"2026-11-15T01:00:00Z","away":"CHI","home":"MIN"},{"id":"bkn-mem","ml":{"away":null,"home":1.66,"src":"RotoWire composite"},"utc":"2026-11-15T01:00:00Z","away":"BKN","home":"MEM"}],"defense":{"DEN":[21.9,21.0,25.4,23.7,19.3],"NOP":[32.1,24.0,17.7,23.7,24.3],"DAL":[25.0,20.7,15.2,28.1,17.6],"CLE":[26.2,23.6,18.4,23.9,22.0],"DET":[24.5,18.4,21.4,19.4,23.1],"MIA":[30.0,26.9,20.5,20.4,19.2],"CHI":[29.7,23.0,24.7,25.7,24.1],"MIN":[26.5,20.0,16.4,23.8,18.5],"BKN":[22.4,22.0,24.7,21.7,24.2],"MEM":[28.9,20.8,18.5,21.8,19.5]},"leagueDefense":[26.0,21.9,20.7,22.5,20.9],"teams":{"DEN":
-  {"name":"Nuggets","players":[
-    ["Jamal Murray","G",36.4,26.2,"",1],
-    ["Nikola Jokic","C",36.3,23.5,"",1],
-    ["Christian Braun","G",34.4,12.4,"",1],
-    ["Cameron Johnson","F",28.3,12.1,"",1],
-    ["Aaron Gordon","F",29.1,11.0,"",1],
-    ["DeMar DeRozan","G",23.6,10.0,""],
-    ["Trevon Brazile","F",19.5,7.1,""],
-    ["Marvin Bagley III","F",12.3,5.8,""],
-    ["Bryce Hopkins","F",14.3,5.4,""],
-    ["Spencer Jones","F",19.0,5.3,""],
-    ["Cam Whitmore","F",7.5,4.0,""],
-    ["Zeke Nnaji","F",3.5,3.5,""],
-    ["Ryan Nembhard","G",3.3,3.0,""],
-    ["Tyus Jones","G",10.5,2.5,""],
-    ["Alpha Diallo","F",8.0,1.0,""],
-    ["DaRon Holmes II","F",2.5,0.8,""]]},"NOP":
-  {"name":"Pelicans","players":[
-    ["Zion Williamson","F",32.7,21.7,""],
-    ["Trey Murphy III","F",32.8,15.6,"Q",1],
-    ["Saddiq Bey","F",26.9,15.4,"",1],
-    ["Jeremiah Fears","G",28.8,15.3,"",1],
-    ["Dejounte Murray","G",31.3,13.4,"O"],
-    ["Derik Queen","C",21.6,12.2,""],
-    ["Yves Missi","C",19.5,9.5,"D"],
-    ["Karlo Matkovic","F",18.6,8.5,"",1],
-    ["Jordan Poole","G",19.8,7.5,""],
-    ["Trendon Watford","F",17.7,7.2,"Q"],
-    ["Bennedict Mathurin","G",15.8,6.0,""],
-    ["Herbert Jones","F",22.8,5.7,"",1],
-    ["DeAndre Jordan","C",14.7,4.0,""],
-    ["Jaron Pierre Jr.","G",7.0,4.0,""],
-    ["Bryce McGowens","G",10.6,3.7,"Q"],
-    ["Julian Reese","F",5.5,1.5,""],
-    ["AJ Johnson","G",6.3,1.5,""]]},"DAL":
-  {"name":"Mavericks","players":[
-    ["Cooper Flagg","F",33.5,24.6,"",1],
-    ["Kyrie Irving","G",30.1,21.6,"",1],
-    ["P.J. Washington","F",32.3,14.3,"",1],
-    ["Naji Marshall","F",24.6,11.3,""],
-    ["Daniel Gafford","F",21.5,9.1,"",1],
-    ["Zaccharie Risacher","F",24.3,8.3,""],
-    ["Santi Aldama","F",14.3,8.3,""],
-    ["Walter Clayton Jr.","G",16.9,7.0,""],
-    ["Morez Johnson Jr.","F",16.7,6.9,"P"],
-    ["Marcus Sasser","G",15.6,5.6,""],
-    ["Max Christie","G",18.5,5.3,"Q"],
-    ["Sergio de Larrea","F",11.5,5.3,"O"],
-    ["Caleb Martin","F",18.8,4.0,"",1],
-    ["Jett Howard","G",2.8,2.5,""],
-    ["Moussa Cisse","C",3.6,1.5,""],
-    ["Tobi Lawal","F",3.9,1.3,""]]},"CLE":
-  {"name":"Cavaliers","players":[
-    ["Donovan Mitchell","G",33.1,22.8,"",1],
-    ["Evan Mobley","C",32.0,16.9,"Q",1],
-    ["James Harden","G",32.7,16.7,"",1],
-    ["Meleek Thomas","G",23.0,13.1,""],
-    ["Jarrett Allen","C",25.4,12.9,"",1],
-    ["Peyton Watson","G",28.0,11.0,"",1],
-    ["Thomas Bryant","C",12.5,8.7,""],
-    ["Mario Hezonja","F",18.9,7.8,""],
-    ["Sam Merrill","G",23.1,7.7,"O"],
-    ["Jaylon Tyson","G",21.2,7.0,""],
-    ["Tyrese Proctor","G",17.1,6.8,""],
-    ["Riley Minix","F",11.0,3.3,""],
-    ["Tristan Enaruna","F",10.0,2.3,""],
-    ["Craig Porter Jr.","G",10.0,1.6,""],
-    ["Norchad Omier","C",7.5,0.0,""]]},"DET":
-  {"name":"Pistons","players":[
-    ["Cade Cunningham","G",34.5,25.0,"",1],
-    ["Duncan Robinson","F",31.7,18.1,"",1],
-    ["Daniss Jenkins","G",27.5,13.5,"",1],
-    ["Jalen Duren","C",19.0,13.0,"O"],
-    ["Paul Reed","F",27.0,11.5,""],
-    ["John Collins","F",26.4,10.6,"",1],
-    ["Ausar Thompson","G",28.8,10.1,"",1],
-    ["Kevin Huerter","G",23.2,9.0,""],
-    ["Isaiah Joe","G",14.0,7.3,"O"],
-    ["Javonte Green","G",17.4,6.1,""],
-    ["Ronald Holland II","F",15.4,4.9,""],
-    ["Chaz Lanier","G",3.3,3.3,""],
-    ["Ebuka Okorie","G",4.0,2.2,""],
-    ["Taurean Prince","F",7.0,2.0,""],
-    ["Tolu Smith","F",3.9,0.9,""],
-    ["Isaac Jones","C",3.3,0.5,""],
-    ["Elijah Harkless","G",3.0,0.0,""]]},"MIA":
-  {"name":"Heat","players":[
-    ["Giannis Antetokounmpo","F",32.6,27.7,"",1],
-    ["Bam Adebayo","C",33.2,17.8,"",1],
-    ["Davion Mitchell","G",35.8,16.5,"",1],
-    ["Klay Thompson","G",24.8,14.4,"Q",1],
-    ["Pelle Larsson","G",29.5,11.4,"Q",1],
-    ["Andrew Wiggins","F",25.7,8.7,""],
-    ["Bobby Portis","F",20.4,6.8,""],
-    ["Tim Hardaway Jr.","G",14.7,4.6,""],
-    ["Ryan Conwell","G",12.4,4.2,""],
-    ["Dru Smith","G",8.3,2.5,""],
-    ["Nikola Jovic","F",12.1,2.4,""],
-    ["Nick Richards","C",2.0,1.4,""],
-    ["Myron Gardner","F",3.3,1.3,""],
-    ["Simone Fontecchio","F",4.0,1.2,""]]},"CHI":
-  {"name":"Bulls","players":[
-    ["Norman Powell","G",28.8,19.3,"",1],
-    ["Caleb Wilson","F",30.8,18.9,"O"],
-    ["Matas Buzelis","F",26.3,13.5,"",1],
-    ["Jalen Smith","F",24.0,12.8,"Q",1],
-    ["Tre Jones","G",18.8,10.6,""],
-    ["Nic Claxton","C",16.5,10.5,""],
-    ["Josh Giddey","G",27.6,10.2,"",1],
-    ["Patrick Williams","F",24.3,6.7,""],
-    ["Leonard Miller","F",15.9,6.3,""],
-    ["Buddy Hield","G",13.0,5.6,""],
-    ["Noa Essengue","F",13.8,5.6,""],
-    ["Isaac Okoro","F",19.1,5.2,"",1],
-    ["Jaylin Sellers","G",8.0,4.3,""],
-    ["Jordan Hawkins","G",10.7,4.0,""],
-    ["Dailyn Swain","G",9.5,2.5,"Q"],
-    ["Tobe Awaka","F",10.3,2.0,"Q"],
-    ["Zach Collins","F",7.9,1.6,""]]},"MIN":
-  {"name":"Timberwolves","players":[
-    ["Anthony Edwards","G",33.8,33.3,"O"],
-    ["LaMelo Ball","G",27.7,18.3,"",1],
-    ["Ayo Dosunmu","G",31.4,18.1,"",1],
-    ["Jaden McDaniels","F",33.8,17.0,"",1],
-    ["Jonathan Kuminga","F",30.7,12.3,"",1],
-    ["Terrence Shannon Jr.","G",21.5,11.1,""],
-    ["Bones Hyland","G",12.3,8.5,""],
-    ["Rudy Gobert","C",29.9,7.8,"",1],
-    ["Trey Lyles","F",18.5,6.4,""],
-    ["Joan Beringer","F",16.4,5.6,""],
-    ["Jaylen Clark","G",14.1,4.7,""],
-    ["Zyon Pullin","G",3.0,2.0,""],
-    ["Cody Williams","F",3.5,0.0,""],
-    ["Isaiah Evans","F",2.4,0.0,""],
-    ["Rocco Zikarsky","C",2.0,0.0,""]]},"BKN":
-  {"name":"Nets","players":[
-    ["Michael Porter Jr.","F",32.6,21.5,"",1],
-    ["Julius Randle","F",33.2,19.7,"",1],
-    ["Nolan Traore","G",22.1,12.9,"P",1],
-    ["Mikel Brown Jr.","G",23.1,12.9,"P"],
-    ["Moritz Wagner","C",18.3,10.9,""],
-    ["Egor Demin","G",22.0,10.6,"",1],
-    ["Danny Wolf","F",23.7,9.8,""],
-    ["Day'Ron Sharpe","C",23.3,8.2,"",1],
-    ["Noah Clowney","F",19.5,6.0,""],
-    ["Keon Ellis","G",22.9,5.0,""],
-    ["Chaney Johnson","F",18.8,4.7,""],
-    ["Josh Minott","F",7.4,3.9,""],
-    ["Drake Powell","G",8.5,2.0,""],
-    ["Ben Saraf","G",4.0,2.0,""],
-    ["Terance Mann","G",16.0,1.3,""],
-    ["Joshua Jefferson","F",4.0,0.0,""]]},"MEM":
-  {"name":"Grizzlies","players":[
-    ["Ty Jerome","G",30.7,26.2,"",1],
-    ["Cameron Boozer","F",32.3,15.9,"",1],
-    ["Cedric Coward","F",28.3,12.8,"",1],
-    ["Jaylen Wells","F",27.3,12.0,"",1],
-    ["Isaiah Stewart","C",18.3,10.8,""],
-    ["Jerami Grant","F",23.6,10.7,""],
-    ["Cam Spencer","G",19.4,9.3,""],
-    ["Zach Edey","C",20.7,7.6,"P",1],
-    ["Javon Small","G",19.8,7.3,""],
-    ["Scotty Pippen Jr.","G",16.0,6.4,"O"],
-    ["GG Jackson","F",15.5,6.3,""],
-    ["Quinten Post","C",13.0,5.0,"Q"],
-    ["Taylor Hendricks","F",7.3,4.3,""],
-    ["Olivier-Maxence Prosper","F",5.2,2.4,""],
-    ["Karim Lopez","F",3.7,1.3,""],
-    ["Kris Murray","F",12.1,1.3,""],
-    ["Carson Cooper","C",3.0,1.0,""],
-    ["Jahmai Mashack","G",2.7,0.7,""]]}}});
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-14","checked":"15 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball"},"games":[{"id":"den-nop","ml":{"away":1.15,"home":null,"src":"RotoWire composite"},"utc":"2026-11-15T00:00:00Z","away":"DEN","home":"NOP","final":{"away":116,"home":108}},{"id":"dal-cle","ml":{"away":1.71,"home":null,"src":"RotoWire composite"},"utc":"2026-11-15T00:30:00Z","away":"DAL","home":"CLE","final":{"away":117,"home":127}},{"id":"det-mia","ml":{"away":1.49,"home":null,"src":"RotoWire composite"},"utc":"2026-11-15T01:00:00Z","away":"DET","home":"MIA","final":{"away":117,"home":137}},{"id":"chi-min","ml":{"away":null,"home":1.1,"src":"RotoWire composite"},"utc":"2026-11-15T01:00:00Z","away":"CHI","home":"MIN","final":{"away":117,"home":106}},{"id":"bkn-mem","ml":{"away":null,"home":1.66,"src":"RotoWire composite"},"utc":"2026-11-15T01:00:00Z","away":"BKN","home":"MEM","final":{"away":110,"home":129}}],"defense":{"DEN":[21.9,21,25.4,23.7,19.3],"NOP":[32.1,24,17.7,23.7,24.3],"DAL":[25,20.7,15.2,28.1,17.6],"CLE":[26.2,23.6,18.4,23.9,22],"DET":[24.5,18.4,21.4,19.4,23.1],"MIA":[30,26.9,20.5,20.4,19.2],"CHI":[29.7,23,24.7,25.7,24.1],"MIN":[26.5,20,16.4,23.8,18.5],"BKN":[22.4,22,24.7,21.7,24.2],"MEM":[28.9,20.8,18.5,21.8,19.5]},"leagueDefense":[26,21.9,20.7,22.5,20.9],"teams":{"DEN":{"name":"Nuggets","players":[["Jamal Murray","G",36.4,26.2,"",1],["Nikola Jokic","C",36.3,23.5,"",1],["Christian Braun","G",34.4,12.4,"",1],["Cameron Johnson","F",28.3,12.1,"",1],["Aaron Gordon","F",29.1,11,"",1],["DeMar DeRozan","G",23.6,10,""],["Trevon Brazile","F",19.5,7.1,""],["Marvin Bagley III","F",12.3,5.8,""],["Bryce Hopkins","F",14.3,5.4,""],["Spencer Jones","F",19,5.3,""],["Cam Whitmore","F",7.5,4,""],["Zeke Nnaji","F",3.5,3.5,""],["Ryan Nembhard","G",3.3,3,""],["Tyus Jones","G",10.5,2.5,""],["Alpha Diallo","F",8,1,""],["DaRon Holmes II","F",2.5,0.8,""]]},"NOP":{"name":"Pelicans","players":[["Zion Williamson","F",32.7,21.7,""],["Trey Murphy III","F",32.8,15.6,"Q",1],["Saddiq Bey","F",26.9,15.4,"",1],["Jeremiah Fears","G",28.8,15.3,"",1],["Dejounte Murray","G",31.3,13.4,"O"],["Derik Queen","C",21.6,12.2,""],["Yves Missi","C",19.5,9.5,"D"],["Karlo Matkovic","F",18.6,8.5,"",1],["Jordan Poole","G",19.8,7.5,""],["Trendon Watford","F",17.7,7.2,"Q"],["Bennedict Mathurin","G",15.8,6,""],["Herbert Jones","F",22.8,5.7,"",1],["DeAndre Jordan","C",14.7,4,""],["Jaron Pierre Jr.","G",7,4,""],["Bryce McGowens","G",10.6,3.7,"Q"],["Julian Reese","F",5.5,1.5,""],["AJ Johnson","G",6.3,1.5,""]]},"DAL":{"name":"Mavericks","players":[["Cooper Flagg","F",33.5,24.6,"",1],["Kyrie Irving","G",30.1,21.6,"",1],["P.J. Washington","F",32.3,14.3,"",1],["Naji Marshall","F",24.6,11.3,""],["Daniel Gafford","F",21.5,9.1,"",1],["Zaccharie Risacher","F",24.3,8.3,""],["Santi Aldama","F",14.3,8.3,""],["Walter Clayton Jr.","G",16.9,7,""],["Morez Johnson Jr.","F",16.7,6.9,"P"],["Marcus Sasser","G",15.6,5.6,""],["Max Christie","G",18.5,5.3,"Q"],["Sergio de Larrea","F",11.5,5.3,"O"],["Caleb Martin","F",18.8,4,"",1],["Jett Howard","G",2.8,2.5,""],["Moussa Cisse","C",3.6,1.5,""],["Tobi Lawal","F",3.9,1.3,""]]},"CLE":{"name":"Cavaliers","players":[["Donovan Mitchell","G",33.1,22.8,"",1],["Evan Mobley","C",32,16.9,"Q",1],["James Harden","G",32.7,16.7,"",1],["Meleek Thomas","G",23,13.1,""],["Jarrett Allen","C",25.4,12.9,"",1],["Peyton Watson","G",28,11,"",1],["Thomas Bryant","C",12.5,8.7,""],["Mario Hezonja","F",18.9,7.8,""],["Sam Merrill","G",23.1,7.7,"O"],["Jaylon Tyson","G",21.2,7,""],["Tyrese Proctor","G",17.1,6.8,""],["Riley Minix","F",11,3.3,""],["Tristan Enaruna","F",10,2.3,""],["Craig Porter Jr.","G",10,1.6,""],["Norchad Omier","C",7.5,0,""]]},"DET":{"name":"Pistons","players":[["Cade Cunningham","G",34.5,25,"",1],["Duncan Robinson","F",31.7,18.1,"",1],["Daniss Jenkins","G",27.5,13.5,"",1],["Jalen Duren","C",19,13,"O"],["Paul Reed","F",27,11.5,""],["John Collins","F",26.4,10.6,"",1],["Ausar Thompson","G",28.8,10.1,"",1],["Kevin Huerter","G",23.2,9,""],["Isaiah Joe","G",14,7.3,"O"],["Javonte Green","G",17.4,6.1,""],["Ronald Holland II","F",15.4,4.9,""],["Chaz Lanier","G",3.3,3.3,""],["Ebuka Okorie","G",4,2.2,""],["Taurean Prince","F",7,2,""],["Tolu Smith","F",3.9,0.9,""],["Isaac Jones","C",3.3,0.5,""],["Elijah Harkless","G",3,0,""]]},"MIA":{"name":"Heat","players":[["Giannis Antetokounmpo","F",32.6,27.7,"",1],["Bam Adebayo","C",33.2,17.8,"",1],["Davion Mitchell","G",35.8,16.5,"",1],["Klay Thompson","G",24.8,14.4,"Q",1],["Pelle Larsson","G",29.5,11.4,"Q",1],["Andrew Wiggins","F",25.7,8.7,""],["Bobby Portis","F",20.4,6.8,""],["Tim Hardaway Jr.","G",14.7,4.6,""],["Ryan Conwell","G",12.4,4.2,""],["Dru Smith","G",8.3,2.5,""],["Nikola Jovic","F",12.1,2.4,""],["Nick Richards","C",2,1.4,""],["Myron Gardner","F",3.3,1.3,""],["Simone Fontecchio","F",4,1.2,""]]},"CHI":{"name":"Bulls","players":[["Norman Powell","G",28.8,19.3,"",1],["Caleb Wilson","F",30.8,18.9,"O"],["Matas Buzelis","F",26.3,13.5,"",1],["Jalen Smith","F",24,12.8,"Q",1],["Tre Jones","G",18.8,10.6,""],["Nic Claxton","C",16.5,10.5,""],["Josh Giddey","G",27.6,10.2,"",1],["Patrick Williams","F",24.3,6.7,""],["Leonard Miller","F",15.9,6.3,""],["Buddy Hield","G",13,5.6,""],["Noa Essengue","F",13.8,5.6,""],["Isaac Okoro","F",19.1,5.2,"",1],["Jaylin Sellers","G",8,4.3,""],["Jordan Hawkins","G",10.7,4,""],["Dailyn Swain","G",9.5,2.5,"Q"],["Tobe Awaka","F",10.3,2,"Q"],["Zach Collins","F",7.9,1.6,""]]},"MIN":{"name":"Timberwolves","players":[["Anthony Edwards","G",33.8,33.3,"O"],["LaMelo Ball","G",27.7,18.3,"",1],["Ayo Dosunmu","G",31.4,18.1,"",1],["Jaden McDaniels","F",33.8,17,"",1],["Jonathan Kuminga","F",30.7,12.3,"",1],["Terrence Shannon Jr.","G",21.5,11.1,""],["Bones Hyland","G",12.3,8.5,""],["Rudy Gobert","C",29.9,7.8,"",1],["Trey Lyles","F",18.5,6.4,""],["Joan Beringer","F",16.4,5.6,""],["Jaylen Clark","G",14.1,4.7,""],["Zyon Pullin","G",3,2,""],["Cody Williams","F",3.5,0,""],["Isaiah Evans","F",2.4,0,""],["Rocco Zikarsky","C",2,0,""]]},"BKN":{"name":"Nets","players":[["Michael Porter Jr.","F",32.6,21.5,"",1],["Julius Randle","F",33.2,19.7,"",1],["Nolan Traore","G",22.1,12.9,"P",1],["Mikel Brown Jr.","G",23.1,12.9,"P"],["Moritz Wagner","C",18.3,10.9,""],["Egor Demin","G",22,10.6,"",1],["Danny Wolf","F",23.7,9.8,""],["Day'Ron Sharpe","C",23.3,8.2,"",1],["Noah Clowney","F",19.5,6,""],["Keon Ellis","G",22.9,5,""],["Chaney Johnson","F",18.8,4.7,""],["Josh Minott","F",7.4,3.9,""],["Drake Powell","G",8.5,2,""],["Ben Saraf","G",4,2,""],["Terance Mann","G",16,1.3,""],["Joshua Jefferson","F",4,0,""]]},"MEM":{"name":"Grizzlies","players":[["Ty Jerome","G",30.7,26.2,"",1],["Cameron Boozer","F",32.3,15.9,"",1],["Cedric Coward","F",28.3,12.8,"",1],["Jaylen Wells","F",27.3,12,"",1],["Isaiah Stewart","C",18.3,10.8,""],["Jerami Grant","F",23.6,10.7,""],["Cam Spencer","G",19.4,9.3,""],["Zach Edey","C",20.7,7.6,"P",1],["Javon Small","G",19.8,7.3,""],["Scotty Pippen Jr.","G",16,6.4,"O"],["GG Jackson","F",15.5,6.3,""],["Quinten Post","C",13,5,"Q"],["Taylor Hendricks","F",7.3,4.3,""],["Olivier-Maxence Prosper","F",5.2,2.4,""],["Karim Lopez","F",3.7,1.3,""],["Kris Murray","F",12.1,1.3,""],["Carson Cooper","C",3,1,""],["Jahmai Mashack","G",2.7,0.7,""]]}},"actual":{"DEN":{"Nikola Jokic":26,"Jamal Murray":23,"Christian Braun":17,"Cameron Johnson":12,"Aaron Gordon":11,"DeMar DeRozan":9,"Marvin Bagley III":7,"Trevon Brazile":5,"Spencer Jones":4,"Tyus Jones":2},"NOP":{"Zion Williamson":24,"Saddiq Bey":16,"Jeremiah Fears":13,"Herbert Jones":10,"Yves Missi":3,"Jordan Poole":14,"Jaron Pierre Jr.":13,"Derik Queen":10,"Karlo Matkovic":5},"DAL":{"Kyrie Irving":34,"Cooper Flagg":18,"Caleb Martin":15,"Daniel Gafford":10,"P.J. Washington":10,"Naji Marshall":12,"Santi Aldama":7,"Zaccharie Risacher":5,"Morez Johnson Jr.":4,"Walter Clayton Jr.":2},"CLE":{"Tyrese Proctor":24,"Mario Hezonja":22,"Meleek Thomas":20,"Thomas Bryant":19,"Jaylon Tyson":18,"Norchad Omier":13,"Craig Porter Jr.":9,"Riley Minix":2},"CHI":{"Norman Powell":24,"Matas Buzelis":18,"Isaac Okoro":9,"Zach Collins":8,"Josh Giddey":8,"Buddy Hield":16,"Tre Jones":16,"Patrick Williams":14,"Leonard Miller":4,"Noa Essengue":0},"MIN":{"Ayo Dosunmu":24,"LaMelo Ball":19,"Jaden McDaniels":18,"Jonathan Kuminga":11,"Rudy Gobert":1,"Terrence Shannon Jr.":14,"Bones Hyland":12,"Trey Lyles":5,"Joan Beringer":2,"Jaylen Clark":0},"MIA":{"Giannis Antetokounmpo":34,"Klay Thompson":26,"Bam Adebayo":20,"Davion Mitchell":15,"Andrew Wiggins":10,"Bobby Portis":7,"Myron Gardner":5,"Nikola Jovic":2},"DET":{"Cade Cunningham":33,"Kevin Huerter":20,"Duncan Robinson":10,"Ausar Thompson":10,"Daniss Jenkins":10,"John Collins":8,"Javonte Green":5,"Ronald Holland II":5,"Tolu Smith":3,"Taurean Prince":2,"Elijah Harkless":2},"MEM":{"Cedric Coward":23,"Taylor Hendricks":22,"Javon Small":19,"Cam Spencer":17,"Cameron Boozer":15,"Olivier-Maxence Prosper":11,"Isaiah Stewart":11,"Kris Murray":3,"GG Jackson":3,"Jahmai Mashack":0,"Karim Lopez":0},"BKN":{"Julius Randle":22,"Day'Ron Sharpe":16,"Noah Clowney":15,"Danny Wolf":14,"Nolan Traore":11,"Egor Demin":11,"Mikel Brown Jr.":6,"Terance Mann":2,"Drake Powell":2,"Chaney Johnson":1,"Keon Ellis":0}},"dnp":{"DEN":["Alpha Diallo","Bryce Hopkins","DaRon Holmes II","Ryan Nembhard","Cam Whitmore","Zeke Nnaji"],"NOP":["DeAndre Jordan","Julian Reese","AJ Johnson","Trey Murphy III","Dejounte Murray","Trendon Watford","Bennedict Mathurin","Bryce McGowens"],"DAL":["Tobi Lawal","Jett Howard","Marcus Sasser","Moussa Cisse","Max Christie","Sergio de Larrea"],"CLE":["Donovan Mitchell","Evan Mobley","James Harden","Jarrett Allen","Peyton Watson","Sam Merrill","Tristan Enaruna"],"CHI":["Jaylin Sellers","Jordan Hawkins","Tobe Awaka","Dailyn Swain","Caleb Wilson","Jalen Smith","Nic Claxton"],"MIN":["Cody Williams","Isaiah Evans","Rocco Zikarsky","Zyon Pullin","Anthony Edwards"],"BKN":["Michael Porter Jr."],"MEM":["Ty Jerome","Zach Edey"]}});
+
+/* NBA slate for Sun 15 Nov 2026 (US date). player: [name, position, minutes per game, points per game, status, starter]
+   status: O out, D doubtful, Q questionable, P probable. rest: days off since each team's last game (0 = back-to-back) */
+(window.NBA_SLATES=window.NBA_SLATES||[]).push({"date":"2026-11-15","checked":"15 Nov 2026","sources":{"stats":"ESPN","injuries":"RotoWire","defense":"Hashtag Basketball","rest":"NBA schedule (days since each team's last game)"},"games":[{"id":"ind-phi","ml":{"away":null,"home":1.37,"src":"RotoWire (first book listed)"},"utc":"2026-11-15T18:00:00Z","away":"IND","home":"PHI"},{"id":"lal-phx","ml":{"away":1.66,"home":null,"src":"RotoWire (first book listed)"},"utc":"2026-11-15T21:00:00Z","away":"LAL","home":"PHX"},{"id":"cha-lac","ml":{"away":null,"home":1.83,"src":"RotoWire (first book listed)"},"utc":"2026-11-15T21:30:00Z","away":"CHA","home":"LAC"},{"id":"sas-uta","ml":{"away":1.06,"home":null,"src":"RotoWire (first book listed)"},"utc":"2026-11-15T22:00:00Z","away":"SAS","home":"UTA"},{"id":"nyk-tor","ml":{"away":1.53,"home":null,"src":"RotoWire (first book listed)"},"utc":"2026-11-15T23:00:00Z","away":"NYK","home":"TOR"},{"id":"dal-bos","ml":{"away":null,"home":1.12,"src":"RotoWire (first book listed)"},"utc":"2026-11-15T23:00:00Z","away":"DAL","home":"BOS"},{"id":"hou-was","ml":{"away":1.26,"home":null,"src":"RotoWire (first book listed)"},"utc":"2026-11-16T00:00:00Z","away":"HOU","home":"WAS"},{"id":"atl-mil","ml":{"away":1.32,"home":null,"src":"RotoWire (first book listed)"},"utc":"2026-11-16T01:00:00Z","away":"ATL","home":"MIL"},{"id":"okc-sac","ml":{"away":1.21,"home":null,"src":"RotoWire (first book listed)"},"utc":"2026-11-16T02:00:00Z","away":"OKC","home":"SAC"}],"defense":{"IND":[22.5,23.8,18.9,23.4,25.5],"PHI":[22.6,20.1,22.7,24.3,16.7],"PHX":[28.7,20.2,17.3,25.2,26.4],"CHA":[25.4,19.4,23.9,20.8,20.4],"LAC":[28.7,25,17.1,21.9,21.3],"SAS":[25.4,21.8,17,21.7,21.9],"UTA":[30.4,19.5,20,26.8,16.3],"NYK":[25.4,21.4,23.1,17.3,14.7],"TOR":[28.2,21.2,24,22.2,18.5],"DAL":[25,20.7,15.2,28.1,17.6],"HOU":[26.3,21.3,18.1,20.7,18.5],"WAS":[22.5,22.1,25.9,22.4,18.5],"ATL":[22.7,20.6,23.8,23.2,26.3],"MIL":[27.6,23.5,21.7,23.6,25.2],"OKC":[22.4,20.8,22.1,22.7,18.1],"SAC":[28,22.6,21,27,22.2],"LAL":[26.2,24,21.6,19.5,20.9],"BOS":[22.8,21.3,19.2,21.3,16.8]},"leagueDefense":[26,21.9,20.7,22.5,20.9],"teams":{"IND":{"name":"Pacers","players":[["Pascal Siakam","F",32.2,22.2,"",1],["Tyrese Haliburton","G",33,21.8,"O",0],["Andrew Nembhard","G",33.2,17.1,"Q",1],["Obi Toppin","F",21.9,13.4,"",0],["Aaron Nesmith","G",25.6,12.8,"Q",1],["Quenton Jackson","G",21.6,10,"",0],["Kelly Oubre Jr.","G",22.3,9.1,"",1],["Ivica Zubac","C",21.7,9,"",1],["Jarace Walker","F",22.2,7.4,"",0],["Jay Huff","C",18.2,7.1,"",0],["Kobe Brown","G",13.7,4.7,"",0],["Larry Nance Jr.","F",15.6,4.6,"",0],["T.J. McConnell","G",8.5,4,"P",0],["Jalen Slawson","F",14.9,3.8,"",0],["Braden Smith","G",13.3,3.8,"",0],["Ben Sheppard","G",12,3,"O",0]]},"PHI":{"name":"76ers","players":[["Tyrese Maxey","G",36.5,26.9,"",1],["Jaylen Brown","G",35.8,22.3,"",1],["Joel Embiid","C",31.9,17.9,"O",0],["LeBron James","F",32.9,15.6,"",1],["VJ Edgecombe","G",33.5,13.2,"",1],["Anfernee Simons","G",21.9,9,"",0],["Kentavious Caldwell-Pope","G",21.9,5.7,"",0],["Jabari Walker","F",10.9,5.3,"",0],["Dean Wade","F",24.7,3.2,"",1],["Labaron Philon Jr.","G",6.3,2.5,"",0],["Adem Bona","C",14.2,2.1,"O",0],["Rayan Rupert","G",2,2,"",0],["Justin Edwards","F",2.3,1.3,"",0],["Tacko Fall","C",3,0,"",0]]},"LAL":{"name":"Lakers","players":[["Luka Doncic","G",35.9,38.6,"",1],["Austin Reaves","G",35.3,24.7,"O",0],["Walker Kessler","C",30.8,14.5,"",1],["Ziaire Williams","F",24.1,11,"",0],["Sandro Mamukelashvili","F",23.6,10.8,"",0],["Collin Sexton","G",17.8,10.3,"Q",0],["Quentin Grimes","G",26.1,8,"",1],["Matisse Thybulle","G",24.4,7.1,"",1],["Jake LaRavia","F",24.5,5.6,"",1],["Adou Thiero","F",9.3,2.5,"Q",0],["Jarred Vanderbilt","F",12,2,"",0],["Kevon Looney","F",5.7,1.3,"",0],["Bronny James","G",2.8,1.3,"Q",0],["Cameron Carr","G",4.8,0.4,"O",0]]},"PHX":{"name":"Suns","players":[["Devin Booker","G",35,25.3,"",1],["Miles Bridges","F",32.3,16.9,"",1],["Dillon Brooks","F",31.1,16.8,"",1],["Jalen Green","G",29,12.4,"",1],["Luke Kennard","G",16.1,8.3,"",0],["Jordan Goodwin","G",18.6,7.8,"",0],["Khaman Maluach","C",19.6,7.4,"",0],["Collin Gillespie","G",24.6,6.8,"",0],["Oso Ighodaro","F",21.7,6.5,"",1],["Ryan Dunn","F",16,5.6,"",0],["Duop Reath","C",5.4,3.4,"",0],["Jamaree Bouyea","G",3.5,2,"",0],["Koa Peat","F",3.5,1.5,"",0],["Pat Spencer","G",4,1,"",0],["Rasheer Fleming","F",7.5,0.5,"",0]]},"CHA":{"name":"Hornets","players":[["Brandon Miller","F",32.9,22,"",1],["Naz Reid","C",29.6,16.9,"",1],["Grayson Allen","G",26.4,15.7,"",1],["Dennis Schroder","G",29.9,10.2,"O",0],["Moussa Diabate","F",28.8,8.9,"",1],["Coby White","G",17,5.5,"",1],["Tidjane Salaun","F",13.8,5.3,"",0],["Sion James","G",25.2,5.2,"",0],["Ryan Kalkbrenner","C",16.8,4.6,"",0],["Royce O'Neale","F",18,4.4,"",0],["Kon Knueppel","G",6,3,"O",0],["Hannes Steinbach","F",7.7,2.7,"",0],["Christian Anderson","G",10.3,2.6,"",0],["Liam McNeeley","G",7,1.8,"",0],["PJ Hall","C",5.5,0,"",0]]},"LAC":{"name":"Clippers","players":[["Darius Garland","G",33.8,20.9,"",1],["Rui Hachimura","F",31.2,14.7,"",1],["Brook Lopez","C",23.5,13.5,"",1],["Keaton Wagler","G",23.8,12,"",0],["Derrick Jones Jr.","F",29.9,11.6,"",1],["Kobe Sanders","G",24.4,10.1,"",0],["Max Strus","G",23,10,"",0],["Isaiah Jackson","F",21,8.6,"",0],["Kris Dunn","G",30.4,8.5,"",1],["Gradey Dick","G",14.8,6,"",0],["Nick Martinelli","F",5,3.8,"",0],["Jalen Pickett","G",5.3,2.3,"",0],["Baba Miller","F",8.4,2.3,"",0],["Cam Christie","G",6.8,1.8,"",0],["Blake Wesley","G",4.5,1,"",0]]},"SAS":{"name":"Spurs","players":[["Victor Wembanyama","F",30,30.3,"",1],["Dylan Harper","G",31.8,18,"",1],["De'Aaron Fox","G",29.5,14.2,"",1],["Stephon Castle","G",29.2,14,"",1],["Devin Vassell","G",30,11.9,"",1],["Julian Champagnie","F",26.6,10.3,"",0],["Keldon Johnson","F",24.1,8,"",0],["Harrison Barnes","F",13.7,5.5,"",0],["Carter Bryant","F",10.9,3.7,"",0],["Luke Kornet","C",14.9,3.4,"",0],["Ja'Kobi Gillespie","G",2,2.5,"",0],["Tarris Reed Jr.","C",5.4,2,"",0],["Jordan McLaughlin","G",7.4,1.9,"",0],["David Jones Garcia","F",3.5,1,"",0],["Maliq Brown","F",1,0,"",0]]},"UTA":{"name":"Jazz","players":[["Keyonte George","G",32.1,21.1,"",1],["Lauri Markkanen","F",30.9,18,"O",0],["Jaren Jackson Jr.","F",26,16.3,"O",0],["Darryn Peterson","G",30.7,14.8,"",1],["Ace Bailey","G",30.6,11.9,"",1],["Jaxson Hayes","C",25.4,8.6,"O",0],["Mo Bamba","C",17.5,7.7,"",0],["Brice Sensabaugh","F",14.2,7.3,"",0],["Isaiah Collier","G",15.6,6.2,"",0],["Josh Green","G",18,3.9,"",1],["Josh Okogie","G",18.4,3.4,"",0],["Svi Mykhailiuk","G",15.2,3.3,"",0],["Kyle Filipowski","F",7.9,2.6,"",1],["Tony Bradley","C",3.8,1,"",0]]},"NYK":{"name":"Knicks","players":[["Jalen Brunson","G",33.6,26,"",1],["Karl-Anthony Towns","C",31.4,20.9,"",1],["OG Anunoby","F",32.7,16.5,"",1],["Landry Shamet","G",25.9,9.6,"",0],["Josh Hart","G",30.9,8.3,"",1],["Miles McBride","G",18.9,7.9,"",0],["Jordan Clarkson","G",10.6,6,"",0],["Mikal Bridges","G",24.4,5.9,"",1],["Dalton Knecht","F",9.7,4.3,"",0],["Andre Drummond","C",13.5,4.3,"",0],["Pacome Dadiet","F",5.3,4,"",0],["Tyler Kolek","G",12.8,3.4,"",0],["Mohamed Diawara","F",12,2.8,"",0],["Jose Alvarado","G",10.4,2,"",0],["James Wiseman","C",5.2,1.6,"",0],["Jaden Akins","G",1,0,"",0]]},"TOR":{"name":"Raptors","players":[["RJ Barrett","F",31.3,22,"",1],["Scottie Barnes","F",30.5,19.8,"Q",1],["Kawhi Leonard","F",26,19.5,"O",0],["Immanuel Quickley","G",28.5,17.5,"",1],["Ja'Kobe Walter","G",26.5,13.3,"",1],["Collin Murray-Boyles","F",17.8,6.8,"",0],["Jamison Battle","F",14,6,"",0],["Jamal Shead","G",21,6,"",0],["Allen Graves","F",16,5.3,"",0],["Trayce Jackson-Davis","F",9.3,4.5,"",0],["Jakob Poeltl","C",19.5,2.8,"",1],["Alijah Martin","G",4.3,2.5,"",0],["Jaden Bradley","G",3.8,1.5,"",0],["Kyle Anderson","F",6.7,0,"",0]]},"DAL":{"name":"Mavericks","players":[["Cooper Flagg","F",33.5,24.6,"",1],["Kyrie Irving","G",30.1,21.6,"",1],["P.J. Washington","F",32.3,14.3,"",1],["Naji Marshall","F",24.6,11.3,"",0],["Daniel Gafford","F",21.5,9.1,"O",0],["Zaccharie Risacher","F",24.3,8.3,"",0],["Santi Aldama","F",14.3,8.3,"",0],["Walter Clayton Jr.","G",16.9,7,"",0],["Morez Johnson Jr.","F",16.7,6.9,"",0],["Marcus Sasser","G",15.6,5.6,"",0],["Max Christie","G",18.5,5.3,"O",0],["Sergio de Larrea","F",11.5,5.3,"O",0],["Caleb Martin","F",18.8,4,"",1],["Jett Howard","G",2.8,2.5,"",0],["Moussa Cisse","C",3.6,1.5,"",0],["Tobi Lawal","F",3.9,1.3,"",0]]},"BOS":{"name":"Celtics","players":[["Jayson Tatum","F",33.8,27.1,"",1],["Paul George","F",30.1,20.4,"",1],["Derrick White","G",29.8,12.9,"",1],["Payton Pritchard","G",26.7,12.8,"",0],["Neemias Queta","C",21.8,9.5,"",1],["Sam Hauser","F",21,7.7,"",0],["Luka Garza","C",12.8,7,"",0],["Mitchell Robinson","C",18.8,6.4,"",0],["Baylor Scheierman","G",20.2,5.9,"",0],["Jordan Walsh","G",15.6,4,"",1],["Hugo Gonzalez","G",12.8,3.8,"",0],["Mike Conley","G",8,3,"",0]]},"HOU":{"name":"Rockets","players":[["Alperen Sengun","C",34.7,21.3,"",1],["Kevin Durant","F",34.3,21,"",1],["Jabari Smith Jr.","F",35.3,17,"",1],["Amen Thompson","G",33.5,14.9,"",1],["Fred VanVleet","G",30,13.2,"O",0],["Reed Sheppard","G",20.1,9.8,"",1],["Tari Eason","F",23.7,9.6,"",0],["Marcus Smart","G",22,8.6,"O",0],["Bogdan Bogdanovic","G",11.4,5.3,"",0],["Steven Adams","C",8,4,"P",0],["Clint Capela","C",14.2,3.2,"O",0],["Oscar Tshiebwe","C",7,2.8,"",0],["Isaiah Crawford","F",4.4,2,"",0],["Bruce Thornton","G",2.7,1.7,"",0],["Jae'Sean Tate","F",2.7,0,"",0]]},"WAS":{"name":"Wizards","players":[["Anthony Davis","F",33,23.4,"",1],["Kyshawn George","F",33,18.5,"",1],["Trae Young","G",35.2,18.4,"",1],["AJ Dybantsa","F",31.5,16,"",1],["Alex Sarr","C",25.8,10.6,"Q",1],["Tre Johnson","G",21.7,9.6,"Q",0],["Justin Champagnie","F",18.3,7.3,"O",0],["Bilal Coulibaly","G",25.8,7.2,"",0],["Bub Carrington","G",19.3,5.7,"Q",0],["Deandre Ayton","C",15.2,5.3,"",0],["Khris Middleton","F",13.8,2.4,"",0],["Will Riley","G",7.1,2,"",0],["Tre Mann","G",5.5,1,"",0],["Anthony Gill","F",5,0.5,"",0],["Felix Okpara","F",2,0.5,"",0],["Reece Beekman","G",1,0,"O",0]]},"ATL":{"name":"Hawks","players":[["Nickeil Alexander-Walker","G",30.3,21.1,"",1],["Jalen Johnson","F",32.6,18.1,"",1],["CJ McCollum","G",26.8,14.3,"",1],["Aaron Wiggins","G",25.4,13.8,"",0],["Onyeka Okongwu","F",28.9,12,"",1],["Dyson Daniels","G",29.1,9.8,"",1],["Luguentz Dort","G",24.6,9.3,"",0],["Corey Kispert","F",8.5,7.5,"",0],["Kingston Flemings","G",20.3,7.1,"O",0],["Jock Landale","C",15.3,6.3,"",0],["RayJ Dennis","G",8,4,"",0],["Asa Newell","F",11.3,4,"O",0],["Zuby Ejiofor","F",8,2,"",0],["Dorian Finney-Smith","F",4.3,1,"",0]]},"MIL":{"name":"Bucks","players":[["Tyler Herro","G",30.7,21.4,"",1],["Jaime Jaquez Jr.","F",27.8,15.2,"",1],["Kyle Kuzma","F",27.4,11.6,"",1],["Ryan Rollins","G",23.3,10.7,"",0],["Brayden Burries","G",21,10.5,"",1],["Kel'el Ware","C",17.3,8.6,"",0],["Nate Ament","F",16,7.8,"",0],["AJ Green","G",20.2,7.5,"",0],["Myles Turner","C",27.1,7.1,"",1],["Kasparas Jakucionis","G",18.6,6.4,"",0],["Ousmane Dieng","F",10.7,3.1,"O",0],["Gary Trent Jr.","G",6.5,3,"",0],["Bogoljub Markovic","F",5,2,"",0],["Jericho Sims","C",7.7,0.3,"",0]]},"OKC":{"name":"Thunder","players":[["Shai Gilgeous-Alexander","G",32.8,29.9,"",1],["Ajay Mitchell","G",27.3,18.9,"Q",1],["Jalen Williams","G",31.7,13.7,"O",0],["Jared McCain","G",25.2,12.1,"",1],["Chet Holmgren","C",30,12,"O",0],["Aday Mara","C",19.7,8.1,"",1],["Bennett Stirtz","G",18,7.6,"",0],["Alex Caruso","G",18.4,7,"",0],["Isaiah Hartenstein","C",24.1,6.9,"",1],["Kenrich Williams","G",18.4,6.8,"",0],["Cason Wallace","G",16.3,6.3,"O",0],["Micah Peavy","G",17,4.3,"",0],["Jaylin Williams","F",18.4,2.9,"O",0],["Josh Dix","G",14.7,2.3,"",0],["Brooks Barnhizer","F",5.4,1.4,"",0],["Dalen Terry","G",5.5,1,"",0]]},"SAC":{"name":"Kings","players":[["Darius Acuff Jr.","G",37.1,25.9,"",1],["Zach LaVine","G",32.7,21.4,"",1],["Domantas Sabonis","F",35.6,15.3,"",1],["De'Andre Hunter","F",31.2,13.1,"",1],["Precious Achiuwa","F",27.5,10.4,"Q",0],["Malik Monk","G",16.9,8.6,"",0],["Keegan Murray","F",25.7,8,"Q",1],["Leaky Black","F",19.2,5.8,"",0],["Dylan Cardwell","C",15.7,5.7,"",0],["Emanuel Sharp","G",18.1,4.9,"",0],["Daeqwon Plowden","G",12.3,3,"",0],["Jonathan Mogbo","F",14.4,3,"",0],["Nique Clifford","G",6.3,1.6,"",0],["Alex Karaban","F",9.8,1.4,"",0]]}},"rest":{"IND":1,"PHI":2,"LAL":3,"PHX":2,"CHA":2,"LAC":1,"SAS":1,"UTA":1,"DAL":0,"BOS":3,"NYK":1,"TOR":2,"HOU":1,"WAS":2,"ATL":1,"MIL":1,"OKC":1,"SAC":1}});
 
 /* UEFA NATIONS LEAGUE, Matchday 6. Every result so far feeds the model; teams are rated against their own group.
    results: [group, home, away, home goals, away goals]
    out: [name, pos, Nations League games known, goals, assists, 'I'/'S', reason, return ('' = doubtful, 'x' = out for this window)] */
 (window.UNL_SLATES=window.UNL_SLATES||[]).push({
-  date:"2026-11-15", label:"Matchday 6", checked:"14 Nov 2026",
-  sources:{results:"UEFA.com league phase fixtures and results (Matchdays 1–5, Saturday 14 Nov games not yet in)",corners:"Statz Nations League corners won per match, home and away, to 14 Nov",injuries:"Team news: Yahoo Sports and Al Jazeera (France, Italy), Khel Now (Spain). No confirmed absences found for other teams."},
+  date:"2026-11-15", label:"Matchday 6", checked:"15 Nov 2026",
+  sources:{results:"UEFA.com league phase fixtures and results (Matchdays 1–5 complete; Matchday 6 results added as they finish)",corners:"Statz Nations League corners won per match, home and away, to 14 Nov",injuries:"Team news: Yahoo Sports and Al Jazeera (France, Italy), Khel Now (Spain). No confirmed absences found for other teams."},
   results:[
     ["A1","ITA","BEL",0,2],["A1","TUR","FRA",0,1],["A1","BEL","FRA",0,1],["A1","TUR","ITA",1,4],["A1","BEL","TUR",3,0],["A1","FRA","ITA",1,1],["A1","FRA","BEL",4,1],["A1","ITA","TUR",3,1],["A1","TUR","BEL",1,2],["A1","ITA","FRA",3,1],
     ["A2","NED","GER",1,1],["A2","SRB","GRE",1,2],["A2","SRB","NED",1,2],["A2","GER","GRE",0,1],["A2","GER","SRB",2,0],["A2","GRE","NED",2,2],["A2","GRE","GER",0,0],["A2","NED","SRB",2,1],["A2","NED","GRE",7,0],["A2","SRB","GER",1,3],
     ["A3","CZE","CRO",1,2],["A3","ENG","ESP",2,3],["A3","CZE","ENG",0,2],["A3","ESP","CRO",4,1],["A3","CRO","ENG",0,7],["A3","ESP","CZE",3,1],["A3","CRO","ESP",1,2],["A3","ENG","CZE",3,0],["A3","CZE","ESP",0,2],["A3","ENG","CRO",2,1],
-    ["A4","NOR","DEN",3,2],["A4","POR","WAL",1,0],["A4","DEN","WAL",2,0],["A4","NOR","POR",1,2],["A4","DEN","POR",2,4],["A4","WAL","NOR",2,1],["A4","POR","NOR",2,1],["A4","WAL","DEN",0,1],
+    ["A4","NOR","WAL",3,1],["A4","POR","DEN",1,4],["A4","NOR","DEN",3,2],["A4","POR","WAL",1,0],["A4","DEN","WAL",2,0],["A4","NOR","POR",1,2],["A4","DEN","POR",2,4],["A4","WAL","NOR",2,1],["A4","POR","NOR",2,1],["A4","WAL","DEN",0,1],
     ["B1","SVN","SCO",0,0],["B1","MKD","SUI",0,3],["B1","SCO","SUI",0,3],["B1","SVN","MKD",2,0],["B1","MKD","SCO",0,2],["B1","SUI","SVN",2,1],["B1","SCO","SVN",1,2],["B1","SUI","MKD",3,0],["B1","SCO","MKD",2,1],["B1","SVN","SUI",0,0],
-    ["B2","GEO","NIR",0,1],["B2","HUN","UKR",0,1],["B2","GEO","UKR",0,0],["B2","NIR","HUN",0,0],["B2","HUN","GEO",1,0],["B2","UKR","NIR",0,3],["B2","NIR","GEO",0,0],["B2","UKR","HUN",1,2],
-    ["B3","AUT","ISR",3,1],["B3","KOS","IRL",1,0],["B3","AUT","KOS",3,1],["B3","ISR","IRL",0,3],["B3","ISR","KOS",0,0],["B3","IRL","AUT",2,2],["B3","KOS","AUT",1,1],["B3","IRL","ISR",1,1],
-    ["B4","POL","BIH",0,0],["B4","SWE","ROU",2,1],["B4","ROU","BIH",2,4],["B4","SWE","POL",3,1],["B4","BIH","SWE",1,1],["B4","POL","ROU",6,0],["B4","BIH","POL",1,0],["B4","ROU","SWE",0,1],
+    ["B2","GEO","HUN",0,2],["B2","NIR","UKR",1,0],["B2","GEO","NIR",0,1],["B2","HUN","UKR",0,1],["B2","GEO","UKR",0,0],["B2","NIR","HUN",0,0],["B2","HUN","GEO",1,0],["B2","UKR","NIR",0,3],["B2","NIR","GEO",0,0],["B2","UKR","HUN",1,2],
+    ["B3","AUT","IRL",1,0],["B3","KOS","ISR",0,0],["B3","AUT","ISR",3,1],["B3","KOS","IRL",1,0],["B3","AUT","KOS",3,1],["B3","ISR","IRL",0,3],["B3","ISR","KOS",0,0],["B3","IRL","AUT",2,2],["B3","KOS","AUT",1,1],["B3","IRL","ISR",1,1],
+    ["B4","SWE","BIH",3,2],["B4","ROU","POL",2,1],["B4","POL","BIH",0,0],["B4","SWE","ROU",2,1],["B4","ROU","BIH",2,4],["B4","SWE","POL",3,1],["B4","BIH","SWE",1,1],["B4","POL","ROU",6,0],["B4","BIH","POL",1,0],["B4","ROU","SWE",0,1],
     ["C1","SMR","FIN",0,7],["C1","ALB","BLR",2,0],["C1","FIN","BLR",0,0],["C1","SMR","ALB",0,3],["C1","FIN","ALB",2,1],["C1","BLR","SMR",4,0],["C1","ALB","SMR",2,1],["C1","BLR","FIN",1,0],["C1","ALB","FIN",2,0],["C1","SMR","BLR",0,2],
     ["C2","ARM","LVA",2,0],["C2","MNE","CYP",2,1],["C2","ARM","MNE",2,3],["C2","LVA","CYP",0,0],["C2","CYP","ARM",2,0],["C2","LVA","MNE",1,2],["C2","CYP","LVA",2,1],["C2","MNE","ARM",0,0],["C2","ARM","CYP",1,1],["C2","MNE","LVA",2,1],
     ["C3","FRO","KAZ",1,1],["C3","SVK","MDA",2,0],["C3","MDA","FRO",1,1],["C3","SVK","KAZ",2,1],["C3","KAZ","MDA",1,2],["C3","FRO","SVK",1,1],["C3","KAZ","FRO",2,2],["C3","MDA","SVK",0,4],["C3","MDA","KAZ",2,1],["C3","SVK","FRO",2,2],
@@ -1238,11 +709,40 @@ function matchupFor(t,pos){
 }
 let edits=DB.get('edits',{min:{},play:{}}); if(!edits.min||!edits.play) edits={min:{},play:{}};
 const pid=(t,i)=>SPORT.id+':'+SLATE.date+':'+t+':'+SLATE.teams[t].players[i][0];
+/* rest: days off before this game (0 = second night of a back-to-back) */
+const restOf=t=>SLATE.rest&&t in SLATE.rest?SLATE.rest[t]:null;
+function restFactor(t){ const own=restOf(t), opp=restOf(opponent(t)); let f=1;
+  if(own===0) f*=.96; else if(own!=null&&own>=2) f*=1.01;
+  if(opp===0) f*=1.02; return {f,own,opp}; }
+/* learning: compare past projections with what players really scored, and nudge the next ones.
+   Only games before this slate count; applied from 15 Nov 2026, when it was added, so older projections stay as they were. */
+const LEARN_FROM='2026-11-15'; let LEARN={};
+function learnTable(){
+  const key=SPORT.id+':'+SLATE.date; if(LEARN.key===key) return LEARN;
+  const per={}; let A=0,P=0,N=0;
+  (SPORT.slates||[]).filter(s=>s.date<SLATE.date&&s.actual).forEach(s=>Object.entries(s.teams).forEach(([t,tm])=>{
+    const g=s.games.find(x=>x.away===t||x.home===t); if(!g) return; const opp=g.away===t?g.home:g.away, dnp=(s.dnp&&s.dnp[t])||[];
+    tm.players.forEach(([name,pos,min,pts])=>{
+      const a=s.actual[t]&&s.actual[t][name]; if(a==null||dnp.includes(name)||min<10) return;
+      const idx=(SPORT.groups[pos]||SPORT.groups.F).cols, d=s.defense&&s.defense[opp], av=x=>idx.reduce((q,k)=>q+x[k],0)/idx.length;
+      const pr=SPORT.project(min,pts,min,d?av(d)/av(s.leagueDefense):1).result; if(!(pr>0)) return;
+      A+=a; P+=pr; N++; const e=per[name]||(per[name]={n:0,a:0,p:0}); e.n++; e.a+=a; e.p+=pr; });
+  }));
+  const g=N?Math.min(1.1,Math.max(.9,1+(A/P-1)*N/(N+100))):1;
+  return LEARN={key,g,per,N,A,P};
+}
+function learnFor(name){
+  if(SLATE.date<LEARN_FROM) return {f:1,n:0,off:true};
+  const L=learnTable(), e=L.per[name]; if(!e) return {f:L.g,n:0,g:L.g,N:L.N};
+  return {f:Math.min(1.2,Math.max(.8,(e.n*(e.a/e.p)+4*L.g)/(e.n+4))),n:e.n,a:e.a,p:e.p,g:L.g,N:L.N};
+}
 function player(t,i){
   const [name,pos,min,pts,status,st]=SLATE.teams[t].players[i], id=pid(t,i);
-  const playing=id in edits.play?edits.play[id]:(status!=='O'&&status!=='D');
+  const sat=SLATE.dnp&&SLATE.dnp[t]&&SLATE.dnp[t].includes(name);
+  const playing=id in edits.play?edits.play[id]:(status!=='O'&&status!=='D'&&!sat);
   const minutes=id in edits.min?edits.min[id]:min;
-  return {t,i,id,name,pos,min,pts,status,starter:!!st,playing,minutes,edited:(id in edits.min)||(id in edits.play),opp:opponent(t),...SPORT.project(min,pts,minutes,matchupFor(t,pos))};
+  const m=SPORT.project(min,pts,minutes,matchupFor(t,pos)), rest=restFactor(t), learn=learnFor(name);
+  return {t,i,id,name,pos,min,pts,status,starter:!!st,playing,minutes,edited:(id in edits.min)||(id in edits.play),opp:opponent(t),...m,base:m.result,rest,learn,result:m.result*rest.f*learn.f};
 }
 function roster(t){
   const all=SLATE.teams[t].players.map((_,i)=>player(t,i));
@@ -1336,7 +836,7 @@ registerSport({
   colors:{"ATL":["#E03A3E","#C1D32F"],"BOS":["#007A33","#BA9653"],"BKN":["#000000","#FFFFFF"],"CHA":["#1D1160","#00788C"],"CHI":["#CE1141","#000000"],"CLE":["#860038","#041E42"],"DAL":["#00538C","#002B5E"],"DEN":["#0E2240","#FEC524"],"DET":["#C8102E","#1D42BA"],"GSW":["#1D428A","#FFC72C"],"HOU":["#CE1141","#000000"],"IND":["#002D62","#FDBB30"],"LAC":["#C8102E","#1D428A"],"LAL":["#552583","#FDB927"],"MEM":["#5D76A9","#12173F"],"MIA":["#98002E","#F9A01B"],"MIL":["#00471B","#EEE1C6"],"MIN":["#0C2340","#236192"],"NOP":["#0C2340","#C8102E"],"NYK":["#006BB6","#F58426"],"OKC":["#007AC1","#EF3B24"],"ORL":["#0077C0","#C4CED4"],"PHI":["#006BB6","#ED174C"],"PHX":["#1D1160","#E56020"],"POR":["#E03A3E","#000000"],"SAC":["#5A2D81","#63727A"],"SAS":["#C4CED4","#000000"],"TOR":["#CE1141","#000000"],"UTA":["#002B5C","#00471B"],"WAS":["#002B5C","#E31837"]},
   // position groups: which defense columns each group uses, and how to name it
   groups:{G:{cols:[0,1],name:'guards',label:'Guards'},F:{cols:[2,3],name:'forwards',label:'Forwards'},C:{cols:[4],name:'centers',label:'Centers'}},
-  steps:['Points per minute','Minutes he plays','Multiply 1 by 2','Points per game, adjusted for the defense he faces','Add 3 and 4, divide by 2'],
+  steps:['Points per minute','Minutes he plays','Multiply 1 by 2','Points per game, adjusted for the defense he faces','Add 3 and 4, divide by 2','Rest: back-to-back costs 4%, two or more days off adds 1%, a tired opponent adds 2%','Learning: how his past projections compared with what he really scored'],
   // the model from the video
   project(seasonMin,seasonAvg,minutesTonight,matchup){
     const rate=seasonMin>0?seasonAvg/seasonMin:0, byMinutes=rate*minutesTonight, vsDefense=seasonAvg*matchup;
@@ -1350,11 +850,21 @@ registerSport({
       {t:'Minutes tonight',stepper:f1(p.minutes)},
       {t:`${f1(p.minutes)} × ${p.rate.toFixed(2)}`,v:f1(p.byMinutes)},
       {t:`${f1(p.avg)} points per game × ${p.matchup.toFixed(2)}`,sub:`${p.opp} allow ${g.name} ${pct(p.matchup)}`,v:f1(p.vsDefense)},
-      {t:`(${f1(p.byMinutes)} + ${f1(p.vsDefense)}) ÷ 2`,v:f1(p.result)}
+      {t:`(${f1(p.byMinutes)} + ${f1(p.vsDefense)}) ÷ 2`,v:f1(p.base)},
+      ...(p.rest.own==null?[]:[{t:`Rest × ${p.rest.f.toFixed(2)}`,sub:restTxt(p),v:f1(p.base*p.rest.f)}]),
+      ...(p.learn.off?[]:[{t:`Learning × ${p.learn.f.toFixed(2)}`,sub:learnTxt(p.learn),v:f1(p.result)}])
     ];
   }
 });
 
+
+const daysOff=n=>n===0?'played last night':n+' day'+(n>1?'s':'')+' off';
+function restTxt(p){ return `${p.t} ${daysOff(p.rest.own)}, ${p.opp} ${daysOff(p.rest.opp)}`; }
+function learnTxt(l){
+  const all=`all players ${l.g>=1?'+':'−'}${Math.abs(Math.round((l.g-1)*100))}%`;
+  if(l.n) return `His last ${l.n>1?l.n+' games':'game'}: projected ${f1(l.p)}, scored ${l.a} · ${all}`;
+  return l.N?`No past games for him yet · ${all}`:'No past games yet';
+}
 
 /* FOOTBALL: goals and corners per match and per team.
    Goals: each team's attack and the other team's defence, against the league average, home and away (a Poisson model).
