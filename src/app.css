@@ -525,3 +525,11 @@ body.gated #nav,body.gated #view,body.gated #tabbar{display:none}
 .g-sum{padding:0}
 .g-sum .row{display:flex;justify-content:space-between;align-items:center;min-height:2.75rem;padding:0 1rem}
 .g-sum .row + .row{border-top:.5px solid var(--sep)}
+/* projected = accent colour, real result = text colour */
+.proj,.projt{color:var(--tint)}
+.real{color:var(--label)}
+.sumv{color:var(--tint)}
+.sumv.real{color:var(--label)}
+.projt{font-weight:600}
+.gh-r .projt{font-size:.8125rem}
+.fbg .gfoot b{color:var(--tint)}

@@ -113,9 +113,9 @@ function fbSlateName(s){ return s.label||day(s.games[0].utc); }
 function fbCard(g){
   const m=fbModel(SLATE,g), f=g.final, C=m.corners;
   const side=(t,lam,k)=>`<div class="side">${tile(t)}<span class="nm">${fbTeamName(SLATE,t)}<span class="topp">${k==='home'?'Home':'Away'} · ${lam.toFixed(2)} goals</span></span>
-    ${f?`<b class="fin num">${f[k]}</b>`:''}<span class="xg num" aria-label="${f?'Projected':'Projected goals'}">${m.ps[k==='home'?'h':'a']}</span></div>`;
-  return `<button class="card game" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" aria-label="${matchTitle(g)}, projected ${m.ps.h} ${m.ps.a}, open match">
-    <div class="ghead"><span>${f?'Final':day(g.utc)+' · '+clock(g.utc)}</span><span class="gh-r">Projected score<i class="chev"></i></span></div>${side(g.home,m.lh,'home')}${side(g.away,m.la,'away')}
+    ${f?`<b class="xg real num" aria-label="Final">${f[k]}</b>`:`<span class="xg proj num" aria-label="Projected goals">${m.ps[k==='home'?'h':'a']}</span>`}</div>`;
+  return `<button class="card game fbg" data-sport="${SPORT.id}" data-day="${DAY}" data-do="open" data-id="${g.id}" aria-label="${matchTitle(g)}, projected ${m.ps.h} ${m.ps.a}, open match">
+    <div class="ghead"><span>${f?'Final':day(g.utc)+' · '+clock(g.utc)}</span><span class="gh-r">${f?`<span class="projt">Projected ${m.ps.h}–${m.ps.a}</span>`:'<span class="projt">Projected score</span>'}<i class="chev"></i></span></div>${side(g.home,m.lh,'home')}${side(g.away,m.la,'away')}
     <div class="gfoot"><span>Goals · <b class="num">${(m.lh+m.la).toFixed(1)}</b></span>${C?`<span>Corners · <b class="num">${(C.home.lam+C.away.lam).toFixed(1)}</b></span>`:''}<span>Both score · <b>${m.bttsPick?'Yes':'No'}</b></span></div></button>`;
 }
 function fbHome(){
@@ -175,13 +175,13 @@ function fbNews(g,t){
 }
 function fbGame(c){
   const g=SLATE.games.find(x=>x.id===c.id), m=fbModel(SLATE,g), f=g.final, tab=c.fb||'sum';
-  const tm=(t,k)=>`<span class="tm">${tile(t,'lg')}<b>${fbTeamName(SLATE,t)}</b><span class="sc num">${f?f[k]:m.ps[k==='home'?'h':'a']}</span><small class="xgs num">${(k==='home'?m.lh:m.la).toFixed(2)} goals</small></span>`;
+  const tm=(t,k)=>`<span class="tm">${tile(t,'lg')}<b>${fbTeamName(SLATE,t)}</b><span class="sc num ${f?'real':'proj'}">${f?f[k]:m.ps[k==='home'?'h':'a']}</span><small class="xgs num">${f?`<span class="projt">Projected ${m.ps[k==='home'?'h':'a']}</span>`:(k==='home'?m.lh:m.la).toFixed(2)+' goals'}</small></span>`;
   const pr=g.prob, W=(k,l,v,src)=>`<span class="wp"><span class="tk">${l}</span><b class="num">${P0(v)}</b>${src!=null?`<small class="num">Sportradar ${src.toFixed(0)}%</small>`:''}</span>`;
   let body='';
   if(tab==='sum'){ const C=m.corners, PRO=has('pro'), lk='<span class="pill e">Pro</span>', hn=fbTeamName(SLATE,g.home), an=fbTeamName(SLATE,g.away);
     const win=m.ps.h>m.ps.a?hn+' win':m.ps.h<m.ps.a?an+' win':'Draw';
     const S=(tabk,k,sub,v,lock)=>`<button class="row" data-do="fbtab" data-v="${tabk}"><span class="who"><b>${k}</b>${sub?`<span>${sub}</span>`:''}</span><span class="v num sumv">${lock?lk:v}</span><i class="chev"></i></button>`;
-    body=`<div class="sec">Projection</div><div class="card">
+    body=`${f?`<div class="sec">Result</div><div class="card"><div class="row"><span class="who"><b>Final score</b><span>Projected <span class="projt">${m.ps.h} – ${m.ps.a}</span>${f.home===m.ps.h&&f.away===m.ps.a?' · exact':''}</span></span><span class="v num sumv real">${f.home} – ${f.away}</span></div></div>`:''}<div class="sec">Projection</div><div class="card">
       ${S('goals','Goals',`${hn} ${m.lh.toFixed(1)} · ${an} ${m.la.toFixed(1)}`,(m.lh+m.la).toFixed(1))}
       ${C?S('corners','Corners',`${hn} ${C.home.lam.toFixed(1)} · ${an} ${C.away.lam.toFixed(1)}`,(C.home.lam+C.away.lam).toFixed(1),!PRO):''}
       ${S('goals','Both teams score',(m.bttsPick?'Both teams projected to score':(m.ps.h===0?hn:an)+' projected not to score')+' · '+P0(m.bttsPick?m.btts:1-m.btts)+' chance',m.bttsPick?'Yes':'No')}
