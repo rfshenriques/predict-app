@@ -2,7 +2,7 @@
    results: [group, home, away, home goals, away goals]
    out: [name, pos, Nations League games known, goals, assists, 'I'/'S', reason, return ('' = doubtful, 'x' = out for this window)] */
 (window.UNL_SLATES=window.UNL_SLATES||[]).push({
-  date:"2026-11-15", label:"Matchday 6", checked:"15 Nov 2026",
+  date:"2026-11-15", label:"Matchday 6", checked:"16 Nov 2026",
   sources:{results:"UEFA.com league phase fixtures and results (Matchdays 1–5 complete; Matchday 6 results added as they finish)",corners:"Statz Nations League corners won per match, home and away, to 14 Nov",injuries:"Team news: Yahoo Sports and Al Jazeera (France, Italy), Khel Now (Spain). No confirmed absences found for other teams."},
   results:[
     ["A1","ITA","BEL",0,2],["A1","TUR","FRA",0,1],["A1","BEL","FRA",0,1],["A1","TUR","ITA",1,4],["A1","BEL","TUR",3,0],["A1","FRA","ITA",1,1],["A1","FRA","BEL",4,1],["A1","ITA","TUR",3,1],["A1","TUR","BEL",1,2],["A1","ITA","FRA",3,1],
@@ -21,10 +21,10 @@
     ["D2","LIE","LTU",0,2],["D2","LTU","AZE",1,1],["D2","AZE","LIE",0,0],["D2","AZE","LTU",1,0],["D2","LIE","AZE",0,1]
   ],
   games:[
-    {id:"n1",group:"C2",utc:"2026-11-15T14:00:00Z",home:"CYP",away:"MNE"},{id:"n2",group:"C2",utc:"2026-11-15T14:00:00Z",home:"LVA",away:"ARM"},
-    {id:"n3",group:"C1",utc:"2026-11-15T17:00:00Z",home:"BLR",away:"ALB"},{id:"n4",group:"C1",utc:"2026-11-15T17:00:00Z",home:"FIN",away:"SMR"},
-    {id:"n5",group:"A1",utc:"2026-11-15T19:45:00Z",home:"BEL",away:"ITA"},{id:"n6",group:"A1",utc:"2026-11-15T19:45:00Z",home:"FRA",away:"TUR"},
-    {id:"n7",group:"A3",utc:"2026-11-15T19:45:00Z",home:"CRO",away:"CZE"},{id:"n8",group:"A3",utc:"2026-11-15T19:45:00Z",home:"ESP",away:"ENG"},
+    {id:"n1",group:"C2",utc:"2026-11-15T14:00:00Z",home:"CYP",away:"MNE",final:{home:1,away:4}},{id:"n2",group:"C2",utc:"2026-11-15T14:00:00Z",home:"LVA",away:"ARM",final:{home:0,away:0}},
+    {id:"n3",group:"C1",utc:"2026-11-15T17:00:00Z",home:"BLR",away:"ALB",final:{home:0,away:2}},{id:"n4",group:"C1",utc:"2026-11-15T17:00:00Z",home:"FIN",away:"SMR",final:{home:7,away:2}},
+    {id:"n5",group:"A1",utc:"2026-11-15T19:45:00Z",home:"BEL",away:"ITA",final:{home:4,away:1}},{id:"n6",group:"A1",utc:"2026-11-15T19:45:00Z",home:"FRA",away:"TUR",final:{home:2,away:1}},
+    {id:"n7",group:"A3",utc:"2026-11-15T19:45:00Z",home:"CRO",away:"CZE",final:{home:2,away:1}},{id:"n8",group:"A3",utc:"2026-11-15T19:45:00Z",home:"ESP",away:"ENG",final:{home:2,away:3}},
     {id:"n9",group:"C3",utc:"2026-11-16T15:00:00Z",home:"FRO",away:"MDA"},{id:"n10",group:"C3",utc:"2026-11-16T15:00:00Z",home:"KAZ",away:"SVK"},
     {id:"n11",group:"C4",utc:"2026-11-16T17:00:00Z",home:"EST",away:"BUL"},{id:"n12",group:"C4",utc:"2026-11-16T17:00:00Z",home:"ISL",away:"LUX"},
     {id:"n13",group:"D2",utc:"2026-11-16T17:00:00Z",home:"LTU",away:"LIE"},
