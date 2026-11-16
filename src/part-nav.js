@@ -139,7 +139,7 @@ addEventListener('blur',stopHold);
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-do]'); if(!b) return; const d=b.dataset;
   if(proAction(d)&&!has('pro')){ ME.email?showPlans(ME):toast('Part of Pro'); return; }
-  if(['upgrade','signout','billing','pwsheet','pwsave','delacct'].includes(d.do)){ authAction(d); return; }
+  if(['upgrade','signout','billing','simcancel','pwsheet','pwsave','delacct'].includes(d.do)){ authAction(d); return; }
   const ctx=b.closest('[data-sport]'); if(ctx&&!root.contains(ctx)){ if(SPORT.id!==ctx.dataset.sport) setSport(ctx.dataset.sport); if(ctx.dataset.day!=null) setDay(+ctx.dataset.day); }
   switch(d.do){
     case 'tab':

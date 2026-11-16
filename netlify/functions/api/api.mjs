@@ -56,7 +56,7 @@ function activeTier(u) {
 async function me(S, u) {
   const c = await secret(S);
   return { email: u.email, tier: activeTier(u), status: u.status || null, owner: c.owner === u.email, payments: !!env("STRIPE_SECRET_KEY"),
-    test: String(env("STRIPE_SECRET_KEY") || "").startsWith("sk_test_"), billing: !!u.customer, plans: PLANS };
+    test: String(env("STRIPE_SECRET_KEY") || "").startsWith("sk_test_"), billing: !!u.customer, simulated: !!u.simulated && !!activeTier(u), plans: PLANS };
 }
 
 /* Stripe over plain HTTPS, no SDK */
@@ -154,7 +154,9 @@ export default async (req) => {
       if (!PLANS[tier]) return err("Pick a plan");
       const c = await secret(S);
       if (c.owner === email) { u.preview = tier; await putUser(S, u); return json({ preview: true }); }
-      if (!env("STRIPE_SECRET_KEY")) return err("Payments are not open yet", 503);
+      if (!env("STRIPE_SECRET_KEY")) {                      // no payments yet: simulated subscription, nothing is charged
+        u.tier = tier; u.status = "active"; u.simulated = true; u.since = Date.now(); await putUser(S, u); return json({ simulated: true });
+      }
       const price = await priceFor(tier);
       if (u.sub && activeTier(u)) {                         // already paying: switch plan with proration
         const sub = await stripe("subscriptions/" + u.sub);
@@ -174,6 +176,10 @@ export default async (req) => {
       if (s.client_reference_id !== email) return err("Not your checkout", 403);
       if (s.status === "complete" && s.subscription) { applySub(u, s.subscription); await putUser(S, u); }
       return json(await me(S, u));
+    }
+    if (route === "cancel" && M === "POST") {             // only for simulated plans; real ones cancel in Stripe
+      if (!u.simulated) return err("Cancel from Billing");
+      u.tier = null; u.status = "canceled"; await putUser(S, u); return json(await me(S, u));
     }
     if (route === "portal" && M === "POST") {
       if (!u.customer) return err("No billing yet");

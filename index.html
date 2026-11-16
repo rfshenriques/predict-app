@@ -587,6 +587,9 @@ body.gated #nav,body.gated #view,body.gated #tabbar{display:none}
 .sumv{font-size:1.25rem;font-weight:700;color:var(--label)}
 .sumv .pill{font-size:.75rem}
 .seg button{padding:0 .25rem}
+.g-sum{padding:0}
+.g-sum .row{display:flex;justify-content:space-between;align-items:center;min-height:2.75rem;padding:0 1rem}
+.g-sum .row + .row{border-top:.5px solid var(--sep)}
 
 </style>
 </head>
@@ -633,7 +636,7 @@ function plansView(me){
   G.hidden=false; document.body.classList.add('gated');
   const P=me.plans, cur=me.tier;
   G.innerHTML=`<div class="g-wrap"><img class="g-logo sm" src="apple-touch-icon.png" alt=""><h1>${cur?'Change plan':'Choose a plan'}</h1>
-  <p class="g-sub">${me.owner?'You own Propline, so you can switch plans for free to see each one.':me.payments?'Monthly. Cancel any time.':'Payments open soon.'}</p>
+  <p class="g-sub">${me.owner?'You own Propline, so you can switch plans for free to see each one.':'Monthly. Cancel any time.'}</p>
   ${['starter','plus','pro'].map(k=>`<div class="card g-plan${k==='plus'?' pop':''}${k===cur?' on':''}"><div class="g-ph"><b>${P[k].name}</b>${k==='plus'?'<span class="pill w">Most picked</span>':''}<span class="g-pr num">€${(P[k].price/100).toFixed(2)}<small>/month</small></span></div>
     <ul>${FEAT[k].map(f=>`<li>${f}</li>`).join('')}</ul>
     <button class="${k==='plus'?'btn':'btn2'}" data-g="plan" data-v="${k}" ${k===cur?'disabled':''}>${k===cur?'Your plan':me.owner?'Switch to '+P[k].name:'Choose '+P[k].name}</button></div>`).join('')}
@@ -641,6 +644,16 @@ function plansView(me){
   ${me.test&&!me.owner?'<p class="note">Test mode: pay with card 4242 4242 4242 4242, any future date, any CVC.</p>':''}
   <div class="g-links">${cur?'<button class="link" data-g="close">Not now</button>':''}<button class="link" data-g="out">Sign out ${esc(me.email)}</button></div></div>`;
   G.scrollTop=0; scrollTo(0,0);
+}
+function checkoutView(me,k){
+  const P=me.plans[k], price='€'+(P.price/100).toFixed(2);
+  G.innerHTML=`<div class="g-wrap"><img class="g-logo sm" src="apple-touch-icon.png" alt=""><h1>Checkout</h1><p class="g-sub">Simulated payment. No card is needed and nothing is charged.</p>
+  <div class="card g-plan"><div class="g-ph"><b>Propline ${P.name}</b><span class="g-pr num">${price}<small>/month</small></span></div><ul>${FEAT[k].map(f=>`<li>${f}</li>`).join('')}</ul></div>
+  <div class="card g-sum"><div class="row"><span>Billed monthly</span><b class="num">${price}</b></div><div class="row"><span>Due today</span><b class="num">€0.00</b></div></div>
+  <p class="g-msg" role="alert" hidden></p>
+  <button class="btn" data-g="pay" data-v="${k}">Confirm and subscribe</button>
+  <div class="g-links"><button class="link" data-g="back">Back to plans</button></div></div>`;
+  scrollTo(0,0);
 }
 window.showPlans=me=>plansView(me||window.ME);
 async function start(me){
@@ -664,7 +677,9 @@ G.addEventListener('click',async e=>{
     try{ await start(await api(mode==='new'?'register':'login',{email,password})); }catch(err){ msg(err.message); busy(b,false); }
     return;
   }
-  if(b.dataset.g==='plan'){
+  if(b.dataset.g==='plan'&&!window.ME?.owner&&!window.ME?.payments){ checkoutView(window.ME,v); return; }
+  if(b.dataset.g==='back'){ plansView(window.ME); return; }
+  if(b.dataset.g==='plan'||b.dataset.g==='pay'){
     busy(b,true); msg('');
     try{ const r=await api('checkout',{tier:v});
       if(r.url){ location.href=r.url; return; }

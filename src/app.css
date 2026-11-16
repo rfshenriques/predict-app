@@ -522,3 +522,6 @@ body.gated #nav,body.gated #view,body.gated #tabbar{display:none}
 .sumv{font-size:1.25rem;font-weight:700;color:var(--label)}
 .sumv .pill{font-size:.75rem}
 .seg button{padding:0 .25rem}
+.g-sum{padding:0}
+.g-sum .row{display:flex;justify-content:space-between;align-items:center;min-height:2.75rem;padding:0 1rem}
+.g-sum .row + .row{border-top:.5px solid var(--sep)}

@@ -43,6 +43,7 @@ function accountTop(){
   return `<div class="card prof">${billy('','Billy the goat')}<span class="who"><b>${esc(ME.email)}</b><span>${ME.tier?PLAN_NAME[ME.tier]+' plan':'No plan'}${ME.owner?' · Owner':''}</span></span></div>
   <div class="sec">Plan</div><div class="card">
     <button class="row" data-do="upgrade"><span class="who"><b>${ME.tier?'Change plan':'Choose a plan'}</b><span>${ME.tier?PLAN_NAME[ME.tier]+', €'+((ME.plans[ME.tier]||{}).price/100||0).toFixed(2)+' a month':''}</span></span><i class="chev"></i></button>
+    ${ME.simulated?`<button class="row" data-do="simcancel"><span class="who"><b style="color:var(--red)">Cancel plan</b><span>Simulated plan, nothing was charged</span></span></button>`:''}
     ${ME.billing?`<button class="row" data-do="billing"><span class="who"><b>Billing and cancel</b><span>Card, invoices, cancel</span></span><i class="chev"></i></button>`:''}
   </div>
   <div class="sec">Sign in</div><div class="card">
@@ -61,6 +62,8 @@ async function authAction(d){
   if(d.do==='upgrade'){ closeSheet&&sheet&&closeSheet(); window.showPlans&&showPlans(ME); return true; }
   if(d.do==='signout'){ try{ await PLAPI('logout',{}); }catch(e){} try{localStorage.removeItem('propline:me')}catch(e){} location.replace('/'); return true; }
   if(d.do==='billing'){ try{ const r=await PLAPI('portal',{}); location.href=r.url; }catch(e){ toast(e.message); } return true; }
+  if(d.do==='simcancel'){ if(!confirmDel){ confirmDel=true; toast('Tap again to cancel your plan'); setTimeout(()=>confirmDel=false,4000); return true; }
+    try{ await PLAPI('cancel',{}); location.replace('/'); }catch(e){ toast(e.message); } return true; }
   if(d.do==='pwsheet'){ openSheet({kind:'pw'}); return true; }
   if(d.do==='pwsave'){ const o=$('#pw-old').value, n=$('#pw-new').value; try{ await PLAPI('password',{old:o,password:n}); closeSheet(); toast('Password changed'); }catch(e){ toast(e.message); } return true; }
   if(d.do==='delacct'){ const p=$('#pw-del').value; if(!p) { toast('Type your password to delete'); return true; }
